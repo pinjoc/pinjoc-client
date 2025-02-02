@@ -1,0 +1,38 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.8.1/schema.json",
+	"vcs": {
+		"clientKind": "git",
+		"useIgnoreFile": true
+	},
+	"organizeImports": {
+		"enabled": false
+	},
+	"javascript": {
+		"parser": {
+			"unsafeParameterDecoratorsEnabled": true
+		}
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"suspicious": {
+				"noExplicitAny": "off",
+				"noImplicitAnyLet": "off",
+				"noExportsInTest": "off"
+			},
+			"style": {
+				"useNodejsImportProtocol": "off",
+				"useImportType": "off"
+			}
+		},
+		"ignore": ["dist", "src/db/*", "scripts", ".vscode", ".docker"]
+	},
+	"formatter": {
+		"formatWithErrors": false,
+		"indentStyle": "tab",
+		"indentWidth": 2,
+		"lineWidth": 80,
+		"ignore": ["dist", ".vscode", ".docker"]
+	}
+}
