@@ -101,3 +101,12 @@
 		--chart-5: 340 75% 55%;
 	}
 }
+
+.corner-radius {
+	clip-path: polygon(-10% -10%, 110% -10%, 110% 110%, 10% 110%, -10% 40%);
+}
+
+.btn-shine-effect:hover {
+	background-position: 200% 0, 0 0;
+	transition-duration: 1.5s;
+}
