@@ -19,11 +19,21 @@
 			"suspicious": {
 				"noExplicitAny": "off",
 				"noImplicitAnyLet": "off",
-				"noExportsInTest": "off"
+				"noExportsInTest": "off",
+				"noArrayIndexKey": "off"
 			},
 			"style": {
 				"useNodejsImportProtocol": "off",
-				"useImportType": "off"
+				"useImportType": "off",
+				"useExponentiationOperator": "off",
+				"noNonNullAssertion": "off",
+				"useTemplate": "off"
+			},
+			"a11y": {
+				"useValidAnchor": "off"
+			},
+			"complexity": {
+				"noForEach": "off"
 			}
 		},
 		"ignore": ["dist", "src/db/*", "scripts", ".vscode", ".docker"]

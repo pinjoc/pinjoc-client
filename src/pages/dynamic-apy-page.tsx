@@ -1,4 +1,4 @@
-import MainLayout from "@/components/layouts/main-layout";
+import AppLayout from "@/components/layouts/app-layout";
 import { ButtonWallet } from "@/components/ui/button-wallet";
 import { columns } from "@/shared/components/features/dynamic-apy/column";
 import { DataTable } from "@/shared/components/features/dynamic-apy/data-table";
@@ -49,7 +49,7 @@ const DynamicApyPage = () => {
 	//     "blockchaindotcom",
 	//   ];
 	return (
-		<MainLayout>
+		<AppLayout>
 			<div className="container mx-auto w-full">
 				<div className="flex items-center justify-between">
 					<div className="space-y-5">
@@ -68,7 +68,7 @@ const DynamicApyPage = () => {
 			<div className="container mx-auto mt-20">
 				<DataTable columns={columns} data={data} />
 			</div>
-		</MainLayout>
+		</AppLayout>
 	);
 };
 
