@@ -1,25 +1,22 @@
+// Provider like query2-an put right here bbyy!
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import React from "react";
-import ReactDOM from "react-dom/client";
+import { PropsWithChildren } from "react";
 import { WagmiProvider } from "wagmi";
 import { darkTheme, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-
-import "@/index.css";
-import "@rainbow-me/rainbowkit/styles.css";
 import { config } from "@/lib/wallet";
-import App from "@/app/index";
 
 const queryClient = new QueryClient();
-const reactApp = document.getElementById("root") as HTMLElement;
+import "@rainbow-me/rainbowkit/styles.css";
 
-ReactDOM.createRoot(reactApp).render(
-	<React.StrictMode>
+export function Providers({ children }: PropsWithChildren) {
+	return (
 		<WagmiProvider config={config}>
 			<QueryClientProvider client={queryClient}>
 				<RainbowKitProvider modalSize="compact" theme={darkTheme()} coolMode>
-					<App />
+					{children}
 				</RainbowKitProvider>
 			</QueryClientProvider>
 		</WagmiProvider>
-	</React.StrictMode>,
-);
+	);
+}

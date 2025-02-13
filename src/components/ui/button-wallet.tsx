@@ -1,6 +1,13 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { Button } from "./button";
+import { cn } from "@/lib/utils";
 
-export const ButtonWallet = () => {
+export const ButtonWallet = ({
+	className,
+	...props
+}: {
+	className?: string;
+}) => {
 	return (
 		<ConnectButton.Custom>
 			{({
@@ -30,15 +37,17 @@ export const ButtonWallet = () => {
 						{(() => {
 							if (!connected) {
 								return (
-									<button
-										type="button"
+									<Button
+										className={cn(
+											"group relative bg-primary rounded-full text-primary-foreground",
+											className,
+										)}
 										onClick={openConnectModal}
-										className="group relative py-3 px-6 text-xl font-bold tracking-wide bg-[#4AFF01] text-black border-0 inline-flex items-center justify-center gap-3 corner-radius cursor-pointer overflow-hidden whitespace-nowrap focus:outline-none focus:ring focus:ring-[#4AFF01]/50 focus-visible:outline-none focus-visible:ring focus-visible:ring-[#4AFF01]/50"
+										{...props}
 									>
-										{/* Shine effect */}
+										Connect Wallet
 										<div className="before:absolute before:inset-0 before:rounded-[inherit] before:bg-[linear-gradient(45deg,transparent_5%,theme(colors.white/.3)_50%,transparent_50%,transparent_100%)] before:bg-[length:250%_250%,100%_100%] before:bg-[position:200%_0,0_0] before:bg-no-repeat before:[transition:background-position_0s_ease] group-hover:before:bg-[position:-100%_0,0_0] group-hover:before:duration-[2500ms]" />
-										<span>Connect Wallet</span>
-									</button>
+									</Button>
 								);
 							}
 							if (chain.unsupported) {
