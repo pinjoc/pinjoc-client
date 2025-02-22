@@ -2,7 +2,6 @@ import GuestLayout from "@/components/layouts/guest-layout";
 import { Button } from "@/components/ui/button";
 import { IconCloud } from "@/components/ui/icon-cloud";
 import Marquee from "@/components/ui/marquee";
-import { TextReveal } from "@/components/ui/text-reveal";
 import { TypingAnimation } from "@/components/ui/text-typing";
 import { features, reviews, slugs } from "@/lib/constants";
 import FeatureCard from "@/shared/components/features/landing-page/feature-card";
@@ -31,7 +30,7 @@ const LandingPage = () => {
 							<span className="text-white mt-5 inline-block font-thin">
 								enabling seamless, transparent, and decentralized debt trading.
 							</span>
-							<Link to={"/dynamic-apy"} className="block mt-8">
+							<Link to={"/borrow-lend"} className="block mt-8">
 								<Button className="rounded-full" size={"lg"}>
 									Launch App
 								</Button>
@@ -89,10 +88,18 @@ const LandingPage = () => {
 				</div>
 			</section>
 			<section>
-				<TextReveal
-					text="Your Trust is Our Foundation. Let's Build Together 🚀"
-					className="flex justify-center"
-				/>
+				<div className="max-w-5xl w-full mx-auto">
+					<div className="text-center py-20">
+						<h1 className="text-white mt-5 inline-block font-thin text-5xl leading-tight">
+							We are a team of developers and designers who are passionate about
+							building the future of{" "}
+							<span className="bg-primary text-black font-normal">
+								decentralized finance
+							</span>
+							.
+						</h1>
+					</div>
+				</div>
 			</section>
 		</GuestLayout>
 	);

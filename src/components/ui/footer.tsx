@@ -1,8 +1,8 @@
 export function Footer() {
 	return (
-		<footer className="bg-gray-950 border-t border-gray-800 mt-20 py-20 relative overflow-hidden">
+		<footer className="bg-[#121421] border-t border-gray-800 mt-20 py-20 relative overflow-hidden">
 			<div className="absolute -bottom-24 left-0 right-0 overflow-hidden pointer-events-none select-none">
-				<div className="text-[400px] font-bold text-gray-900/40 leading-none whitespace-nowrap">
+				<div className="text-[400px] font-bold text-white/1 leading-none whitespace-nowrap">
 					PINJOC
 				</div>
 			</div>

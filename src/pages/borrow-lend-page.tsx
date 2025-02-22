@@ -5,7 +5,7 @@ import { DataTable } from "@/shared/components/features/borrow-lend/data-table";
 import TerminalBoard from "@/shared/components/features/borrow-lend/terminal-board";
 import { useAccount } from "wagmi";
 
-const TokenizebondPage = () => {
+const BorrowLendPage = () => {
 	const { isConnected } = useAccount();
 	const data = [
 		{
@@ -76,4 +76,4 @@ const TokenizebondPage = () => {
 	);
 };
 
-export default TokenizebondPage;
+export default BorrowLendPage;

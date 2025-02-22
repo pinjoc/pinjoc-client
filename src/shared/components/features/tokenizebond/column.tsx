@@ -15,7 +15,9 @@ export const columns: ColumnDef<Collection>[] = [
 		accessorKey: "id",
 		header: "#",
 		cell: ({ row }) => (
-			<div className="w-[40px] text-gray-400">{row.getValue("id")}</div>
+			<div className="w-[40px] text-gray-400 font-extralight">
+				{row.getValue("id")}
+			</div>
 		),
 	},
 	{
@@ -25,7 +27,7 @@ export const columns: ColumnDef<Collection>[] = [
 				<Button
 					variant="ghost"
 					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-					className="hover:bg-transparent hover:text-white"
+					className="hover:bg-transparent hover:text-white font-extralight"
 				>
 					Asset
 					<ArrowUpDown className="ml-2 h-4 w-4" />
@@ -34,7 +36,9 @@ export const columns: ColumnDef<Collection>[] = [
 		},
 		cell: ({ row }) => (
 			<div className="flex items-center gap-2">
-				<div className="font-medium text-white">{row.getValue("asset")}</div>
+				<div className="text-white font-extralight">
+					{row.getValue("asset")}
+				</div>
 			</div>
 		),
 	},
@@ -45,7 +49,7 @@ export const columns: ColumnDef<Collection>[] = [
 				<Button
 					variant="ghost"
 					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-					className="hover:bg-transparent hover:text-white"
+					className="hover:bg-transparent hover:text-white font-extralight"
 				>
 					Maturity
 					<ArrowUpDown className="ml-2 h-4 w-4" />
@@ -53,7 +57,7 @@ export const columns: ColumnDef<Collection>[] = [
 			);
 		},
 		cell: ({ row }) => {
-			return <div className="font-medium">{row.getValue("maturity")}</div>;
+			return <div className="font-extralight">{row.getValue("maturity")}</div>;
 		},
 	},
 	{
@@ -63,7 +67,7 @@ export const columns: ColumnDef<Collection>[] = [
 				<Button
 					variant="ghost"
 					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-					className="hover:bg-transparent hover:text-white"
+					className="hover:bg-transparent font-extralight hover:text-white"
 				>
 					APY
 					<ArrowUpDown className="ml-2 h-4 w-4" />
@@ -72,7 +76,7 @@ export const columns: ColumnDef<Collection>[] = [
 		},
 		cell: ({ row }) => {
 			const amount = Number.parseFloat(row.getValue("apy"));
-			return <div className="font-medium">{amount.toFixed(2)} %</div>;
+			return <div className="font-extralight">{amount.toFixed(2)} %</div>;
 		},
 	},
 	{
@@ -82,12 +86,16 @@ export const columns: ColumnDef<Collection>[] = [
 				<Button
 					variant="ghost"
 					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-					className="hover:bg-transparent hover:text-white"
+					className="hover:bg-transparent hover:text-white font-extralight"
 				>
 					Vault
 					<ArrowUpDown className="ml-2 h-4 w-4" />
 				</Button>
 			);
+		},
+		cell: ({ row }) => {
+			const vault = Number.parseFloat(row.getValue("vault"));
+			return <div className="font-extralight">{vault}k</div>;
 		},
 	},
 ];

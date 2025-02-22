@@ -70,13 +70,13 @@ export function DataTable<TData, TValue>({
 					/>
 				</div>
 			</div>
-			<div className="rounded-xl border border-[#1A1A1A] bg-[#0A0A0A] overflow-hidden">
+			<div className="shadow-xl border border-[#1A1A1A] bg-[#22232E] overflow-hidden">
 				<Table>
 					<TableHeader className="text-start">
 						{table.getHeaderGroups().map((headerGroup) => (
 							<TableRow
 								key={headerGroup.id}
-								className="border-b border-[#1A1A1A] hover:bg-[#1A1A1A]"
+								className="border-b border-gray-700 hover:bg-gray-700/90"
 							>
 								{headerGroup.headers.map((header) => {
 									return (
@@ -99,7 +99,7 @@ export function DataTable<TData, TValue>({
 								<TableRow
 									key={row.id}
 									data-state={row.getIsSelected() && "selected"}
-									className="border-b border-[#1A1A1A] hover:bg-[#1A1A1A] transition-colors"
+									className="border-b border-gray-700 hover:bg-gray-700/90 transition-colors "
 								>
 									{row.getVisibleCells().map((cell) => (
 										<TableCell key={cell.id} className="text-gray-300">
