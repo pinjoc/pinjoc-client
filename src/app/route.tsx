@@ -1,3 +1,4 @@
+import OrderbookPage from "@/pages/app/orderbook";
 import DynamicApyPage from "@/pages/dynamic-apy-page";
 import LandingPage from "@/pages/landing-page";
 import TokenizebondPage from "@/pages/tokenize-bond-page";
@@ -10,6 +11,7 @@ export const Router = () => {
 				<Route path="/" element={<LandingPage />} />
 				<Route path="/dynamic-apy" element={<DynamicApyPage />} />
 				<Route path="/tokenizebond" element={<TokenizebondPage />} />
+				<Route path="/orderbook" element={<OrderbookPage />} />
 			</Routes>
 		</BrowserRouter>
 	);
