@@ -19,16 +19,16 @@ export default function OrderbookPage() {
 	return (
 		<V2_AppLayout>
 			<Stats />
-			<div className="w-full h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-				<div className="p-6 border-gray-300">
+			<div className="w-full h-full grid grid-cols-4">
+				<div className="col-span-2 p-6 border-r border-gray-300" />
+				<div className="col-span-1 p-6 border-r border-gray-300">
 					<Pool
 						borrows={mockBorrows}
 						supplies={mockSupplies}
 						settled={{ type: "settled", price: 110, apy: 3, amount: 22 }}
 					/>
 				</div>
-				<div className="p-6 border-r border-gray-300">Column 2</div>
-				<div className="p-6">Column 3</div>
+				<div className="col-span-1 p-6" />
 			</div>
 		</V2_AppLayout>
 	);
