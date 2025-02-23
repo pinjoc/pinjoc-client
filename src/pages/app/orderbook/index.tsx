@@ -1,10 +1,52 @@
 import V2_AppLayout from "@/components/layouts/v2_app.layout";
 import Stats from "./summary";
 import Pool from "./orderbook";
-import { ChartData } from "./type";
+import { ChartData, GroupPoolProps } from "./type";
 import OrderBookChart from "./chart-orderbook";
 import { Action } from "./action-section";
 import { useUpdateMaturity } from "@/hooks/use-maturity";
+
+const mockGroupPool: GroupPoolProps = {
+	supplies: [
+		{
+			price: 100,
+			apy: 5.2,
+			amount: 1000,
+			type: "supply",
+			maturity: "2025-12-31",
+		},
+		{
+			price: 105,
+			apy: 4.8,
+			amount: 1500,
+			type: "supply",
+			maturity: "2026-06-30",
+		},
+	],
+	borrows: [
+		{
+			price: 98,
+			apy: 6.5,
+			amount: 2000,
+			type: "borrow",
+			maturity: "2025-12-31",
+		},
+		{
+			price: 102,
+			apy: 7.1,
+			amount: 2500,
+			type: "borrow",
+			maturity: "2026-06-30",
+		},
+	],
+	settled: {
+		price: 101,
+		apy: 5.9,
+		amount: 500,
+		type: "settled",
+		maturity: "2025-06-30",
+	},
+};
 
 export default function OrderbookPage() {
 	const { mutate: updateMaturity } = useUpdateMaturity();
@@ -40,7 +82,7 @@ export default function OrderbookPage() {
 					<div className="mt-4">Position</div>
 				</div>
 				<div className="col-span-1 p-6 border-r border-gray-300">
-					<Pool borrows={[]} supplies={[]} />
+					<Pool {...mockGroupPool} />
 				</div>
 				<div className="col-span-1 p-6">
 					<Action />

@@ -6,7 +6,7 @@ import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 
-export function BorrowAction() {
+export function SupplyAction() {
 	const [amount, setAmount] = useState(0);
 	const [amountMarket, setAmountMarket] = useState(0);
 	return (
@@ -29,11 +29,22 @@ export function BorrowAction() {
 				<Card className="border-0 shadow-none p-0">
 					<CardContent className="space-y-2 p-0 my-3">
 						<div className="space-y-2 text-lg">
+							<div className="flex justify-between items-center mb-6">
+								<Label htmlFor="amount-limit" className="max-w-sm text-clip">
+									Available On Wallet
+								</Label>
+								<Input
+									id="amount-limit"
+									value="98.8 ETH"
+									disabled
+									className="w-24 text-right border-0 text-gray-900"
+								/>
+							</div>
 							<div className="flex justify-between items-center">
 								<Label htmlFor="price-limit">Bond Price</Label>
 								<Input
 									id="price-limit"
-									defaultValue="98.8"
+									value="98.8"
 									className="w-24 text-right border-0 text-gray-900"
 								/>
 							</div>
@@ -41,7 +52,7 @@ export function BorrowAction() {
 								<Label htmlFor="rate-limit">Fixed Rate</Label>
 								<Input
 									id="rate-limit"
-									defaultValue="3.5%"
+									value="3.5%"
 									className="w-24 text-right border-0 text-gray-900"
 								/>
 							</div>
@@ -86,17 +97,28 @@ export function BorrowAction() {
 				<Card className="border-0 shadow-none p-0">
 					<CardContent className="space-y-2 p-0 my-3">
 						<div className="space-y-2 text-lg">
+							<div className="flex justify-between items-center mb-6">
+								<Label htmlFor="amount-limit" className="max-w-sm text-clip">
+									Available On Wallet
+								</Label>
+								<Input
+									id="amount-limit"
+									value="98.8 ETH"
+									disabled
+									className="w-24 text-right border-0 text-gray-900"
+								/>
+							</div>
 							<div className="flex justify-between items-center">
 								<Label htmlFor="price-market">Bond Price</Label>
 								<Input
 									type="text"
 									disabled
-									defaultValue="Market"
+									value="Market"
 									className="w-24 text-right border-0 text-gray-900"
 								/>
 								<Input
 									id="price-market"
-									defaultValue="98.8"
+									value="98.8"
 									className="w-24 hidden text-right border-0 text-gray-900"
 								/>
 							</div>
@@ -104,7 +126,7 @@ export function BorrowAction() {
 								<Label htmlFor="rate-market">Fixed Rate</Label>
 								<Input
 									id="rate-market"
-									defaultValue="3.5%"
+									value="3.5%"
 									className="w-24 text-right border-0 text-gray-900"
 								/>
 							</div>
