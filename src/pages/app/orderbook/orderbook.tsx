@@ -1,65 +1,146 @@
 import { cn } from "@/lib/utils";
-import React from "react";
-import { GroupPoolProps } from "./type";
+import React, { useEffect, useState } from "react";
+import { GroupPoolProps, PoolProps } from "./type";
+import PoolControls from "./button-select-orderbook";
 
-const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies }) => {
+const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
+	const [selectedOption, setSelectedOption] = useState<string>("all");
+	const [filledPool, setFilledPool] = useState<Array<PoolProps>>([]);
+
+	const handleSelectionChange = (selection: string) => {
+		setSelectedOption(selection);
+	};
+
 	const maxItems = 10;
 
-	let borrowCount = borrows.length;
-	let supplyCount = supplies.length;
+	useEffect(() => {
+		setAll();
+	}, []);
 
-	if (borrowCount + supplyCount > maxItems) {
-		if (borrowCount > 5 && supplyCount > 5) {
-			borrowCount = 5;
-			supplyCount = 5;
-		} else if (borrowCount > supplyCount) {
-			borrowCount = maxItems - supplyCount;
-		} else {
+	useEffect(() => {
+		switch (selectedOption) {
+			case "all":
+				setAll();
+				break;
+			case "borrow":
+				setJustBorrow();
+				break;
+			case "supply":
+				setJustSupply();
+				break;
+			default:
+				break;
+		}
+	}, [selectedOption]);
+
+	const setJustBorrow = () => {
+		let borrowCount = borrows.length;
+
+		if (borrowCount > maxItems) {
+			const borrowRatio = borrowCount / borrowCount;
+			borrowCount = Math.round(maxItems * borrowRatio);
+		}
+
+		const adjustedBorrows = borrows.slice(0, borrowCount);
+
+		setFilledPool([
+			...Array.from({ length: maxItems - borrowCount }, () => ({
+				type: "empty",
+				price: 0,
+				apy: 0,
+				amount: 0,
+			})),
+			...adjustedBorrows,
+			settled,
+		]);
+	};
+
+	const setJustSupply = () => {
+		let supplyCount = supplies.length;
+
+		if (supplyCount > maxItems) {
+			const supplyRatio = supplyCount / supplyCount;
+			supplyCount = Math.round(maxItems * supplyRatio);
+		}
+
+		const adjustedSupplies = supplies.slice(0, supplyCount);
+
+		setFilledPool([
+			settled,
+			...adjustedSupplies,
+			...Array.from({ length: maxItems - supplyCount }, () => ({
+				type: "empty",
+				price: 0,
+				apy: 0,
+				amount: 0,
+			})),
+		]);
+	};
+
+	const setAll = () => {
+		let borrowCount = borrows.length;
+		let supplyCount = supplies.length;
+
+		if (borrowCount + supplyCount > maxItems) {
+			const borrowRatio = borrowCount / (borrowCount + supplyCount);
+			borrowCount = Math.round(maxItems * borrowRatio);
 			supplyCount = maxItems - borrowCount;
 		}
-	}
 
-	const adjustedBorrows = borrows.slice(0, borrowCount);
-	const adjustedSupplies = supplies.slice(0, supplyCount);
-	const filledPool = [...adjustedBorrows, ...adjustedSupplies];
+		const adjustedBorrows = borrows.slice(0, borrowCount);
+		const adjustedSupplies = supplies.slice(0, supplyCount);
+
+		setFilledPool([
+			...Array.from({ length: maxItems - (borrowCount + supplyCount) }, () => ({
+				type: "empty",
+				price: 0,
+				apy: 0,
+				amount: 0,
+			})),
+			...adjustedBorrows,
+			settled,
+			...adjustedSupplies,
+		]);
+	};
 
 	return (
 		<div className="w-full max-h-[400px] relative bg-white">
-			<h2 className="text-xl font-semibold text-center text-gray-900 mb-6">
-				Order Book
-			</h2>
-			<div className="flex flex-col border overflow-hidden border-gray-300">
-				<div
-					className={cn(
-						"h-full flex justify-between items-center p-3 shadow-inner text-gray-900",
-					)}
-				>
-					<span className="text-sm font-medium">Price</span>
-					<span className="text-sm font-medium">APY (%)</span>
-					<span className="text-sm font-medium">Amount</span>
+			<div className="flex justify-between my-3 items-center">
+				<h2 className="text-xl font-semibold text-gray-900 mb-4">Order Book</h2>
+				<PoolControls onSelectionChange={handleSelectionChange} />
+			</div>
+			<div className="flex flex-col rounded-md overflow-hidden border border-gray-300">
+				<div className="w-full p-3 flex font-medium bg-gray-200 border-b">
+					<span className="flex-1 text-left">Price</span>
+					<span className="flex-1 text-center">APY (%)</span>
+					<span className="flex-1 text-right">Amount</span>
 				</div>
 				{filledPool.map((item, index) => (
-					<div key={index} className="flex items-center">
+					<div
+						key={index}
+						className="flex items-center h-10 border-b border-gray-200 last:border-0"
+					>
 						<div
 							className={cn(
-								"flex-1 overflow-hidden h-9",
-								item ? "bg-gray-50" : "bg-white",
+								"flex-1 relative h-full flex items-center px-4",
+								item.type === "supply"
+									? "text-green-700 text-sm"
+									: item.type === "borrow"
+										? "text-red-700 text-sm"
+										: item.type === "settled"
+											? "text-gray-900 text-lg bg-gray-300"
+											: "bg-white",
 							)}
 						>
-							{item ? (
-								<div
-									className={cn(
-										"h-full flex justify-between items-center p-3 shadow-inner text-gray-900",
-										item.type === "supply"
-											? "text-green-600 bg-green-50"
-											: "text-red-600 bg-red-50",
-									)}
-								>
-									<span className="text-sm font-medium">{item.price}</span>
-									<span className="text-sm font-medium">{item.apy}%</span>
-									<span className="text-sm font-medium">{item.amount}</span>
+							{item.type !== "empty" ? (
+								<div className="w-full flex justify-between font-medium">
+									<span className="flex-1 text-left">{item.price}</span>
+									<span className="flex-1 text-center">{item.apy}%</span>
+									<span className="flex-1 text-right">{item.amount}</span>
 								</div>
-							) : null}
+							) : (
+								<div className="w-full h-full" />
+							)}
 						</div>
 					</div>
 				))}
