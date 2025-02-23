@@ -33,25 +33,28 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 		}
 	}, [selectedOption]);
 
+	const createEmptyItems = (count: number) =>
+		Array.from({ length: count }, () => ({
+			type: "empty",
+			price: 0,
+			apy: 0,
+			amount: 0,
+		}));
+
 	const setJustBorrow = () => {
 		let borrowCount = borrows.length;
 
 		if (borrowCount > maxItems) {
-			const borrowRatio = borrowCount / borrowCount;
-			borrowCount = Math.round(maxItems * borrowRatio);
+			// Here borrowRatio is always 1, so we can simply set borrowCount to maxItems.
+			borrowCount = maxItems;
 		}
 
 		const adjustedBorrows = borrows.slice(0, borrowCount);
 
 		setFilledPool([
-			...Array.from({ length: maxItems - borrowCount }, () => ({
-				type: "empty",
-				price: 0,
-				apy: 0,
-				amount: 0,
-			})),
+			...createEmptyItems(maxItems - borrowCount),
 			...adjustedBorrows,
-			settled,
+			...(settled ? [settled] : []),
 		]);
 	};
 
@@ -59,21 +62,16 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 		let supplyCount = supplies.length;
 
 		if (supplyCount > maxItems) {
-			const supplyRatio = supplyCount / supplyCount;
-			supplyCount = Math.round(maxItems * supplyRatio);
+			// Here supplyRatio is always 1, so we can simply set supplyCount to maxItems.
+			supplyCount = maxItems;
 		}
 
 		const adjustedSupplies = supplies.slice(0, supplyCount);
 
 		setFilledPool([
-			settled,
+			...(settled ? [settled] : []),
 			...adjustedSupplies,
-			...Array.from({ length: maxItems - supplyCount }, () => ({
-				type: "empty",
-				price: 0,
-				apy: 0,
-				amount: 0,
-			})),
+			...createEmptyItems(maxItems - supplyCount),
 		]);
 	};
 
@@ -91,14 +89,11 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 		const adjustedSupplies = supplies.slice(0, supplyCount);
 
 		setFilledPool([
-			...Array.from({ length: maxItems - (borrowCount + supplyCount) }, () => ({
-				type: "empty",
-				price: 0,
-				apy: 0,
-				amount: 0,
-			})),
+			...createEmptyItems(
+				maxItems - (borrowCount + supplyCount + (settled ? 1 : 0)),
+			),
 			...adjustedBorrows,
-			settled,
+			...(settled ? [settled] : []),
 			...adjustedSupplies,
 		]);
 	};

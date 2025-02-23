@@ -6,9 +6,9 @@ export interface PoolProps {
 }
 
 export interface GroupPoolProps {
-	supplies: Array<PoolProps>;
-	borrows: Array<PoolProps>;
-	settled: PoolProps;
+	supplies: Array<PoolWithMaturityProps>;
+	borrows: Array<PoolWithMaturityProps>;
+	settled?: PoolWithMaturityProps;
 }
 
 export interface ChartData {
@@ -23,4 +23,8 @@ export interface ChartData {
 		pointRadius: number;
 		pointHoverRadius: number;
 	}[];
+}
+
+export interface PoolWithMaturityProps extends PoolProps {
+	maturity?: string;
 }

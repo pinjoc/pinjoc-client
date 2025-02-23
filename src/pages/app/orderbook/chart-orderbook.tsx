@@ -26,9 +26,13 @@ ChartJS.register(
 
 type OrderBookChartProps = {
 	data: ChartData;
+	onPointClick?: (pointIndex: number) => void;
 };
 
-const OrderBookChart: React.FC<OrderBookChartProps> = ({ data }) => {
+const OrderBookChart: React.FC<OrderBookChartProps> = ({
+	data,
+	onPointClick,
+}) => {
 	const options = {
 		responsive: true,
 		plugins: {
@@ -56,6 +60,14 @@ const OrderBookChart: React.FC<OrderBookChartProps> = ({ data }) => {
 					drawTicks: false,
 				},
 			},
+		},
+		onClick: (_event: any, elements: any[]) => {
+			if (elements.length > 0) {
+				const pointIndex = elements[0].index;
+				if (onPointClick) {
+					onPointClick(pointIndex);
+				}
+			}
 		},
 	};
 
