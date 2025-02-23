@@ -7,7 +7,8 @@ export type Collection = {
 	asset: string;
 	maturity: number | string;
 	apy: number;
-	vault: string;
+	lenderVault: string;
+	borrowVault: string;
 };
 
 export const columns: ColumnDef<Collection>[] = [
@@ -80,7 +81,7 @@ export const columns: ColumnDef<Collection>[] = [
 		},
 	},
 	{
-		accessorKey: "vault",
+		accessorKey: "lenderVault",
 		header: ({ column }) => {
 			return (
 				<Button
@@ -88,14 +89,54 @@ export const columns: ColumnDef<Collection>[] = [
 					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 					className="hover:bg-transparent hover:text-white font-extralight"
 				>
-					Vault
+					Lender Vault
 					<ArrowUpDown className="ml-2 h-4 w-4" />
 				</Button>
 			);
 		},
 		cell: ({ row }) => {
-			const vault = Number.parseFloat(row.getValue("vault"));
-			return <div className="font-extralight">{vault}k</div>;
+			const lenderVault = Number.parseFloat(row.getValue("lenderVault"));
+			return <div className="font-extralight">{lenderVault}k</div>;
+		},
+	},
+	{
+		accessorKey: "borrowVault",
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					className="hover:bg-transparent hover:text-white font-extralight"
+				>
+					Borrow Vault
+					<ArrowUpDown className="ml-2 h-4 w-4" />
+				</Button>
+			);
+		},
+		cell: ({ row }) => {
+			const borrowVault = Number.parseFloat(row.getValue("borrowVault"));
+			return <div className="font-extralight">{borrowVault}k</div>;
+		},
+	},
+	{
+		accessorKey: "action",
+		header: () => {
+			return <p className="text-center">Action</p>;
+		},
+		cell: () => {
+			return (
+				<div className="w-72 space-x-2">
+					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
+						Borrow
+					</Button>
+					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
+						Lend
+					</Button>
+					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
+						View Market
+					</Button>
+				</div>
+			);
 		},
 	},
 ];

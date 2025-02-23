@@ -1,8 +1,8 @@
 import AppLayout from "@/components/layouts/app-layout";
 import { ButtonWallet } from "@/components/ui/button-wallet";
-import { columns } from "@/shared/components/features/borrow-lend/column";
-import { DataTable } from "@/shared/components/features/borrow-lend/data-table";
 import TerminalBoard from "@/shared/components/features/borrow-lend/terminal-board";
+import { columns } from "@/shared/components/features/tokenizebond/column";
+import { DataTable } from "@/shared/components/features/tokenizebond/data-table";
 import { useAccount } from "wagmi";
 
 const TokenizebondPage = () => {
@@ -10,31 +10,27 @@ const TokenizebondPage = () => {
 	const data = [
 		{
 			id: 1,
-			asset: "Etherium",
-			maturity: "3 Months",
-			apy: 12.8,
-			vault: "3.91k",
+			symbol: "GB2030",
+			name: "Government Bond 2030",
+			price: 122222,
 		},
 		{
 			id: 2,
-			asset: "Bitcoin",
-			maturity: "3 Months",
-			apy: 85.2,
-			vault: "2.98k",
+			symbol: "XYZBOND",
+			name: "Corporate Bond XYZ",
+			price: 122622,
 		},
 		{
 			id: 3,
-			asset: "Solana",
-			maturity: "3 Months",
-			apy: 122,
-			vault: "1.93k",
+			symbol: "GEB25",
+			name: "Green Energy Bond 2025",
+			price: 12000,
 		},
 		{
 			id: 4,
-			asset: "Dogecoin",
-			maturity: "3 Months",
-			apy: 6.8,
-			vault: "2.4k",
+			symbol: "GEB25",
+			name: "Government Bond 2030",
+			price: 150000,
 		},
 	];
 	//   const slugs = [
@@ -69,7 +65,7 @@ const TokenizebondPage = () => {
 					</div>
 				</div>
 			)}
-			<div className="max-w-5xl mx-auto mt-8">
+			<div className="max-w-6xl mx-auto mt-8">
 				<DataTable columns={columns} data={data} />
 			</div>
 		</AppLayout>

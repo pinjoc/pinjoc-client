@@ -4,10 +4,9 @@ import { Button } from "@/components/ui/button";
 
 export type Collection = {
 	id: number;
-	asset: string;
-	maturity: number | string;
-	apy: number;
-	vault: string;
+	symbol: string;
+	name: string;
+	price: number;
 };
 
 export const columns: ColumnDef<Collection>[] = [
@@ -21,7 +20,7 @@ export const columns: ColumnDef<Collection>[] = [
 		),
 	},
 	{
-		accessorKey: "asset",
+		accessorKey: "symbol",
 		header: ({ column }) => {
 			return (
 				<Button
@@ -29,7 +28,7 @@ export const columns: ColumnDef<Collection>[] = [
 					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 					className="hover:bg-transparent hover:text-white font-extralight"
 				>
-					Asset
+					Symbol
 					<ArrowUpDown className="ml-2 h-4 w-4" />
 				</Button>
 			);
@@ -37,13 +36,13 @@ export const columns: ColumnDef<Collection>[] = [
 		cell: ({ row }) => (
 			<div className="flex items-center gap-2">
 				<div className="text-white font-extralight">
-					{row.getValue("asset")}
+					{row.getValue("symbol")}
 				</div>
 			</div>
 		),
 	},
 	{
-		accessorKey: "maturity",
+		accessorKey: "name",
 		header: ({ column }) => {
 			return (
 				<Button
@@ -51,17 +50,17 @@ export const columns: ColumnDef<Collection>[] = [
 					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 					className="hover:bg-transparent hover:text-white font-extralight"
 				>
-					Maturity
+					Name
 					<ArrowUpDown className="ml-2 h-4 w-4" />
 				</Button>
 			);
 		},
 		cell: ({ row }) => {
-			return <div className="font-extralight">{row.getValue("maturity")}</div>;
+			return <div className="font-extralight">{row.getValue("name")}</div>;
 		},
 	},
 	{
-		accessorKey: "apy",
+		accessorKey: "price",
 		header: ({ column }) => {
 			return (
 				<Button
@@ -69,33 +68,35 @@ export const columns: ColumnDef<Collection>[] = [
 					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 					className="hover:bg-transparent font-extralight hover:text-white"
 				>
-					APY
+					Price
 					<ArrowUpDown className="ml-2 h-4 w-4" />
 				</Button>
 			);
 		},
 		cell: ({ row }) => {
-			const amount = Number.parseFloat(row.getValue("apy"));
-			return <div className="font-extralight">{amount.toFixed(2)} %</div>;
+			const price = Number.parseFloat(row.getValue("price"));
+			return <div className="font-extralight">{price.toFixed(2)}</div>;
 		},
 	},
 	{
-		accessorKey: "vault",
-		header: ({ column }) => {
-			return (
-				<Button
-					variant="ghost"
-					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-					className="hover:bg-transparent hover:text-white font-extralight"
-				>
-					Vault
-					<ArrowUpDown className="ml-2 h-4 w-4" />
-				</Button>
-			);
+		accessorKey: "action",
+		header: () => {
+			return <p className="text-center">Action</p>;
 		},
-		cell: ({ row }) => {
-			const vault = Number.parseFloat(row.getValue("vault"));
-			return <div className="font-extralight">{vault}k</div>;
+		cell: () => {
+			return (
+				<div className="flex gap-3 justify-center items-center">
+					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
+						Buy
+					</Button>
+					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
+						Sell
+					</Button>
+					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
+						View Market
+					</Button>
+				</div>
+			);
 		},
 	},
 ];

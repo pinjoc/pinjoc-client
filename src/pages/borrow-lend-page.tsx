@@ -13,28 +13,32 @@ const BorrowLendPage = () => {
 			asset: "Etherium",
 			maturity: "3 Months",
 			apy: 12.8,
-			vault: "3.91k",
+			lenderVault: "3.91k",
+			borrowVault: "3.91k",
 		},
 		{
 			id: 2,
 			asset: "Bitcoin",
 			maturity: "3 Months",
 			apy: 85.2,
-			vault: "2.98k",
+			lenderVault: "3.91k",
+			borrowVault: "3.91k",
 		},
 		{
 			id: 3,
 			asset: "Solana",
 			maturity: "3 Months",
 			apy: 122,
-			vault: "1.93k",
+			lenderVault: "3.91k",
+			borrowVault: "3.91k",
 		},
 		{
 			id: 4,
 			asset: "Dogecoin",
 			maturity: "3 Months",
 			apy: 6.8,
-			vault: "2.4k",
+			lenderVault: "3.91k",
+			borrowVault: "3.91k",
 		},
 	];
 	//   const slugs = [
@@ -69,7 +73,7 @@ const BorrowLendPage = () => {
 					</div>
 				</div>
 			)}
-			<div className="max-w-5xl mx-auto mt-8">
+			<div className="max-w-6xl mx-auto mt-8">
 				<DataTable columns={columns} data={data} />
 			</div>
 		</AppLayout>

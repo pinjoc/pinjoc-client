@@ -61,22 +61,22 @@ export function DataTable<TData, TValue>({
 				<div className="relative flex-1 max-w-sm">
 					<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
 					<Input
-						placeholder="Search by asset"
-						value={(table.getColumn("asset")?.getFilterValue() as string) ?? ""}
+						placeholder="Search by name"
+						value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
 						onChange={(event) =>
-							table.getColumn("asset")?.setFilterValue(event.target.value)
+							table.getColumn("name")?.setFilterValue(event.target.value)
 						}
 						className="pl-9 bg-[#0A0A0A] border border-[#1A1A1A] text-white placeholder:text-gray-500"
 					/>
 				</div>
 			</div>
-			<div className="rounded-xl border border-[#1A1A1A] bg-[#0A0A0A] overflow-hidden">
+			<div className="shadow-xl border border-[#1A1A1A] bg-[#22232E] overflow-hidden">
 				<Table>
 					<TableHeader className="text-start">
 						{table.getHeaderGroups().map((headerGroup) => (
 							<TableRow
 								key={headerGroup.id}
-								className="border-b border-[#1A1A1A] hover:bg-[#1A1A1A]"
+								className="border-b border-gray-700 hover:bg-gray-700/90"
 							>
 								{headerGroup.headers.map((header) => {
 									return (
@@ -99,7 +99,7 @@ export function DataTable<TData, TValue>({
 								<TableRow
 									key={row.id}
 									data-state={row.getIsSelected() && "selected"}
-									className="border-b border-[#1A1A1A] hover:bg-[#1A1A1A] transition-colors"
+									className="border-b border-gray-700 hover:bg-gray-700/90 transition-colors "
 								>
 									{row.getVisibleCells().map((cell) => (
 										<TableCell key={cell.id} className="text-gray-300">
