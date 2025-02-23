@@ -6,6 +6,7 @@ export type Collection = {
 	id: number;
 	asset: string;
 	apy: number;
+	maturity: string;
 	supplied: string;
 	earned: string;
 };
@@ -38,6 +39,28 @@ export const columnLend: ColumnDef<Collection>[] = [
 			<div className="flex items-center gap-2">
 				<div className="text-white font-extralight">
 					{row.getValue("asset")}
+				</div>
+			</div>
+		),
+	},
+	{
+		accessorKey: "maturity",
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					className="hover:bg-transparent hover:text-white font-extralight"
+				>
+					Maturity
+					<ArrowUpDown className="ml-2 h-4 w-4" />
+				</Button>
+			);
+		},
+		cell: ({ row }) => (
+			<div className="flex items-center gap-2">
+				<div className="text-white font-extralight">
+					{row.getValue("maturity")}
 				</div>
 			</div>
 		),
