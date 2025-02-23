@@ -105,8 +105,9 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 
 	return (
 		<div className="w-full max-h-[400px] relative bg-white">
-			<div className="flex justify-between my-3 items-center">
-				<h2 className="text-xl font-semibold text-gray-900 mb-4">Order Book</h2>
+			<div className="mb-6">
+				<h2 className="text-xl font-semibold text-gray-900">Order Book</h2>
+				<br />
 				<PoolControls onSelectionChange={handleSelectionChange} />
 			</div>
 			<div className="flex flex-col rounded-md overflow-hidden border border-gray-300">
