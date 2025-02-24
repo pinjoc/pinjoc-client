@@ -88,6 +88,16 @@ const Navbar = () => {
 									Portfolio
 								</Button>
 							</Link>
+							<Link to={"/history"}>
+								<Button
+									className={cn(
+										" text-white rounded-full font-extralight hover:bg-[#31323D]",
+										pathname === "/history" ? "bg-[#31323D]" : "bg-transparent",
+									)}
+								>
+									History
+								</Button>
+							</Link>
 							<ButtonWallet />
 						</div>
 					</div>

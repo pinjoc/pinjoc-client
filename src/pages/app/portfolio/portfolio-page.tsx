@@ -3,10 +3,10 @@ import { useAccount } from "wagmi";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
-import { DataTableBorrow } from "./data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { columnBorrow } from "./column-borrow";
 import { columnLend } from "./column-lend";
+import { DataTable } from "./data-table";
 
 const PortfolioPage = () => {
 	const { address } = useAccount();
@@ -86,10 +86,10 @@ const PortfolioPage = () => {
 							</TabsTrigger>
 						</TabsList>
 						<TabsContent value="borrow">
-							<DataTableBorrow columns={columnBorrow} data={dataBorrow} />
+							<DataTable columns={columnBorrow} data={dataBorrow} />
 						</TabsContent>
 						<TabsContent value="lend">
-							<DataTableBorrow columns={columnLend} data={dataLend} />
+							<DataTable columns={columnLend} data={dataLend} />
 						</TabsContent>
 					</Tabs>
 				</div>
