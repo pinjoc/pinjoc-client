@@ -48,7 +48,6 @@ export class ApiClient {
 					...this.defaultHeaders,
 					...options.headers,
 				},
-				mode: "no-cors",
 				body: data ? JSON.stringify(data) : undefined,
 			});
 
