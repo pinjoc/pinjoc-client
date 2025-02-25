@@ -4,8 +4,8 @@ import { IconCloud } from "@/components/ui/icon-cloud";
 import Marquee from "@/components/ui/marquee";
 import { TypingAnimation } from "@/components/ui/text-typing";
 import { features, reviews, slugs } from "@/lib/constants";
-import FeatureCard from "@/shared/components/features/landing-page/feature-card";
-import ReviewCard from "@/shared/components/features/landing-page/review-card";
+import FeatureCard from "@/pages/app/home/feature-card";
+import ReviewCard from "@/pages/app/home/review-card";
 import { Link } from "react-router-dom";
 
 const LandingPage = () => {

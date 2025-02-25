@@ -73,7 +73,7 @@ const Navbar = () => {
 											: "bg-transparent",
 									)}
 								>
-									Tokenizebond
+									Tokenized bond
 								</Button>
 							</Link>
 							<Link to={"/portfolio"}>

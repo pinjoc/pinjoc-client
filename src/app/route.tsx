@@ -1,6 +1,6 @@
-import BorrowLendPage from "@/pages/borrow-lend-page";
-import LandingPage from "@/pages/landing-page";
-import TokenizebondPage from "@/pages/tokenize-bond-page";
+import BorrowLendPage from "@/pages/app/borrow-lend/borrow-lend-page";
+import LandingPage from "@/pages/app/home/landing-page";
+import TokenizebondPage from "@/pages/app/tokenizebond/tokenize-bond-page";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import OrderbookPage from "@/pages/app/orderbook";
 import PortfolioPage from "@/pages/app/portfolio/portfolio-page";

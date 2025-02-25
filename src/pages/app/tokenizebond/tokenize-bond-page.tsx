@@ -1,44 +1,36 @@
 import AppLayout from "@/components/layouts/app-layout";
 import { ButtonWallet } from "@/components/ui/button-wallet";
-import { columns } from "@/shared/components/features/borrow-lend/column";
-import { DataTable } from "@/shared/components/features/borrow-lend/data-table";
-import TerminalBoard from "@/shared/components/features/borrow-lend/terminal-board";
+import TerminalBoard from "@/pages/app/borrow-lend/terminal-board";
+import { columns } from "@/pages/app/tokenizebond/column";
+import { DataTable } from "@/pages/app/tokenizebond/data-table";
 import { useAccount } from "wagmi";
 
-const BorrowLendPage = () => {
+const TokenizebondPage = () => {
 	const { isConnected } = useAccount();
 	const data = [
 		{
 			id: 1,
-			asset: "Etherium",
-			maturity: "3 Months",
-			apy: 12.8,
-			lenderVault: "3.91k",
-			borrowVault: "3.91k",
+			symbol: "GB2030",
+			name: "Government Bond 2030",
+			price: 122222,
 		},
 		{
 			id: 2,
-			asset: "Bitcoin",
-			maturity: "3 Months",
-			apy: 85.2,
-			lenderVault: "3.91k",
-			borrowVault: "3.91k",
+			symbol: "XYZBOND",
+			name: "Corporate Bond XYZ",
+			price: 122622,
 		},
 		{
 			id: 3,
-			asset: "Solana",
-			maturity: "3 Months",
-			apy: 122,
-			lenderVault: "3.91k",
-			borrowVault: "3.91k",
+			symbol: "GEB25",
+			name: "Green Energy Bond 2025",
+			price: 12000,
 		},
 		{
 			id: 4,
-			asset: "Dogecoin",
-			maturity: "3 Months",
-			apy: 6.8,
-			lenderVault: "3.91k",
-			borrowVault: "3.91k",
+			symbol: "GEB25",
+			name: "Government Bond 2030",
+			price: 150000,
 		},
 	];
 	//   const slugs = [
@@ -80,4 +72,4 @@ const BorrowLendPage = () => {
 	);
 };
 
-export default BorrowLendPage;
+export default TokenizebondPage;
