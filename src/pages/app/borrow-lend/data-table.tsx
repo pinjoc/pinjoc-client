@@ -62,9 +62,15 @@ export function DataTable<TData, TValue>({
 					<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
 					<Input
 						placeholder="Search by asset"
-						value={(table.getColumn("asset")?.getFilterValue() as string) ?? ""}
+						value={
+							(table
+								.getColumn("DebtTokenSymbol")
+								?.getFilterValue() as string) ?? ""
+						}
 						onChange={(event) =>
-							table.getColumn("asset")?.setFilterValue(event.target.value)
+							table
+								.getColumn("DebtTokenSymbol")
+								?.setFilterValue(event.target.value)
 						}
 						className="pl-9 bg-[#0A0A0A] border border-[#1A1A1A] text-white placeholder:text-gray-500"
 					/>
@@ -72,7 +78,7 @@ export function DataTable<TData, TValue>({
 			</div>
 			<div className="shadow-xl border border-[#1A1A1A] bg-[#22232E] overflow-hidden">
 				<Table>
-					<TableHeader className="text-start">
+					<TableHeader>
 						{table.getHeaderGroups().map((headerGroup) => (
 							<TableRow
 								key={headerGroup.id}

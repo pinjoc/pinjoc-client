@@ -8,58 +8,55 @@ import { useAccount } from "wagmi";
 
 const BorrowLendPage = () => {
 	const { isConnected } = useAccount();
-	const data = [
-		{
-			id: 1,
-			asset: "Etherium",
-			maturity: "3 Months",
-			apy: 12.8,
-			lenderVault: "3.91k",
-			borrowVault: "3.91k",
-		},
-		{
-			id: 2,
-			asset: "Bitcoin",
-			maturity: "3 Months",
-			apy: 85.2,
-			lenderVault: "3.91k",
-			borrowVault: "3.91k",
-		},
-		{
-			id: 3,
-			asset: "Solana",
-			maturity: "3 Months",
-			apy: 122,
-			lenderVault: "3.91k",
-			borrowVault: "3.91k",
-		},
-		{
-			id: 4,
-			asset: "Dogecoin",
-			maturity: "3 Months",
-			apy: 6.8,
-			lenderVault: "3.91k",
-			borrowVault: "3.91k",
-		},
-	];
-	//   const slugs = [
-	//     "stellar",
-	//     "bitcoinsv",
-	//     "ethereum",
-	//     "dogecoin",
-	//     "solana",
-	//     "coinmarketcap",
-	//     "coinbase",
-	//     "chainlink",
-	//     "hedera",
-	//     "foundryvirtualtabletop",
-	//     "blockchaindotcom",
-	//   ];
+	// const data = [
+	//   {
+	//     id: 1,
+	//     asset: "Etherium",
+	//     maturity: "3 Months",
+	//     apy: 12.8,
+	//     lenderVault: "3.91k",
+	//     borrowVault: "3.91k",
+	//   },
+	//   {
+	//     id: 2,
+	//     asset: "Bitcoin",
+	//     maturity: "3 Months",
+	//     apy: 85.2,
+	//     lenderVault: "3.91k",
+	//     borrowVault: "3.91k",
+	//   },
+	//   {
+	//     id: 3,
+	//     asset: "Solana",
+	//     maturity: "3 Months",
+	//     apy: 122,
+	//     lenderVault: "3.91k",
+	//     borrowVault: "3.91k",
+	//   },
+	//   {
+	//     id: 4,
+	//     asset: "Dogecoin",
+	//     maturity: "3 Months",
+	//     apy: 6.8,
+	//     lenderVault: "3.91k",
+	//     borrowVault: "3.91k",
+	//   },
+	// ];
+	// //   const slugs = [
+	// //     "stellar",
+	// //     "bitcoinsv",
+	// //     "ethereum",
+	// //     "dogecoin",
+	// //     "solana",
+	// //     "coinmarketcap",
+	// //     "coinbase",
+	// //     "chainlink",
+	// //     "hedera",
+	// //     "foundryvirtualtabletop",
+	// //     "blockchaindotcom",
+	// //   ];
 
-	const { availableTokens, error, isAvailableTokenLoading, isError } =
-		useAvailableTokens();
-
-	console.log(availableTokens, error, isAvailableTokenLoading, isError);
+	const { availableTokens, isAvailableTokenLoading } = useAvailableTokens();
 
 	return (
 		<AppLayout>
@@ -81,7 +78,14 @@ const BorrowLendPage = () => {
 				</div>
 			)}
 			<div className="max-w-6xl mx-auto mt-8">
-				<DataTable columns={columns} data={data} />
+				{isAvailableTokenLoading ? (
+					<div className="space-y-3">
+						<div className="bg-[#22232E] animate-pulse h-8 w-96" />
+						<div className="bg-[#22232E] animate-pulse h-72" />
+					</div>
+				) : (
+					<DataTable columns={columns} data={availableTokens!} />
+				)}
 			</div>
 		</AppLayout>
 	);

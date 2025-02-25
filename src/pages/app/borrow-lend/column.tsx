@@ -1,28 +1,20 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { AvailableTokens } from "@/types";
 
-export type Collection = {
-	id: number;
-	asset: string;
-	maturity: number | string;
-	apy: number;
-	lenderVault: string;
-	borrowVault: string;
-};
-
-export const columns: ColumnDef<Collection>[] = [
+export const columns: ColumnDef<AvailableTokens>[] = [
 	{
 		accessorKey: "id",
 		header: "#",
 		cell: ({ row }) => (
 			<div className="w-[40px] text-gray-400 font-extralight">
-				{row.getValue("id")}
+				{row.index + 1}
 			</div>
 		),
 	},
 	{
-		accessorKey: "asset",
+		accessorKey: "DebtTokenSymbol",
 		header: ({ column }) => {
 			return (
 				<Button
@@ -38,13 +30,13 @@ export const columns: ColumnDef<Collection>[] = [
 		cell: ({ row }) => (
 			<div className="flex items-center gap-2">
 				<div className="text-white font-extralight">
-					{row.getValue("asset")}
+					{row.getValue("DebtTokenSymbol")}
 				</div>
 			</div>
 		),
 	},
 	{
-		accessorKey: "maturity",
+		accessorKey: "MaturityRange",
 		header: ({ column }) => {
 			return (
 				<Button
@@ -58,11 +50,13 @@ export const columns: ColumnDef<Collection>[] = [
 			);
 		},
 		cell: ({ row }) => {
-			return <div className="font-extralight">{row.getValue("maturity")}</div>;
+			return (
+				<div className="font-extralight">{row.getValue("MaturityRange")}</div>
+			);
 		},
 	},
 	{
-		accessorKey: "apy",
+		accessorKey: "RateRange",
 		header: ({ column }) => {
 			return (
 				<Button
@@ -76,12 +70,13 @@ export const columns: ColumnDef<Collection>[] = [
 			);
 		},
 		cell: ({ row }) => {
-			const amount = Number.parseFloat(row.getValue("apy"));
-			return <div className="font-extralight">{amount.toFixed(2)} %</div>;
+			return (
+				<div className="font-extralight w-32">{row.getValue("RateRange")}</div>
+			);
 		},
 	},
 	{
-		accessorKey: "lenderVault",
+		accessorKey: "LendingVault",
 		header: ({ column }) => {
 			return (
 				<Button
@@ -95,12 +90,17 @@ export const columns: ColumnDef<Collection>[] = [
 			);
 		},
 		cell: ({ row }) => {
-			const lenderVault = Number.parseFloat(row.getValue("lenderVault"));
-			return <div className="font-extralight">{lenderVault}k</div>;
+			const formatLenderVault = Intl.NumberFormat("en-US", {
+				minimumFractionDigits: 0,
+				maximumFractionDigits: 0,
+				style: "currency",
+				currency: "USD",
+			}).format(row.getValue("LendingVault"));
+			return <div className="font-extralight">{formatLenderVault}</div>;
 		},
 	},
 	{
-		accessorKey: "borrowVault",
+		accessorKey: "BorrowVault",
 		header: ({ column }) => {
 			return (
 				<Button
@@ -114,8 +114,13 @@ export const columns: ColumnDef<Collection>[] = [
 			);
 		},
 		cell: ({ row }) => {
-			const borrowVault = Number.parseFloat(row.getValue("borrowVault"));
-			return <div className="font-extralight">{borrowVault}k</div>;
+			const borrowFormat = Intl.NumberFormat("en-US", {
+				minimumFractionDigits: 0,
+				maximumFractionDigits: 0,
+				style: "currency",
+				currency: "USD",
+			}).format(row.getValue("BorrowVault"));
+			return <div className="font-extralight">{borrowFormat}</div>;
 		},
 	},
 	{
