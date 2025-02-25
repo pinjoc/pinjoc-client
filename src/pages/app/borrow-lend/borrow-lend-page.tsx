@@ -1,5 +1,6 @@
 import AppLayout from "@/components/layouts/app-layout";
 import { ButtonWallet } from "@/components/ui/button-wallet";
+import { useAvailableTokens } from "@/hooks/use-available-tokens";
 import { columns } from "@/pages/app/borrow-lend/column";
 import { DataTable } from "@/pages/app/borrow-lend/data-table";
 import TerminalBoard from "@/pages/app/borrow-lend/terminal-board";
@@ -54,6 +55,12 @@ const BorrowLendPage = () => {
 	//     "foundryvirtualtabletop",
 	//     "blockchaindotcom",
 	//   ];
+
+	const { availableTokens, error, isAvailableTokenLoading, isError } =
+		useAvailableTokens();
+
+	console.log(availableTokens, error, isAvailableTokenLoading, isError);
+
 	return (
 		<AppLayout>
 			{!isConnected && (

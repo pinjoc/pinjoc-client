@@ -1,5 +1,6 @@
 // Provider like query2-an put right here bbyy!
 
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PropsWithChildren } from "react";
 import { WagmiProvider } from "wagmi";
@@ -16,6 +17,7 @@ export function Providers({ children }: PropsWithChildren) {
 				<RainbowKitProvider modalSize="compact" theme={darkTheme()} coolMode>
 					{children}
 				</RainbowKitProvider>
+				{/* <ReactQueryDevtools initialIsOpen={false} /> */}
 			</QueryClientProvider>
 		</WagmiProvider>
 	);
