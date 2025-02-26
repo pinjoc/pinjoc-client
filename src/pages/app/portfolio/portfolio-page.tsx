@@ -1,17 +1,12 @@
 import AppLayout from "@/components/layouts/app-layout";
 import { useAccount } from "wagmi";
-import {
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { columnBorrow } from "./column-borrow";
 import { columnLend } from "./column-lend";
 import { DataTable } from "./data-table";
 import { Banknote, HandCoins, Wallet } from "lucide-react";
-import { ButtonWallet } from "@/components/ui/button-wallet";
+import AddressEmpty from "@/components/ui/address-empty";
 
 const PortfolioPage = () => {
 	const { address } = useAccount();
@@ -59,28 +54,7 @@ const PortfolioPage = () => {
 		<AppLayout>
 			<div className="min-h-screen w-screen">
 				{!address ? (
-					<div className="flex items-center justify-center">
-						<Card className="bg-[#22232E] border-none w-96 p-0 py-4 px-3 rounded-md">
-							<CardHeader>
-								<h1 className="text-2xl font-semibold text-center text-white">
-									PINJ 🪙 C
-								</h1>
-							</CardHeader>
-							<CardContent className="text-white space-y-3 text-center font-light mt-8">
-								<p className="font-semibold text-xl">Ship Together With Us🚀</p>
-								<span className="text-sm">
-									Experience higher yields, better rates, and expanded
-									collateral options
-								</span>
-							</CardContent>
-							<CardFooter className="flex flex-col gap-5 items-center justify-center mt-10">
-								<span className="text-xs font-extralight text-white">
-									Connect your wallet or email to continue
-								</span>
-								<ButtonWallet className="w-full" />
-							</CardFooter>
-						</Card>
-					</div>
+					<AddressEmpty />
 				) : (
 					<div className="max-w-5xl mx-auto">
 						<div className="grid grid-cols-3 gap-2 my-4">
