@@ -81,8 +81,12 @@ export class ApiClient {
 		}
 	}
 
-	async get<T>(url: string, options?: RequestOptions): Promise<T> {
-		return this.request<T>("GET", url, undefined, options);
+	async get<T>(
+		url: string,
+		data?: unknown,
+		options?: RequestOptions,
+	): Promise<T> {
+		return this.request<T>("GET", url, data, options);
 	}
 
 	async post<T>(

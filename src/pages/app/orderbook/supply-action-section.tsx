@@ -1,12 +1,15 @@
 import { Button } from "@/components/ui/button";
+import { ButtonWallet } from "@/components/ui/button-wallet";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
+import { useAccount } from "wagmi";
 
 export function SupplyAction() {
+	const { isConnected } = useAccount();
 	const [amount, setAmount] = useState(0);
 	const [amountMarket, setAmountMarket] = useState(0);
 	return (
@@ -37,14 +40,6 @@ export function SupplyAction() {
 									id="amount-limit"
 									value="98.8 ETH"
 									disabled
-									className="w-24 text-right border-0 text-gray-900"
-								/>
-							</div>
-							<div className="flex justify-between items-center">
-								<Label htmlFor="price-limit">Bond Price</Label>
-								<Input
-									id="price-limit"
-									value="98.8"
 									className="w-24 text-right border-0 text-gray-900"
 								/>
 							</div>
@@ -89,7 +84,15 @@ export function SupplyAction() {
 						</div>
 					</CardContent>
 					<CardFooter className="p-0 pr-3">
-						<Button className="w-full">Place Order</Button>
+						{isConnected ? (
+							<Button type="button" className="w-full">
+								Place Order
+							</Button>
+						) : (
+							<div className="w-full">
+								<ButtonWallet className="rounded-md w-full" />
+							</div>
+						)}
 					</CardFooter>
 				</Card>
 			</TabsContent>
@@ -109,13 +112,6 @@ export function SupplyAction() {
 								/>
 							</div>
 							<div className="flex justify-between items-center">
-								<Label htmlFor="price-market">Bond Price</Label>
-								<Input
-									type="text"
-									disabled
-									value="Market"
-									className="w-24 text-right border-0 text-gray-900"
-								/>
 								<Input
 									id="price-market"
 									value="98.8"
@@ -165,7 +161,15 @@ export function SupplyAction() {
 						</div>
 					</CardContent>
 					<CardFooter className="p-0 pr-3">
-						<Button className="w-full">Place Order</Button>
+						{isConnected ? (
+							<Button type="button" className="w-full">
+								Place Order
+							</Button>
+						) : (
+							<div className="w-full">
+								<ButtonWallet className="rounded-md w-full" />
+							</div>
+						)}
 					</CardFooter>
 				</Card>
 			</TabsContent>

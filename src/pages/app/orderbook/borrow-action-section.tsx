@@ -1,12 +1,15 @@
 import { Button } from "@/components/ui/button";
+import { ButtonWallet } from "@/components/ui/button-wallet";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
+import { useAccount } from "wagmi";
 
 export function BorrowAction() {
+	const { isConnected } = useAccount();
 	const [amount, setAmount] = useState(0);
 	const [amountMarket, setAmountMarket] = useState(0);
 	return (
@@ -29,14 +32,6 @@ export function BorrowAction() {
 				<Card className="border-0 shadow-none p-0">
 					<CardContent className="space-y-2 p-0 my-3">
 						<div className="space-y-2 text-lg">
-							<div className="flex justify-between items-center">
-								<Label htmlFor="price-limit">Bond Price</Label>
-								<Input
-									id="price-limit"
-									defaultValue="98.8"
-									className="w-24 text-right border-0 text-gray-900"
-								/>
-							</div>
 							<div className="flex justify-between items-center">
 								<Label htmlFor="rate-limit">Fixed Rate</Label>
 								<Input
@@ -78,7 +73,15 @@ export function BorrowAction() {
 						</div>
 					</CardContent>
 					<CardFooter className="p-0 pr-3">
-						<Button className="w-full">Place Order</Button>
+						{isConnected ? (
+							<Button type="button" className="w-full">
+								Place Order
+							</Button>
+						) : (
+							<div className="w-full">
+								<ButtonWallet className="rounded-md w-full" />
+							</div>
+						)}
 					</CardFooter>
 				</Card>
 			</TabsContent>
@@ -87,13 +90,6 @@ export function BorrowAction() {
 					<CardContent className="space-y-2 p-0 my-3">
 						<div className="space-y-2 text-lg">
 							<div className="flex justify-between items-center">
-								<Label htmlFor="price-market">Bond Price</Label>
-								<Input
-									type="text"
-									disabled
-									defaultValue="Market"
-									className="w-24 text-right border-0 text-gray-900"
-								/>
 								<Input
 									id="price-market"
 									defaultValue="98.8"
@@ -143,7 +139,15 @@ export function BorrowAction() {
 						</div>
 					</CardContent>
 					<CardFooter className="p-0 pr-3">
-						<Button className="w-full">Place Order</Button>
+						{isConnected ? (
+							<Button type="button" className="w-full">
+								Place Order
+							</Button>
+						) : (
+							<div className="w-full">
+								<ButtonWallet className="rounded-md w-full" />
+							</div>
+						)}
 					</CardFooter>
 				</Card>
 			</TabsContent>

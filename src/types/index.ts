@@ -10,3 +10,9 @@ export interface AvailableTokens {
 	LendingVault: number;
 	BorrowVault: number;
 }
+
+export interface CLOBAvailable {
+	Rate: string;
+	AvailableToken: number;
+	OrderType: string;
+}
