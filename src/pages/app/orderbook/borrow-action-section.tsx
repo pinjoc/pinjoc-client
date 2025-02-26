@@ -7,8 +7,11 @@ import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 import { useAccount } from "wagmi";
+import { useCLOBState } from "./clob-state";
+import { cn } from "@/lib/utils";
 
 export function BorrowAction() {
+	const { state } = useCLOBState();
 	const { isConnected } = useAccount();
 	const [amount, setAmount] = useState(0);
 	const [amountMarket, setAmountMarket] = useState(0);
@@ -36,7 +39,7 @@ export function BorrowAction() {
 								<Label htmlFor="rate-limit">Fixed Rate</Label>
 								<Input
 									id="rate-limit"
-									defaultValue="3.5%"
+									value={`${state.fixedRate}%`}
 									className="w-24 text-right border-0 text-gray-900"
 								/>
 							</div>
@@ -47,8 +50,15 @@ export function BorrowAction() {
 									<Input
 										id="amount-limit"
 										value={amount}
-										onChange={(e) => setAmount(Number(e.target.value) || 0)}
-										className="w-48 text-right border-0 text-gray-900 pr-14"
+										onChange={(e) => {
+											const max = state.maxAmount;
+											const value = Number(e.target.value) || 0;
+											setAmount(value > max ? max : value);
+										}}
+										className={cn(
+											"w-48 text-right border-0 text-gray-900 pr-14",
+											amount > state.maxAmount && "border border-red-500",
+										)}
 									/>
 									<span className="absolute right-3 text-gray-500 text-sm">
 										USDC
@@ -57,7 +67,7 @@ export function BorrowAction() {
 							</div>
 							<Slider
 								value={[amount]}
-								max={100}
+								max={state.maxAmount}
 								step={1}
 								onValueChange={(value) => setAmount(value[0])}
 							/>
@@ -65,7 +75,7 @@ export function BorrowAction() {
 								<button
 									className="text-xs bg-gray-100 p-1 rounded-sm"
 									type="button"
-									onClick={() => setAmount(100)}
+									onClick={() => setAmount(state.maxAmount)}
 								>
 									Max
 								</button>
@@ -100,7 +110,7 @@ export function BorrowAction() {
 								<Label htmlFor="rate-market">Fixed Rate</Label>
 								<Input
 									id="rate-market"
-									defaultValue="3.5%"
+									value={`${state.fixedRate}%`}
 									className="w-24 text-right border-0 text-gray-900"
 								/>
 							</div>
@@ -111,10 +121,15 @@ export function BorrowAction() {
 									<Input
 										id="amount-market"
 										value={amountMarket}
-										onChange={(e) =>
-											setAmountMarket(Number(e.target.value) || 0)
-										}
-										className="w-48 text-right border-0 text-gray-900 pr-14"
+										onChange={(e) => {
+											const max = state.maxAmount;
+											const value = Number(e.target.value) || 0;
+											setAmountMarket(value > max ? max : value);
+										}}
+										className={cn(
+											"w-48 text-right border-0 text-gray-900 pr-14",
+											amountMarket > state.maxAmount && "border border-red-500",
+										)}
 									/>
 									<span className="absolute right-3 text-gray-500 text-sm">
 										USDC
@@ -123,7 +138,7 @@ export function BorrowAction() {
 							</div>
 							<Slider
 								value={[amountMarket]}
-								max={100}
+								max={state.maxAmount}
 								step={1}
 								onValueChange={(value) => setAmountMarket(value[0])}
 							/>
@@ -131,7 +146,7 @@ export function BorrowAction() {
 								<button
 									className="text-xs bg-gray-100 p-1 rounded-sm"
 									type="button"
-									onClick={() => setAmountMarket(100)}
+									onClick={() => setAmountMarket(state.maxAmount)}
 								>
 									Max
 								</button>

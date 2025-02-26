@@ -141,7 +141,7 @@ export const columns: ColumnDef<AvailableTokens>[] = [
 		cell: ({ row }) => {
 			return (
 				<div className="w-32 space-x-2">
-					<Link to={`/orderbook/${row.original.CollateralAddress}`}>
+					<Link to={`/orderbook/${btoa(JSON.stringify(row.original))}`}>
 						<Button
 							size={"sm"}
 							className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer"

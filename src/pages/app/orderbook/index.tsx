@@ -1,58 +1,71 @@
 import V2_AppLayout from "@/components/layouts/v2_app.layout";
 import Stats from "./summary";
 import Pool from "./orderbook";
-import { ChartData, GroupPoolProps } from "./type";
+import { ChartData, PoolProps } from "./type";
 import OrderBookChart from "./chart-orderbook";
 import { Action } from "./action-section";
-import { useUpdateMaturity } from "@/hooks/use-maturity";
-
-const mockGroupPool: GroupPoolProps = {
-	supplies: [
-		{
-			price: 100,
-			apy: 5.2,
-			amount: 1000,
-			type: "supply",
-			maturity: "2025-12-31",
-		},
-		{
-			price: 105,
-			apy: 4.8,
-			amount: 1500,
-			type: "supply",
-			maturity: "2026-06-30",
-		},
-	],
-	borrows: [
-		{
-			price: 98,
-			apy: 6.5,
-			amount: 2000,
-			type: "borrow",
-			maturity: "2025-12-31",
-		},
-		{
-			price: 102,
-			apy: 7.1,
-			amount: 2500,
-			type: "borrow",
-			maturity: "2026-06-30",
-		},
-	],
-	settled: {
-		price: 101,
-		apy: 5.9,
-		amount: 500,
-		type: "settled",
-		maturity: "2025-06-30",
-	},
-};
+import { useParams } from "react-router-dom";
+import { AvailableTokens } from "@/types";
+import { useEffect, useMemo, useState } from "react";
+import { fetchCLOBData } from "@/utils/api";
+import { useQuery } from "@tanstack/react-query";
+import { CLOBStateProvider } from "./clob-state";
 
 export default function OrderbookPage() {
-	const { mutate: updateMaturity } = useUpdateMaturity();
+	const { address } = useParams<{ address?: string }>();
+	const summary = useMemo(() => {
+		return JSON.parse(atob(address || "")) as AvailableTokens;
+	}, [address]);
+
+	const [supply, setSupply] = useState<Array<PoolProps>>();
+	const [borrow, setBorrow] = useState<Array<PoolProps>>();
+
+	const [month, year] = useMemo(() => {
+		return summary.MaturityRange.slice(0, 8).split(" ");
+	}, [summary.MaturityRange]);
+	const { data } = useQuery({
+		queryKey: [
+			"clobData",
+			summary.CollateralAddress,
+			summary.DebtTokenAddress,
+			month,
+			year,
+		],
+		queryFn: () =>
+			fetchCLOBData(
+				summary.CollateralAddress!,
+				summary.DebtTokenAddress!,
+				month!,
+				year!,
+			),
+		staleTime: 1000 * 60 * 5,
+	});
+
+	useEffect(() => {
+		if (data) {
+			const sup: PoolProps[] = data
+				.filter((d) => d.OrderType === "LEND")
+				.map((d) => ({
+					amount: Number(d.AvailableToken),
+					apy: Number(d.Rate),
+					type: d.OrderType,
+				}));
+
+			const bor: PoolProps[] = data
+				.filter((d) => d.OrderType === "BORROW")
+				.map((d) => ({
+					amount: Number(d.AvailableToken),
+					apy: Number(d.Rate),
+					type: d.OrderType,
+				}));
+
+			setSupply(sup);
+			setBorrow(bor);
+		}
+	}, [data]);
 
 	const chartData: ChartData = {
-		labels: ["March2025", "June2025", "September2025", "December2025"],
+		labels: ["Mar2025", "Jun2025", "Sep2025", "Dec2025"],
 		datasets: [
 			{
 				label: "APY",
@@ -66,28 +79,25 @@ export default function OrderbookPage() {
 			},
 		],
 	};
-	const handlePointClick = (pointIndex: number) => {
-		const maturity = chartData.labels[pointIndex];
-
-		updateMaturity(maturity);
-	};
 	return (
 		<V2_AppLayout>
-			<Stats />
-			<div className="w-full h-full grid grid-cols-4">
-				<div className="col-span-2 p-6 border-r border-gray-300">
-					<div>
-						<OrderBookChart data={chartData} onPointClick={handlePointClick} />
+			<CLOBStateProvider>
+				<Stats {...summary} />
+				<div className="w-full grid grid-cols-4 overflow-x-hidden">
+					<div className="col-span-2 p-6 border-r border-gray-300">
+						<div>
+							<OrderBookChart data={chartData} onPointClick={() => {}} />
+						</div>
+						<div className="mt-4">Position</div>
 					</div>
-					<div className="mt-4">Position</div>
+					<div className="col-span-1 p-6 border-r border-gray-300">
+						<Pool borrows={borrow || []} supplies={supply || []} />
+					</div>
+					<div className="col-span-1 p-6">
+						<Action />
+					</div>
 				</div>
-				<div className="col-span-1 p-6 border-r border-gray-300">
-					<Pool {...mockGroupPool} />
-				</div>
-				<div className="col-span-1 p-6">
-					<Action />
-				</div>
-			</div>
+			</CLOBStateProvider>
 		</V2_AppLayout>
 	);
 }

@@ -1,4 +1,4 @@
-import CryptoPair from "@/components/ui/crypto-icon";
+import { AvailableTokens } from "@/types";
 import React from "react";
 
 interface StatItemProps {
@@ -15,15 +15,39 @@ const StatItem: React.FC<StatItemProps> = ({ label, value }) => {
 	);
 };
 
-const Stats = () => {
+const Stats = (data: AvailableTokens) => {
 	return (
 		<div className="w-full border-b border-gray-300">
-			<div className="flex justify-start space-x-12 p-6 bg-white w-full items-center">
-				<CryptoPair coin="eth" />
-				<StatItem label="Supplied" value="5.044M USDC" />
-				<StatItem label="Borrowed" value="3.199M USDC" />
-				<StatItem label="Utilization" value="63.43%" />
-				<StatItem label="Volume (all time)" value="270.5M USDC" />
+			<div className="w-full bg-white p-6 rounded-lg ml-8">
+				{/* Token Information */}
+				<div className="flex items-start gap-4">
+					<h2 className="flex items-center text-lg font-semibold text-gray-800">
+						<img
+							className="w-6 h-6 mr-2"
+							src={data.CollateralTokenIcon}
+							alt={data.CollateralTokenName}
+						/>
+						{data.CollateralTokenSymbol}
+					</h2>
+					<h2 className="flex items-center text-lg font-semibold text-gray-800">
+						<img
+							className="w-6 h-6 mr-2"
+							src={data.DebtTokenIcon}
+							alt={data.DebtTokenName}
+						/>
+						{data.DebtTokenSymbol}
+					</h2>
+				</div>
+
+				<br />
+
+				{/* Stats Section */}
+				<div className="flex space-x-12">
+					<StatItem label="Lending Vault" value={String(data.LendingVault)} />
+					<StatItem label="Borrow Vault" value={String(data.BorrowVault)} />
+					<StatItem label="Maturity" value={data.MaturityRange} />
+					<StatItem label="Rate" value={data.RateRange} />
+				</div>
 			</div>
 		</div>
 	);
