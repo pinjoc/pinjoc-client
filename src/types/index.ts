@@ -1,14 +1,16 @@
 export interface AvailableTokens {
-	DebtTokenName: string;
-	DebtTokenSymbol: string;
-	DebtTokenAddress: string;
+	BorrowVault: number;
+	CollateralAddress: string;
+	CollateralTokenIcon: string;
 	CollateralTokenName: string;
 	CollateralTokenSymbol: string;
-	CollateralAddress: string;
+	DebtTokenAddress: string;
+	DebtTokenIcon: string;
+	DebtTokenName: string;
+	DebtTokenSymbol: string;
+	LendingVault: string;
 	MaturityRange: string;
 	RateRange: string;
-	LendingVault: number;
-	BorrowVault: number;
 }
 
 export interface TokenizedBonds {

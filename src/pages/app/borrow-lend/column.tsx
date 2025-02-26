@@ -3,6 +3,7 @@ import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AvailableTokens } from "@/types";
 import { Link } from "react-router-dom";
+import { AvatarCollapse } from "@/components/ui/avatar-collapse";
 
 export const columns: ColumnDef<AvailableTokens>[] = [
 	{
@@ -29,8 +30,14 @@ export const columns: ColumnDef<AvailableTokens>[] = [
 			);
 		},
 		cell: ({ row }) => (
-			<div className="flex items-center gap-2">
-				<div className="text-white font-extralight">
+			<div className="flex w-36 items-center gap-2">
+				<div className="text-white font-extralight flex items-center gap-8">
+					<AvatarCollapse
+						avatarUrls={[
+							row.original.CollateralTokenIcon,
+							row.original.DebtTokenIcon,
+						]}
+					/>
 					{row.original.DebtTokenSymbol}/{row.original.CollateralTokenSymbol}
 				</div>
 			</div>
@@ -52,7 +59,9 @@ export const columns: ColumnDef<AvailableTokens>[] = [
 		},
 		cell: ({ row }) => {
 			return (
-				<div className="font-extralight">{row.getValue("MaturityRange")}</div>
+				<div className="font-extralight w-48">
+					{row.getValue("MaturityRange")}
+				</div>
 			);
 		},
 	},
