@@ -30,3 +30,7 @@ export interface CLOBAvailable {
 	AvailableToken: number;
 	OrderType: string;
 }
+
+export interface BestRate {
+	best_rate: string;
+}
