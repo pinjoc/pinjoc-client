@@ -6,8 +6,11 @@ import { Collection, columnTransactions } from "./column-transaction";
 import { columnBorrowOrder } from "./column-borrow-order";
 import { columnBuyBond } from "./column-buy-bond";
 import { columnSellBond } from "./column-sell-bond";
+import { useAccount } from "wagmi";
+import AddressEmpty from "@/components/ui/address-empty";
 
 const HistoryPage = () => {
+	const { address } = useAccount();
 	const dataOrderBorrow = [
 		{
 			id: 1,
@@ -97,81 +100,71 @@ const HistoryPage = () => {
 	return (
 		<AppLayout>
 			<div className="min-h-screen w-screen">
-				{/* <div className="flex items-center justify-center">
-          <Card className="bg-transparent">
-            <CardContent className="flex flex-col items-center justify-center gap-5">
-              <Avatar className="bg-red-300 flex items-center justify-center w-10 h-10">
-                🍉
-              </Avatar>
-              <p className="text-white text-xs font-light">
-                {address ? address.slice(0, 10) : "Connect Wallet"}
-              </p>
-              <div className="flex gap-2">
-                <Button className="font-light bg-accent hover:bg-accent/90">
-                  Deposit
-                </Button>
-                <Button className="font-light bg-accent hover:bg-accent/90">
-                  Withdraw
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div> */}
-				<div className="max-w-5xl mx-auto">
-					<Tabs defaultValue="lending-protocol">
-						<TabsList className="bg-transparent">
-							<TabsTrigger
-								value="lending-protocol"
-								className="rounded-full border-none text-white font-light"
-							>
-								Lending Protocol
-							</TabsTrigger>
-							<TabsTrigger
-								value="tokenized-bond"
-								className="rounded-full border-none text-white font-light"
-							>
-								Tokonized Bond
-							</TabsTrigger>
-							<TabsTrigger
-								value="transactions"
-								className="rounded-full border-none font-light text-white hover:bg-secondary-foreground"
-							>
-								Transactions
-							</TabsTrigger>
-						</TabsList>
-						<TabsContent value="lending-protocol">
-							<div>
-								<h1 className="text-white text-xl font-semibold my-3 mb-5">
-									Lending Order
-								</h1>
-								<DataTable columns={columnLendOrder} data={dataOrderLend} />
-							</div>
-							<div>
-								<h1 className="text-white text-xl font-semibold my-3 mb-5">
-									Borowed Order
-								</h1>
-								<DataTable columns={columnBorrowOrder} data={dataOrderBorrow} />
-							</div>
-						</TabsContent>
-						<TabsContent value="tokenized-bond">
-							<div>
-								<h1 className="text-white text-xl font-semibold my-3 mb-5">
-									Buy Order
-								</h1>
-								<DataTable columns={columnBuyBond} data={dataBuyBond} />
-							</div>
-							<div>
-								<h1 className="text-white text-xl font-semibold my-3 mb-5">
-									Sell Order
-								</h1>
-								<DataTable columns={columnSellBond} data={dataSellBond} />
-							</div>
-						</TabsContent>
-						<TabsContent value="transactions">
-							<DataTable columns={columnTransactions} data={dataTransactions} />
-						</TabsContent>
-					</Tabs>
-				</div>
+				{!address ? (
+					<AddressEmpty />
+				) : (
+					<div className="max-w-5xl mx-auto">
+						<Tabs defaultValue="lending-protocol">
+							<TabsList className="bg-transparent">
+								<TabsTrigger
+									value="lending-protocol"
+									className="rounded-full border-none text-white font-light"
+								>
+									Lending Protocol
+								</TabsTrigger>
+								<TabsTrigger
+									value="tokenized-bond"
+									className="rounded-full border-none text-white font-light"
+								>
+									Tokonized Bond
+								</TabsTrigger>
+								<TabsTrigger
+									value="transactions"
+									className="rounded-full border-none font-light text-white hover:bg-secondary-foreground"
+								>
+									Transactions
+								</TabsTrigger>
+							</TabsList>
+							<TabsContent value="lending-protocol">
+								<div>
+									<h1 className="text-white text-xl font-semibold my-3 mb-5">
+										Lending Order
+									</h1>
+									<DataTable columns={columnLendOrder} data={dataOrderLend} />
+								</div>
+								<div>
+									<h1 className="text-white text-xl font-semibold my-3 mb-5">
+										Borowed Order
+									</h1>
+									<DataTable
+										columns={columnBorrowOrder}
+										data={dataOrderBorrow}
+									/>
+								</div>
+							</TabsContent>
+							<TabsContent value="tokenized-bond">
+								<div>
+									<h1 className="text-white text-xl font-semibold my-3 mb-5">
+										Buy Order
+									</h1>
+									<DataTable columns={columnBuyBond} data={dataBuyBond} />
+								</div>
+								<div>
+									<h1 className="text-white text-xl font-semibold my-3 mb-5">
+										Sell Order
+									</h1>
+									<DataTable columns={columnSellBond} data={dataSellBond} />
+								</div>
+							</TabsContent>
+							<TabsContent value="transactions">
+								<DataTable
+									columns={columnTransactions}
+									data={dataTransactions}
+								/>
+							</TabsContent>
+						</Tabs>
+					</div>
+				)}
 			</div>
 		</AppLayout>
 	);

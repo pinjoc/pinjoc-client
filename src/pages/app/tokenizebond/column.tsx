@@ -105,14 +105,11 @@ export const columns: ColumnDef<TokenizedBonds>[] = [
 		cell: ({ row }) => {
 			return (
 				<div className="flex gap-3 justify-center items-center">
-					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
-						Buy
-					</Button>
-					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
-						Sell
-					</Button>
 					<Link to={`/orderbook/${row.original.QuoteTokenAddress}`}>
-						<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
+						<Button
+							size={"sm"}
+							className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer"
+						>
 							View Market
 						</Button>
 					</Link>

@@ -8,6 +8,7 @@ export type Collection = {
 	apy: number;
 	borrowed: string;
 	maturity: string;
+	liquidationRisk: string;
 	colleteral: string;
 };
 
@@ -120,6 +121,28 @@ export const columnBorrow: ColumnDef<Collection>[] = [
 		cell: ({ row }) => {
 			const colleteral = Number.parseFloat(row.getValue("colleteral"));
 			return <div className="font-extralight">{colleteral}k</div>;
+		},
+	},
+	{
+		accessorKey: "liquidationRisk",
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					className="hover:bg-transparent hover:text-white font-extralight"
+				>
+					Liquidation Risk
+					<ArrowUpDown className="ml-2 h-4 w-4" />
+				</Button>
+			);
+		},
+		cell: ({ row }) => {
+			return (
+				<div className="font-extralight">
+					{row.getValue("liquidationRisk")}%
+				</div>
+			);
 		},
 	},
 	{

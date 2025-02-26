@@ -3,6 +3,7 @@ import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AvailableTokens } from "@/types";
 import { Link } from "react-router-dom";
+import { AvatarCollapse } from "@/components/ui/avatar-collapse";
 
 export const columns: ColumnDef<AvailableTokens>[] = [
 	{
@@ -15,7 +16,7 @@ export const columns: ColumnDef<AvailableTokens>[] = [
 		),
 	},
 	{
-		accessorKey: "DebtTokenSymbol",
+		accessorKey: "CollateralTokenName",
 		header: ({ column }) => {
 			return (
 				<Button
@@ -29,8 +30,14 @@ export const columns: ColumnDef<AvailableTokens>[] = [
 			);
 		},
 		cell: ({ row }) => (
-			<div className="flex items-center gap-2">
-				<div className="text-white font-extralight">
+			<div className="flex w-36 items-center gap-2">
+				<div className="text-white font-extralight flex items-center gap-8">
+					<AvatarCollapse
+						avatarUrls={[
+							row.original.DebtTokenIcon,
+							row.original.CollateralTokenIcon,
+						]}
+					/>
 					{row.original.DebtTokenSymbol}/{row.original.CollateralTokenSymbol}
 				</div>
 			</div>
@@ -52,7 +59,9 @@ export const columns: ColumnDef<AvailableTokens>[] = [
 		},
 		cell: ({ row }) => {
 			return (
-				<div className="font-extralight">{row.getValue("MaturityRange")}</div>
+				<div className="font-extralight w-48">
+					{row.getValue("MaturityRange")}
+				</div>
 			);
 		},
 	},
@@ -127,19 +136,16 @@ export const columns: ColumnDef<AvailableTokens>[] = [
 	{
 		accessorKey: "action",
 		header: () => {
-			return <p className="text-center">Action</p>;
+			return <p className="text-start">Action</p>;
 		},
 		cell: ({ row }) => {
 			return (
-				<div className="w-72 space-x-2">
-					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
-						Borrow
-					</Button>
-					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
-						Lend
-					</Button>
-					<Link to={`/orderbook/${btoa(JSON.stringify(row.original))}`}>
-						<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
+				<div className="w-32 space-x-2">
+					<Link to={`/orderbook/${row.original.CollateralAddress}`}>
+						<Button
+							size={"sm"}
+							className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer"
+						>
 							View Market
 						</Button>
 					</Link>
