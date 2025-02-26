@@ -16,7 +16,7 @@ export const columns: ColumnDef<AvailableTokens>[] = [
 		),
 	},
 	{
-		accessorKey: "DebtTokenSymbol",
+		accessorKey: "CollateralTokenName",
 		header: ({ column }) => {
 			return (
 				<Button
@@ -34,8 +34,8 @@ export const columns: ColumnDef<AvailableTokens>[] = [
 				<div className="text-white font-extralight flex items-center gap-8">
 					<AvatarCollapse
 						avatarUrls={[
-							row.original.CollateralTokenIcon,
 							row.original.DebtTokenIcon,
+							row.original.CollateralTokenIcon,
 						]}
 					/>
 					{row.original.DebtTokenSymbol}/{row.original.CollateralTokenSymbol}
@@ -136,19 +136,16 @@ export const columns: ColumnDef<AvailableTokens>[] = [
 	{
 		accessorKey: "action",
 		header: () => {
-			return <p className="text-center">Action</p>;
+			return <p className="text-start">Action</p>;
 		},
 		cell: ({ row }) => {
 			return (
-				<div className="w-72 space-x-2">
-					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
-						Borrow
-					</Button>
-					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
-						Lend
-					</Button>
+				<div className="w-32 space-x-2">
 					<Link to={`/orderbook/${row.original.CollateralAddress}`}>
-						<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
+						<Button
+							size={"sm"}
+							className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer"
+						>
 							View Market
 						</Button>
 					</Link>

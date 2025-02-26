@@ -77,7 +77,7 @@ const BorrowLendPage = () => {
 					</div>
 				</div>
 			)}
-			<div className="max-w-6xl mx-auto mt-8">
+			<div className="max-w-7xl mx-auto mt-8">
 				{isAvailableTokenLoading ? (
 					<div className="space-y-3">
 						<div className="bg-[#22232E] animate-pulse h-8 w-96" />
