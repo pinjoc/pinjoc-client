@@ -107,8 +107,7 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 			</div>
 			<div className="flex flex-col rounded-md overflow-hidden border border-gray-300">
 				<div className="w-full p-3 flex font-medium bg-gray-200 border-b">
-					<span className="flex-1 text-left">Price</span>
-					<span className="flex-1 text-center">APY (%)</span>
+					<span className="flex-1 text-left">APY (%)</span>
 					<span className="flex-1 text-right">Amount</span>
 				</div>
 				{filledPool.map((item, index) => (
@@ -130,8 +129,7 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 						>
 							{item.type !== "empty" ? (
 								<div className="w-full flex justify-between font-medium">
-									<span className="flex-1 text-left">{item.price}</span>
-									<span className="flex-1 text-center">{item.apy}%</span>
+									<span className="flex-1 text-left">{item.apy}%</span>
 									<span className="flex-1 text-right">{item.amount}</span>
 								</div>
 							) : (

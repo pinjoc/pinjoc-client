@@ -22,3 +22,8 @@ export interface TokenizedBonds {
 	MaturityRange: string;
 	Volume24h: number;
 }
+export interface CLOBAvailable {
+	Rate: string;
+	AvailableToken: number;
+	OrderType: string;
+}
