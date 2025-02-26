@@ -16,6 +16,9 @@
 		"enabled": true,
 		"rules": {
 			"recommended": true,
+			"correctness": {
+				"useExhaustiveDependencies": "off"
+			},
 			"suspicious": {
 				"noExplicitAny": "off",
 				"noImplicitAnyLet": "off",

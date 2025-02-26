@@ -16,7 +16,7 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 	const maxItems = 10;
 
 	useEffect(() => {
-		if (borrows && supplies && settled) setAll();
+		setAll();
 	}, [borrows, supplies, settled]);
 
 	useEffect(() => {
@@ -134,7 +134,9 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 									type="button"
 									className={cn(
 										"w-full flex justify-between cursor-pointer hover:bg-gray-100 p-2 rounded",
-										state.fixedRate === item.apy ? "font-bold" : "font-medium",
+										state.fixedRate === item.apy
+											? "font-bold bg-blue-50"
+											: "font-medium bg-white",
 									)}
 									onClick={() => {
 										dispatch({ type: "SET_FIXED_RATE", payload: +item.apy });
