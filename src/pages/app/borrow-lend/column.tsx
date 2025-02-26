@@ -138,7 +138,7 @@ export const columns: ColumnDef<AvailableTokens>[] = [
 					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
 						Lend
 					</Button>
-					<Link to={`/orderbook/${row.original.CollateralAddress}`}>
+					<Link to={`/orderbook/${btoa(JSON.stringify(row.original))}`}>
 						<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
 							View Market
 						</Button>

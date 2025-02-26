@@ -1,14 +1,13 @@
 export interface PoolProps {
-	price: number;
 	apy: number;
 	amount: number;
 	type: string;
 }
 
 export interface GroupPoolProps {
-	supplies: Array<PoolWithMaturityProps>;
-	borrows: Array<PoolWithMaturityProps>;
-	settled?: PoolWithMaturityProps;
+	supplies: Array<PoolProps>;
+	borrows: Array<PoolProps>;
+	settled?: PoolProps;
 }
 
 export interface ChartData {
@@ -23,8 +22,4 @@ export interface ChartData {
 		pointRadius: number;
 		pointHoverRadius: number;
 	}[];
-}
-
-export interface PoolWithMaturityProps extends PoolProps {
-	maturity?: string;
 }

@@ -19,11 +19,15 @@ export const fetchCLOBData = async (
 	month: string,
 	year: string,
 ) => {
-	const data = {
+	const params = {
 		collateral_address: collateralAddress,
 		debt_token_address: debtTokenAddress,
-		month,
-		year,
+		month: month.toString(),
+		year: +year,
 	};
-	return api.get<CLOBAvailable[]>("/clob", data);
+	return api.post<CLOBAvailable[]>("/clob/clob", params, {
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
 };

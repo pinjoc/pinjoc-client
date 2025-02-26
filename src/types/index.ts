@@ -2,9 +2,11 @@ export interface AvailableTokens {
 	DebtTokenName: string;
 	DebtTokenSymbol: string;
 	DebtTokenAddress: string;
+	DebtTokenIcon: string;
 	CollateralTokenName: string;
 	CollateralTokenSymbol: string;
 	CollateralAddress: string;
+	CollateralTokenIcon: string;
 	MaturityRange: string;
 	RateRange: string;
 	LendingVault: number;
@@ -22,6 +24,7 @@ export interface TokenizedBonds {
 	MaturityRange: string;
 	Volume24h: number;
 }
+
 export interface CLOBAvailable {
 	Rate: string;
 	AvailableToken: number;

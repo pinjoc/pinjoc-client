@@ -2,8 +2,10 @@ import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
 import { GroupPoolProps, PoolProps } from "./type";
 import PoolControls from "./button-select-orderbook";
+import { useCLOBState } from "./clob-state";
 
 const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
+	const { state, dispatch } = useCLOBState();
 	const [selectedOption, setSelectedOption] = useState<string>("all");
 	const [filledPool, setFilledPool] = useState<Array<PoolProps>>([]);
 
@@ -14,8 +16,8 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 	const maxItems = 10;
 
 	useEffect(() => {
-		setAll();
-	}, []);
+		if (borrows && supplies && settled) setAll();
+	}, [borrows, supplies, settled]);
 
 	useEffect(() => {
 		switch (selectedOption) {
@@ -99,7 +101,7 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 	};
 
 	return (
-		<div className="w-full max-h-[400px] relative bg-white">
+		<div className="w-full relative bg-white">
 			<div className="mb-6">
 				<h2 className="text-xl font-semibold text-gray-900">Order Book</h2>
 				<br />
@@ -117,21 +119,31 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 					>
 						<div
 							className={cn(
-								"flex-1 relative h-full flex items-center px-4",
-								item.type === "supply"
+								"flex-1 relative h-full flex items-center",
+								item.type === "LEND"
 									? "text-green-700 text-sm"
-									: item.type === "borrow"
+									: item.type === "BORROW"
 										? "text-red-700 text-sm"
-										: item.type === "settled"
+										: item.type === "SET"
 											? "text-gray-900 text-lg bg-gray-300"
 											: "bg-white",
 							)}
 						>
 							{item.type !== "empty" ? (
-								<div className="w-full flex justify-between font-medium">
+								<button
+									type="button"
+									className={cn(
+										"w-full flex justify-between cursor-pointer hover:bg-gray-100 p-2 rounded",
+										state.fixedRate === item.apy ? "font-bold" : "font-medium",
+									)}
+									onClick={() => {
+										dispatch({ type: "SET_FIXED_RATE", payload: +item.apy });
+										dispatch({ type: "SET_MAX_AMOUNT", payload: +item.amount });
+									}}
+								>
 									<span className="flex-1 text-left">{item.apy}%</span>
 									<span className="flex-1 text-right">{item.amount}</span>
-								</div>
+								</button>
 							) : (
 								<div className="w-full h-full" />
 							)}

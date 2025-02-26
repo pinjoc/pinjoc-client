@@ -3,7 +3,7 @@ import { ButtonWallet } from "../ui/button-wallet";
 
 const V2_AppLayout = ({ children }: PropsWithChildren) => {
 	return (
-		<div className="flex flex-col items-center h-screen bg-white">
+		<div className="flex flex-col items-center bg-white overflow-y-scroll">
 			{/* Header */}
 			<header className="w-full p-6 bg-white shadow-md flex justify-between items-center rounded-t-lg">
 				<h1 className="text-2xl font-bold text-gray-600">PINJ🪙C</h1>
@@ -13,7 +13,7 @@ const V2_AppLayout = ({ children }: PropsWithChildren) => {
 			<hr className="border-t border-gray-300" />
 
 			{/* Main Content */}
-			<main className="w-full flex-grow bg-white shadow-lg overflow-y-hidden">
+			<main className="w-full flex-grow bg-white shadow-lg overflow-x-hidden">
 				{children}
 			</main>
 
