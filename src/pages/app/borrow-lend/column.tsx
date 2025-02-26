@@ -2,6 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AvailableTokens } from "@/types";
+import { Link } from "react-router-dom";
 
 export const columns: ColumnDef<AvailableTokens>[] = [
 	{
@@ -128,7 +129,8 @@ export const columns: ColumnDef<AvailableTokens>[] = [
 		header: () => {
 			return <p className="text-center">Action</p>;
 		},
-		cell: () => {
+		cell: ({ row }) => {
+			console.log("row", row);
 			return (
 				<div className="w-72 space-x-2">
 					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
@@ -137,9 +139,11 @@ export const columns: ColumnDef<AvailableTokens>[] = [
 					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
 						Lend
 					</Button>
-					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
-						View Market
-					</Button>
+					<Link to={`/orderbook/${row.original.CollateralAddress}`}>
+						<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
+							View Market
+						</Button>
+					</Link>
 				</div>
 			);
 		},

@@ -14,6 +14,7 @@ export const Router = () => {
 				<Route path="/borrow-lend" element={<BorrowLendPage />} />
 				<Route path="/tokenizebond" element={<TokenizebondPage />} />
 				<Route path="/orderbook" element={<OrderbookPage />} />
+				<Route path="/orderbook/:address" element={<OrderbookPage />} />
 				<Route path="/portfolio" element={<PortfolioPage />} />
 				<Route path="/history" element={<HistoryPage />} />
 			</Routes>
