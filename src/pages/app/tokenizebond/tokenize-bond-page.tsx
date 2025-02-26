@@ -1,5 +1,6 @@
 import AppLayout from "@/components/layouts/app-layout";
 import { ButtonWallet } from "@/components/ui/button-wallet";
+import { useTokenizedbond } from "@/hooks/use-tokenizedbond";
 import TerminalBoard from "@/pages/app/borrow-lend/terminal-board";
 import { columns } from "@/pages/app/tokenizebond/column";
 import { DataTable } from "@/pages/app/tokenizebond/data-table";
@@ -7,32 +8,32 @@ import { useAccount } from "wagmi";
 
 const TokenizebondPage = () => {
 	const { isConnected } = useAccount();
-	const data = [
-		{
-			id: 1,
-			symbol: "GB2030",
-			name: "Government Bond 2030",
-			price: 122222,
-		},
-		{
-			id: 2,
-			symbol: "XYZBOND",
-			name: "Corporate Bond XYZ",
-			price: 122622,
-		},
-		{
-			id: 3,
-			symbol: "GEB25",
-			name: "Green Energy Bond 2025",
-			price: 12000,
-		},
-		{
-			id: 4,
-			symbol: "GEB25",
-			name: "Government Bond 2030",
-			price: 150000,
-		},
-	];
+	//   const data = [
+	//     {
+	//       id: 1,
+	//       symbol: "GB2030",
+	//       name: "Government Bond 2030",
+	//       price: 122222,
+	//     },
+	//     {
+	//       id: 2,
+	//       symbol: "XYZBOND",
+	//       name: "Corporate Bond XYZ",
+	//       price: 122622,
+	//     },
+	//     {
+	//       id: 3,
+	//       symbol: "GEB25",
+	//       name: "Green Energy Bond 2025",
+	//       price: 12000,
+	//     },
+	//     {
+	//       id: 4,
+	//       symbol: "GEB25",
+	//       name: "Government Bond 2030",
+	//       price: 150000,
+	//     },
+	//   ];
 	//   const slugs = [
 	//     "stellar",
 	//     "bitcoinsv",
@@ -46,6 +47,11 @@ const TokenizebondPage = () => {
 	//     "foundryvirtualtabletop",
 	//     "blockchaindotcom",
 	//   ];
+
+	const { isTokenizedbondLoading, tokenizedbonds } = useTokenizedbond();
+
+	console.log("tokenizebond", tokenizedbonds);
+
 	return (
 		<AppLayout>
 			{!isConnected && (
@@ -66,7 +72,14 @@ const TokenizebondPage = () => {
 				</div>
 			)}
 			<div className="max-w-6xl mx-auto mt-8">
-				<DataTable columns={columns} data={data} />
+				{isTokenizedbondLoading ? (
+					<div className="space-y-3">
+						<div className="bg-[#22232E] animate-pulse h-8 w-96" />
+						<div className="bg-[#22232E] animate-pulse h-72" />
+					</div>
+				) : (
+					<DataTable columns={columns} data={tokenizedbonds!} />
+				)}
 			</div>
 		</AppLayout>
 	);

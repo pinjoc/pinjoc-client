@@ -61,10 +61,16 @@ export function DataTable<TData, TValue>({
 				<div className="relative flex-1 max-w-sm">
 					<Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
 					<Input
-						placeholder="Search by name"
-						value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+						placeholder="Search by symbol"
+						value={
+							(table
+								.getColumn("QuoteTokenSymbol")
+								?.getFilterValue() as string) ?? ""
+						}
 						onChange={(event) =>
-							table.getColumn("name")?.setFilterValue(event.target.value)
+							table
+								.getColumn("QuoteTokenSymbol")
+								?.setFilterValue(event.target.value)
 						}
 						className="pl-9 bg-[#0A0A0A] border border-[#1A1A1A] text-white placeholder:text-gray-500"
 					/>

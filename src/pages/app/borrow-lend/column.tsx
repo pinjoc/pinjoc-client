@@ -130,7 +130,6 @@ export const columns: ColumnDef<AvailableTokens>[] = [
 			return <p className="text-center">Action</p>;
 		},
 		cell: ({ row }) => {
-			console.log("row", row);
 			return (
 				<div className="w-72 space-x-2">
 					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">

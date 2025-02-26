@@ -1,26 +1,28 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { TokenizedBonds } from "@/types";
+import { Link } from "react-router-dom";
 
-export type Collection = {
-	id: number;
-	symbol: string;
-	name: string;
-	price: number;
-};
+// export type Collection = {
+//   id: number;
+//   symbol: string;
+//   name: string;
+//   price: number;
+// };
 
-export const columns: ColumnDef<Collection>[] = [
+export const columns: ColumnDef<TokenizedBonds>[] = [
 	{
 		accessorKey: "id",
 		header: "#",
 		cell: ({ row }) => (
 			<div className="w-[40px] text-gray-400 font-extralight">
-				{row.getValue("id")}
+				{row.index + 1}
 			</div>
 		),
 	},
 	{
-		accessorKey: "symbol",
+		accessorKey: "QuoteTokenSymbol",
 		header: ({ column }) => {
 			return (
 				<Button
@@ -36,13 +38,13 @@ export const columns: ColumnDef<Collection>[] = [
 		cell: ({ row }) => (
 			<div className="flex items-center gap-2">
 				<div className="text-white font-extralight">
-					{row.getValue("symbol")}
+					{row.getValue("QuoteTokenSymbol")}
 				</div>
 			</div>
 		),
 	},
 	{
-		accessorKey: "name",
+		accessorKey: "QuoteTokenName",
 		header: ({ column }) => {
 			return (
 				<Button
@@ -56,11 +58,13 @@ export const columns: ColumnDef<Collection>[] = [
 			);
 		},
 		cell: ({ row }) => {
-			return <div className="font-extralight">{row.getValue("name")}</div>;
+			return (
+				<div className="font-extralight">{row.getValue("QuoteTokenName")}</div>
+			);
 		},
 	},
 	{
-		accessorKey: "price",
+		accessorKey: "PriceRange",
 		header: ({ column }) => {
 			return (
 				<Button
@@ -74,8 +78,23 @@ export const columns: ColumnDef<Collection>[] = [
 			);
 		},
 		cell: ({ row }) => {
-			const price = Number.parseFloat(row.getValue("price"));
-			return <div className="font-extralight">{price.toFixed(2)}</div>;
+			function formatRange(value: string) {
+				const [start, end] = value
+					.split("~")
+					.map((value: string) => Number.parseInt(value.trim()));
+				const formatter = new Intl.NumberFormat("en-US", {
+					currency: "USD",
+					style: "currency",
+					maximumFractionDigits: 0,
+					minimumFractionDigits: 0,
+				});
+				return `${formatter.format(start)} ~ ${formatter.format(end)}`;
+			}
+			return (
+				<div className="font-extralight">
+					{formatRange(row.getValue("PriceRange"))}
+				</div>
+			);
 		},
 	},
 	{
@@ -83,7 +102,7 @@ export const columns: ColumnDef<Collection>[] = [
 		header: () => {
 			return <p className="text-center">Action</p>;
 		},
-		cell: () => {
+		cell: ({ row }) => {
 			return (
 				<div className="flex gap-3 justify-center items-center">
 					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
@@ -92,9 +111,11 @@ export const columns: ColumnDef<Collection>[] = [
 					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
 						Sell
 					</Button>
-					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
-						View Market
-					</Button>
+					<Link to={`/orderbook/${row.original.QuoteTokenAddress}`}>
+						<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
+							View Market
+						</Button>
+					</Link>
 				</div>
 			);
 		},

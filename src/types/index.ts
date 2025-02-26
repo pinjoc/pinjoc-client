@@ -10,3 +10,15 @@ export interface AvailableTokens {
 	LendingVault: number;
 	BorrowVault: number;
 }
+
+export interface TokenizedBonds {
+	QuoteTokenName: string;
+	QuoteTokenSymbol: string;
+	QuoteTokenAddress: string;
+	BaseTokenName: string;
+	BaseTokenSymbol: string;
+	BaseTokenAddress: string;
+	PriceRange: string;
+	MaturityRange: string;
+	Volume24h: number;
+}
