@@ -7,7 +7,7 @@ import { Action } from "./action-section";
 import { useParams } from "react-router-dom";
 import { AvailableTokens } from "@/types";
 import { useEffect, useMemo, useState } from "react";
-import { fetchCLOBData } from "@/utils/api";
+import { fetchCLOBBestPrice, fetchCLOBData } from "@/utils/api";
 import { useQuery } from "@tanstack/react-query";
 import { CLOBStateProvider } from "./clob-state";
 
@@ -19,6 +19,7 @@ export default function OrderbookPage() {
 
 	const [supply, setSupply] = useState<Array<PoolProps>>();
 	const [borrow, setBorrow] = useState<Array<PoolProps>>();
+	const [settled, setSettled] = useState<PoolProps>();
 
 	const [month, year] = useMemo(() => {
 		return summary.MaturityRange.slice(0, 8).split(" ");
@@ -33,6 +34,24 @@ export default function OrderbookPage() {
 		],
 		queryFn: () =>
 			fetchCLOBData(
+				summary.CollateralAddress!,
+				summary.DebtTokenAddress!,
+				month!,
+				year!,
+			),
+		staleTime: 1000 * 60 * 5,
+	});
+
+	const { data: dataBestRate } = useQuery({
+		queryKey: [
+			"bestRate",
+			summary.CollateralAddress,
+			summary.DebtTokenAddress,
+			month,
+			year,
+		],
+		queryFn: () =>
+			fetchCLOBBestPrice(
 				summary.CollateralAddress!,
 				summary.DebtTokenAddress!,
 				month!,
@@ -59,10 +78,17 @@ export default function OrderbookPage() {
 					type: d.OrderType,
 				}));
 
+			const bestPrice = {
+				amount: 0,
+				apy: +(dataBestRate?.best_rate || "0"),
+				type: "settled",
+			};
+
+			setSettled(bestPrice);
 			setSupply(sup);
 			setBorrow(bor);
 		}
-	}, [data]);
+	}, [data, dataBestRate]);
 
 	const chartData: ChartData = {
 		labels: ["Mar2025", "Jun2025", "Sep2025", "Dec2025"],
@@ -91,7 +117,11 @@ export default function OrderbookPage() {
 						<div className="mt-4">Position</div>
 					</div>
 					<div className="col-span-1 p-6 border-r border-gray-300">
-						<Pool borrows={borrow || []} supplies={supply || []} />
+						<Pool
+							borrows={borrow || []}
+							settled={settled}
+							supplies={supply || []}
+						/>
 					</div>
 					<div className="col-span-1 p-6">
 						<Action />
