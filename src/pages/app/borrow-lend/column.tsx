@@ -31,7 +31,7 @@ export const columns: ColumnDef<AvailableTokens>[] = [
 		cell: ({ row }) => (
 			<div className="flex items-center gap-2">
 				<div className="text-white font-extralight">
-					{row.getValue("DebtTokenSymbol")}
+					{row.original.DebtTokenSymbol}/{row.original.CollateralTokenSymbol}
 				</div>
 			</div>
 		),

@@ -62,12 +62,12 @@ export function DataTable<TData, TValue>({
 						placeholder="Search by asset"
 						value={
 							(table
-								.getColumn("DebtTokenSymbol")
+								.getColumn("CollateralTokenName")
 								?.getFilterValue() as string) ?? ""
 						}
 						onChange={(event) =>
 							table
-								.getColumn("DebtTokenSymbol")
+								.getColumn("CollateralTokenName")
 								?.setFilterValue(event.target.value)
 						}
 						className="pl-9 bg-[#0A0A0A] border border-[#1A1A1A] text-white placeholder:text-gray-500"
