@@ -7,6 +7,7 @@ export type Collection = {
 	asset: string;
 	apy: number;
 	maturity: string;
+	defaultRisk: string;
 	supplied: string;
 	earned: string;
 };
@@ -123,15 +124,38 @@ export const columnLend: ColumnDef<Collection>[] = [
 		},
 	},
 	{
+		accessorKey: "defaultRisk",
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					className="hover:bg-transparent hover:text-white font-extralight"
+				>
+					Default Risk
+					<ArrowUpDown className="ml-2 h-4 w-4" />
+				</Button>
+			);
+		},
+		cell: ({ row }) => {
+			return (
+				<div className="font-extralight">{row.getValue("defaultRisk")}%</div>
+			);
+		},
+	},
+	{
 		accessorKey: "action",
 		header: () => {
 			return <p>Action</p>;
 		},
 		cell: () => {
 			return (
-				<div className="w-32 space-x-2">
+				<div className="w-full flex items-center space-x-2">
 					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
 						Withdraw
+					</Button>
+					<Button className="bg-[#121421] hover:bg-[#121421]/90 cursor-pointer">
+						View Token Market
 					</Button>
 				</div>
 			);
