@@ -55,7 +55,9 @@ const Pool = () => {
 			borrowCount = maxItems;
 		}
 
-		const adjustedBorrow = borrow.slice(0, borrowCount);
+		const adjustedBorrow = borrow
+			.slice(0, borrowCount)
+			.sort((a, b) => a.apy - b.apy);
 
 		setFilledPool([
 			...createEmptyItems(maxItems - borrowCount),
@@ -71,7 +73,9 @@ const Pool = () => {
 			supplyCount = maxItems;
 		}
 
-		const adjustedSupply = supply.slice(0, supplyCount);
+		const adjustedSupply = supply
+			.slice(0, supplyCount)
+			.sort((a, b) => b.apy - a.apy);
 
 		setFilledPool([
 			...adjustedSupply,
@@ -89,8 +93,12 @@ const Pool = () => {
 			supplyCount = maxItems - borrowCount;
 		}
 
-		const adjustedBorrow = borrow.slice(0, borrowCount).reverse();
-		const adjustedSupply = supply.slice(0, supplyCount).reverse();
+		const adjustedBorrow = borrow
+			.slice(0, borrowCount)
+			.sort((a, b) => a.apy - b.apy);
+		const adjustedSupply = supply
+			.slice(0, supplyCount)
+			.sort((a, b) => b.apy - a.apy);
 
 		setFilledPool([
 			...createEmptyItems(
@@ -100,8 +108,6 @@ const Pool = () => {
 			...adjustedSupply,
 		]);
 	};
-
-	console.log(filledPool, settled);
 
 	return (
 		<div className="w-full relative">
