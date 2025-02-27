@@ -1,3 +1,4 @@
+import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { Button } from "@/components/ui/button";
 import { ButtonWallet } from "@/components/ui/button-wallet";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -5,12 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
 import { useCLOBState } from "./clob-state";
 import { cn } from "@/lib/utils";
-import { usePlaceOrder } from "@/hooks/use-place-order";
 import { AutoRollSupply } from "./autoroll";
+import { usePlaceOrder } from "@/hooks/use-place-order";
+// import { placeOrderAbi } from "@/abis/pinjoc/place-order-abi";
+import { toast } from "sonner";
 
 export function SupplyAction() {
 	const { state, dispatch } = useCLOBState();
@@ -19,57 +22,57 @@ export function SupplyAction() {
 	const [amountMarket, setAmountMarket] = useState(0);
 
 	// TODO: Berikut adalah cara integerasi smart contract yang masih (mungkin) salah
-	// const contractAddr = "0x8d37312f46377C4cEa898c5183dbb8c4aD1c4e18" as const;
-	// const { writeContract, isPending, data: hash } = useWriteContract();
-	// const { isLoading, isSuccess, isError } = useWaitForTransactionReceipt({
-	//   hash,
-	// });
+	// const contractAddr = "0x6f79Ec0beD0b721750477778B25f02Ac104b8F77" as const;
+	const { data: hash } = useWriteContract();
+	const { isLoading, isSuccess, isError } = useWaitForTransactionReceipt({
+		hash,
+	});
 
-	// const _debtToken = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-	// const _collateralToken = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
-	// const _amount = BigInt(1000000000);
-	// const _rate = BigInt(60000000000000000);
-	// const _maturity = BigInt(9999999999999999999999999999999);
-	// const _maturityMonth = "MAY";
-	// const _maturityYear = BigInt(2025);
-	// const _lendingOrderType = 0;
-	// const _isMatchOrder = false; // Tambahkan nilai default untuk _isMatchOrder
+	const _debtToken = "0x0F848482cC12EA259DA229e7c5C4949EdA7E6475";
+	const _collateralToken = "0xa8014bB3A0020C0FF326Ef3AF3E1c55F6e5B25c7"; //WETH
+	const _amount = BigInt(100) * BigInt(10 ** 6);
+	const _rate = BigInt(500000000000); // 6% dalam wei (0.06 ETH);
+	const _maturity = BigInt(1748449527);
+	const _maturityMonth = "MAY";
+	const _maturityYear = BigInt(2025);
+	const _lendingOrderType = 0;
+	const _collateralAmount = BigInt(1000000000);
 
 	// const handlePlaceOrder = async () => {
-	//   try {
-	//     await writeContract({
-	//       abi: placeOrderAbi,
-	//       address: contractAddr,
-	//       functionName: "placeOrder",
-	//       args: [
-	//         _debtToken,
-	//         _collateralToken,
-	//         _amount,
-	//         _rate,
-	//         _maturity,
-	//         _maturityMonth,
-	//         _maturityYear,
-	//         _lendingOrderType,
-	//         _isMatchOrder,
-	//       ],
-	//     });
-	//   } catch (error) {
-	//     console.error("Error placing order:", error);
-	//     toast.dismiss();
-	//     toast.error("Transaction failed!");
-	//   }
+	// 	try {
+	// 		await writeContract({
+	// 			abi: placeOrderAbi,
+	// 			address: contractAddr,
+	// 			functionName: "placeOrder",
+	// 			args: [
+	// 				_debtToken,
+	// 				_collateralToken,
+	// 				_amount,
+	// 				_rate,
+	// 				_maturity,
+	// 				_maturityMonth,
+	// 				_maturityYear,
+	// 				_lendingOrderType,
+	// 				_isMatchOrder,
+	// 			],
+	// 		});
+	// 	} catch (error) {
+	// 		console.error("Error placing order:", error);
+	// 		toast.dismiss();
+	// 		toast.error("Transaction failed!");
+	// 	}
 	// };
 
-	// useEffect(() => {
-	//   if (isLoading) {
-	//     toast.loading("Transaction is being processed...");
-	//   }
+	useEffect(() => {
+		if (isLoading) {
+			toast.loading("Transaction is being processed...");
+		}
 
-	//   if (isError || isSuccess) {
-	//     toast.dismiss();
-	//     toast.success("Order placed successfully!");
-	//   }
-	// }, [isLoading, isSuccess, isError]);
+		if (isError || isSuccess) {
+			toast.dismiss();
+			toast.success("Order placed successfully!");
+		}
+	}, [isLoading, isSuccess, isError]);
 
 	const { placeOrder, isPlacing } = usePlaceOrder({
 		onSuccess: (result) => {
@@ -83,15 +86,15 @@ export function SupplyAction() {
 	const handleClick = async () => {
 		try {
 			await placeOrder({
-				debtToken: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-				collateralToken: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
-				amount: BigInt(1000000000),
-				rate: BigInt(60000000000000000),
-				maturity: BigInt(9999999999999999999999999999999),
-				maturityMonth: "MAY",
-				maturityYear: BigInt(2025),
-				lendingOrderType: 0,
-				isMatchOrder: false,
+				debtToken: _debtToken,
+				collateralToken: _collateralToken,
+				amount: _amount,
+				collateralAmount: _collateralAmount,
+				rate: _rate,
+				maturity: _maturity,
+				maturityMonth: _maturityMonth,
+				maturityYear: _maturityYear,
+				lendingOrderType: _lendingOrderType,
 			});
 		} catch (error) {
 			console.error("Failed to place order:", error);

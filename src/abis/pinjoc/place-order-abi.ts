@@ -19,6 +19,11 @@ export const placeOrderAbi = [
 				internalType: "uint256",
 			},
 			{
+				name: "_collateralAmount",
+				type: "uint256",
+				internalType: "uint256",
+			},
+			{
 				name: "_rate",
 				type: "uint256",
 				internalType: "uint256",
@@ -42,11 +47,6 @@ export const placeOrderAbi = [
 				name: "_lendingOrderType",
 				type: "uint8",
 				internalType: "enum LendingOrderType",
-			},
-			{
-				name: "_isMatchOrder",
-				type: "bool",
-				internalType: "bool",
 			},
 		],
 		outputs: [],
