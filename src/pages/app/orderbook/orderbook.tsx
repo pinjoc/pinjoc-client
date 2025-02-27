@@ -55,13 +55,31 @@ const Pool = () => {
 			borrowCount = maxItems;
 		}
 
-		const adjustedBorrow = borrow
-			.slice(0, borrowCount)
-			.sort((a, b) => a.apy - b.apy);
+		// Separate the items into removed and remaining ones for borrow
+		const { removedborrowItems, remainingborrowItems } = borrow.reduce(
+			(acc, item) => {
+				if (item.apy === settled) {
+					acc.removedborrowItems.push(item); // Collect removed borrow items
+				} else {
+					acc.remainingborrowItems.push(item); // Collect remaining borrow items
+				}
+				return acc;
+			},
+			{
+				removedborrowItems: [] as PoolProps[],
+				remainingborrowItems: [] as PoolProps[],
+			},
+		);
 
+		const adjustedborrow = remainingborrowItems
+			.slice(0, borrowCount)
+			.sort((a, b) => b.apy - a.apy);
+
+		// Combine and set the filled pool
 		setFilledPool([
-			...createEmptyItems(maxItems - borrowCount),
-			...adjustedBorrow,
+			...createEmptyItems(maxItems - (borrowCount + (settled ? 1 : 0))),
+			...removedborrowItems,
+			...adjustedborrow,
 		]);
 	};
 
@@ -73,13 +91,31 @@ const Pool = () => {
 			supplyCount = maxItems;
 		}
 
-		const adjustedSupply = supply
+		// Separate the items into removed and remaining ones for supply
+		const { removedSupplyItems, remainingSupplyItems } = supply.reduce(
+			(acc, item) => {
+				if (item.apy === settled) {
+					acc.removedSupplyItems.push(item); // Collect removed supply items
+				} else {
+					acc.remainingSupplyItems.push(item); // Collect remaining supply items
+				}
+				return acc;
+			},
+			{
+				removedSupplyItems: [] as PoolProps[],
+				remainingSupplyItems: [] as PoolProps[],
+			},
+		);
+
+		const adjustedSupply = remainingSupplyItems
 			.slice(0, supplyCount)
 			.sort((a, b) => b.apy - a.apy);
 
+		// Combine and set the filled pool
 		setFilledPool([
+			...createEmptyItems(maxItems - (supplyCount + (settled ? 1 : 0))),
+			...removedSupplyItems,
 			...adjustedSupply,
-			...createEmptyItems(maxItems - supplyCount),
 		]);
 	};
 
@@ -93,18 +129,55 @@ const Pool = () => {
 			supplyCount = maxItems - borrowCount;
 		}
 
-		const adjustedBorrow = borrow
+		// Separate the items into removed and remaining ones for borrow
+		const { removedBorrowItems, remainingBorrowItems } = borrow.reduce(
+			(acc, item) => {
+				if (item.apy === settled) {
+					acc.removedBorrowItems.push(item); // Collect removed borrow items
+				} else {
+					acc.remainingBorrowItems.push(item); // Collect remaining borrow items
+				}
+				return acc;
+			},
+			{
+				removedBorrowItems: [] as PoolProps[],
+				remainingBorrowItems: [] as PoolProps[],
+			},
+		);
+
+		// Separate the items into removed and remaining ones for supply
+		const { removedSupplyItems, remainingSupplyItems } = supply.reduce(
+			(acc, item) => {
+				if (item.apy === settled) {
+					acc.removedSupplyItems.push(item); // Collect removed supply items
+				} else {
+					acc.remainingSupplyItems.push(item); // Collect remaining supply items
+				}
+				return acc;
+			},
+			{
+				removedSupplyItems: [] as PoolProps[],
+				remainingSupplyItems: [] as PoolProps[],
+			},
+		);
+
+		// Adjusted borrow and supply lists after slicing and sorting
+		const adjustedBorrow = remainingBorrowItems
 			.slice(0, borrowCount)
 			.sort((a, b) => a.apy - b.apy);
-		const adjustedSupply = supply
+
+		const adjustedSupply = remainingSupplyItems
 			.slice(0, supplyCount)
 			.sort((a, b) => b.apy - a.apy);
 
+		// Combine and set the filled pool
 		setFilledPool([
 			...createEmptyItems(
 				maxItems - (borrowCount + supplyCount + (settled ? 1 : 0)),
 			),
 			...adjustedBorrow,
+			...removedBorrowItems,
+			...removedSupplyItems,
 			...adjustedSupply,
 		]);
 	};
