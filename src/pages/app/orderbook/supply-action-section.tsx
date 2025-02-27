@@ -14,10 +14,11 @@ import { AutoRollSupply } from "./autoroll";
 import { usePlaceOrder } from "@/hooks/use-place-order";
 // import { placeOrderAbi } from "@/abis/pinjoc/place-order-abi";
 import { toast } from "sonner";
+import { useBalance } from "@/hooks/use-balance";
 
 export function SupplyAction() {
 	const { state, dispatch } = useCLOBState();
-	const { isConnected } = useAccount();
+	const { isConnected, address } = useAccount();
 	const [amount, setAmount] = useState(0);
 	const [amountMarket, setAmountMarket] = useState(0);
 
@@ -101,6 +102,12 @@ export function SupplyAction() {
 		}
 	};
 
+	const {
+		balance: amountBalance,
+		// error: collateralError,
+		// loading: collateralLoading,
+	} = useBalance(address!, state.token.debtAddress as `0x${string}`);
+
 	return (
 		<Tabs
 			onValueChange={(value) => {
@@ -140,9 +147,9 @@ export function SupplyAction() {
 								<div className="relative flex items-center">
 									<Input
 										id="amount-market"
-										value={56}
+										value={amountBalance?.toString()}
 										disabled
-										className="w-24 text-right border-0 mr-8 bg-transparent text-white"
+										className="w-24 text-right border-0 mr-10 bg-transparent text-white"
 									/>
 									<span className="absolute right-3 text-gray-500 text-sm">
 										{state.token.debt}
@@ -190,7 +197,7 @@ export function SupplyAction() {
 									type="button"
 									onClick={() => setAmount(state.maxAmount)}
 								>
-									Max
+									Max {amountBalance?.toString()}
 								</button>
 							</div>
 							<br />
@@ -228,9 +235,9 @@ export function SupplyAction() {
 								<div className="relative flex items-center">
 									<Input
 										id="amount-limit"
-										value={56}
+										value={amountBalance?.toString()}
 										disabled
-										className="w-24 text-right border-0 mr-8 bg-transparent text-white"
+										className="w-24 text-right border-0 mr-10 bg-transparent text-white"
 									/>
 									<span className="absolute right-3 text-gray-500 text-sm">
 										{state.token.debt}
@@ -285,7 +292,7 @@ export function SupplyAction() {
 									type="button"
 									onClick={() => setAmount(state.maxAmount)}
 								>
-									Max
+									Max {amountBalance?.toString()}
 								</button>
 							</div>
 							<br />

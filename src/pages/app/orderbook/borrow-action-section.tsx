@@ -32,8 +32,8 @@ export function BorrowAction() {
 	const handleClick = async () => {
 		try {
 			await placeOrder({
-				debtToken: state.token.debtAddress,
-				collateralToken: state.token.collateralAddress,
+				debtToken: state.token.debtAddress as `0x${string}`,
+				collateralToken: state.token.collateralAddress as `0x${string}`,
 				amount: BigInt(1000000000),
 				collateralAmount: BigInt(1000000000),
 				rate: BigInt(60000000000000000),
@@ -51,13 +51,13 @@ export function BorrowAction() {
 		balance: debtBalance,
 		// error: debtError,
 		// loading: debtLoading,
-	} = useBalance(address!, state.token.debtAddress);
+	} = useBalance(address!, state.token.debtAddress as `0x${string}`);
 
 	const {
 		balance: collateralBalance,
 		// error: collateralError,
 		// loading: collateralLoading,
-	} = useBalance(address!, state.token.debtAddress);
+	} = useBalance(address!, state.token.collateralAddress as `0x${string}`);
 
 	return (
 		<Tabs
@@ -141,7 +141,7 @@ export function BorrowAction() {
 							</div>
 							<div className="space-y-2">
 								<div className="flex items-center justify-between gap-2">
-									<Label htmlFor="debt-limit">Debt</Label>
+									<Label htmlFor="debt-limit">Borrow</Label>
 									<div className="relative flex items-center">
 										<Input
 											id="debt-limit"
@@ -258,7 +258,7 @@ export function BorrowAction() {
 							</div>
 							<div className="space-y-2">
 								<div className="flex items-center justify-between gap-2">
-									<Label htmlFor="debt-market">Debt</Label>
+									<Label htmlFor="debt-market">Borrow</Label>
 									<div className="relative flex items-center">
 										<Input
 											id="debt-market"

@@ -18,8 +18,6 @@ export const useUpdateMaturity = () => {
 
 	return useMutation({
 		mutationFn: async (newMaturity: string) => {
-			// TODO: Remove when prod
-			console.log(newMaturity);
 			return Promise.resolve(newMaturity);
 		},
 		onSuccess: (newMaturity) => {

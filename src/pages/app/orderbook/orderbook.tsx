@@ -1,11 +1,14 @@
 import { cn } from "@/lib/utils";
-import React, { useEffect, useState } from "react";
-import { GroupPoolProps, PoolProps } from "./type";
+import { useEffect, useState } from "react";
+import { PoolProps } from "./type";
 import PoolControls from "./button-select-orderbook";
 import { useCLOBState } from "./clob-state";
 
-const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
-	const { state, dispatch } = useCLOBState();
+const Pool = () => {
+	const {
+		state: { borrow, supply, settled, fixedRate },
+		dispatch,
+	} = useCLOBState();
 	const [selectedOption, setSelectedOption] = useState<string>("all");
 	const [filledPool, setFilledPool] = useState<Array<PoolProps>>([]);
 
@@ -17,8 +20,8 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 
 	useEffect(() => {
 		setAll();
-		dispatch({ type: "SET_BEST_RATE", payload: +settled?.apy! });
-	}, [borrows, supplies, settled]);
+		dispatch({ type: "SET_BEST_RATE", payload: +settled });
+	}, [borrow, supply, settled]);
 
 	useEffect(() => {
 		switch (selectedOption) {
@@ -45,42 +48,80 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 		}));
 
 	const setJustBorrow = () => {
-		let borrowCount = borrows.length;
+		let borrowCount = borrow.length;
 
 		if (borrowCount > maxItems) {
 			// Here borrowRatio is always 1, so we can simply set borrowCount to maxItems.
 			borrowCount = maxItems;
 		}
 
-		const adjustedBorrows = borrows.slice(0, borrowCount);
+		// Separate the items into removed and remaining ones for borrow
+		const { removedborrowItems, remainingborrowItems } = borrow.reduce(
+			(acc, item) => {
+				if (item.apy === settled) {
+					acc.removedborrowItems.push(item); // Collect removed borrow items
+				} else {
+					acc.remainingborrowItems.push(item); // Collect remaining borrow items
+				}
+				return acc;
+			},
+			{
+				removedborrowItems: [] as PoolProps[],
+				remainingborrowItems: [] as PoolProps[],
+			},
+		);
 
+		const adjustedborrow = remainingborrowItems
+			.slice(0, borrowCount)
+			.sort((a, b) => b.apy - a.apy);
+
+		// Combine and set the filled pool
 		setFilledPool([
-			...createEmptyItems(maxItems - borrowCount),
-			...adjustedBorrows,
-			...(settled ? [settled] : []),
+			...createEmptyItems(maxItems - (borrowCount + (settled ? 1 : 0))),
+			...removedborrowItems,
+			...adjustedborrow,
 		]);
 	};
 
 	const setJustSupply = () => {
-		let supplyCount = supplies.length;
+		let supplyCount = supply.length;
 
 		if (supplyCount > maxItems) {
 			// Here supplyRatio is always 1, so we can simply set supplyCount to maxItems.
 			supplyCount = maxItems;
 		}
 
-		const adjustedSupplies = supplies.slice(0, supplyCount);
+		// Separate the items into removed and remaining ones for supply
+		const { removedSupplyItems, remainingSupplyItems } = supply.reduce(
+			(acc, item) => {
+				if (item.apy === settled) {
+					acc.removedSupplyItems.push(item); // Collect removed supply items
+				} else {
+					acc.remainingSupplyItems.push(item); // Collect remaining supply items
+				}
+				return acc;
+			},
+			{
+				removedSupplyItems: [] as PoolProps[],
+				remainingSupplyItems: [] as PoolProps[],
+			},
+		);
 
+		const adjustedSupply = remainingSupplyItems
+			.slice(0, supplyCount)
+			.sort((a, b) => b.apy - a.apy);
+
+		// Combine and set the filled pool
 		setFilledPool([
-			...(settled ? [settled] : []),
-			...adjustedSupplies,
-			...createEmptyItems(maxItems - supplyCount),
+			...createEmptyItems(maxItems - (supplyCount + (settled ? 1 : 0))),
+			...removedSupplyItems,
+			...adjustedSupply,
 		]);
 	};
 
 	const setAll = () => {
-		let borrowCount = borrows.length;
-		let supplyCount = supplies.length;
+		let borrowCount = borrow.length;
+		let supplyCount = supply.length;
 
 		if (borrowCount + supplyCount > maxItems) {
 			const borrowRatio = borrowCount / (borrowCount + supplyCount);
@@ -88,16 +129,56 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 			supplyCount = maxItems - borrowCount;
 		}
 
-		const adjustedBorrows = borrows.slice(0, borrowCount);
-		const adjustedSupplies = supplies.slice(0, supplyCount);
+		// Separate the items into removed and remaining ones for borrow
+		const { removedBorrowItems, remainingBorrowItems } = borrow.reduce(
+			(acc, item) => {
+				if (item.apy === settled) {
+					acc.removedBorrowItems.push(item); // Collect removed borrow items
+				} else {
+					acc.remainingBorrowItems.push(item); // Collect remaining borrow items
+				}
+				return acc;
+			},
+			{
+				removedBorrowItems: [] as PoolProps[],
+				remainingBorrowItems: [] as PoolProps[],
+			},
+		);
 
+		// Separate the items into removed and remaining ones for supply
+		const { removedSupplyItems, remainingSupplyItems } = supply.reduce(
+			(acc, item) => {
+				if (item.apy === settled) {
+					acc.removedSupplyItems.push(item); // Collect removed supply items
+				} else {
+					acc.remainingSupplyItems.push(item); // Collect remaining supply items
+				}
+				return acc;
+			},
+			{
+				removedSupplyItems: [] as PoolProps[],
+				remainingSupplyItems: [] as PoolProps[],
+			},
+		);
+
+		// Adjusted borrow and supply lists after slicing and sorting
+		const adjustedBorrow = remainingBorrowItems
+			.slice(0, borrowCount)
+			.sort((a, b) => a.apy - b.apy);
+
+		const adjustedSupply = remainingSupplyItems
+			.slice(0, supplyCount)
+			.sort((a, b) => b.apy - a.apy);
+
+		// Combine and set the filled pool
 		setFilledPool([
 			...createEmptyItems(
 				maxItems - (borrowCount + supplyCount + (settled ? 1 : 0)),
 			),
-			...adjustedBorrows,
-			...(settled ? [settled] : []),
-			...adjustedSupplies,
+			...adjustedBorrow,
+			...removedBorrowItems,
+			...removedSupplyItems,
+			...adjustedSupply,
 		]);
 	};
 
@@ -121,22 +202,20 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 						<div
 							className={cn(
 								"flex-1 relative h-full flex items-center",
-								item.type === "LEND"
-									? "text-green-700 text-sm"
-									: item.type === "BORROW"
-										? "text-red-700 text-sm"
-										: item.type === "SET"
-											? "text-white text-lg bg-[#22232E]"
-											: "bg-[#22232E]",
+								item.apy !== settled
+									? item.type === "LEND"
+										? "text-green-300 text-sm"
+										: "text-red-300 text-sm"
+									: "text-white text-base font-semibold",
 							)}
 						>
 							{item.type !== "empty" ? (
 								<button
 									type="button"
-									disabled={item.type === "SET"}
+									disabled={item.apy === settled}
 									className={cn(
-										"w-full flex justify-between cursor-pointer disabled:cursor-not-allowed hover:bg-gray-100 p-2",
-										state.fixedRate === item.apy
+										"w-full flex justify-between cursor-pointer disabled:cursor-not-allowed hover:bg-gray-600 p-2",
+										fixedRate === item.apy
 											? "font-bold bg-[#0f0f13]"
 											: "font-medium bg-[#22232E]",
 									)}
@@ -151,7 +230,7 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 								>
 									<span className="flex-1 text-left">{item.apy}%</span>
 									<span className="flex-1 text-right">
-										{item.type === "SET" ? "-" : item.amount}
+										{item.apy === settled ? "-" : item.amount}
 									</span>
 								</button>
 							) : (
