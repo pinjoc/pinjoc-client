@@ -11,6 +11,7 @@ import { useCLOBState } from "./clob-state";
 import { cn } from "@/lib/utils";
 import { usePlaceOrder } from "@/hooks/use-place-order";
 import { useBalance } from "@/hooks/use-balance";
+import { useApprove } from "@/hooks/use-approve";
 
 export function BorrowAction() {
 	const { state, dispatch } = useCLOBState();
@@ -29,23 +30,32 @@ export function BorrowAction() {
 		},
 	});
 
-	const handleClick = async () => {
-		try {
-			await placeOrder({
-				debtToken: state.token.debtAddress as `0x${string}`,
-				collateralToken: state.token.collateralAddress as `0x${string}`,
-				amount: BigInt(1000000000),
-				collateralAmount: BigInt(1000000000),
-				rate: BigInt(60000000000000000),
-				maturity: BigInt(9999999999999999999999999999999),
-				maturityMonth: "MAY",
-				maturityYear: BigInt(2025),
-				lendingOrderType: 1,
-			});
-		} catch (error) {
-			console.error("Failed to place order:", error);
-		}
-	};
+	const { approve, isApproving } = useApprove({
+		onSuccess: (result) => {
+			console.log("Order placed successfully:", result);
+		},
+		onError: (error) => {
+			console.error("Error placing order:", error);
+		},
+	});
+
+	// const handleClick = async () => {
+	//   try {
+	//     await placeOrder({
+	//       debtToken: state.token.debtAddress as `0x${string}`,
+	//       collateralToken: state.token.collateralAddress as `0x${string}`,
+	//       amount: BigInt(1000000000),
+	//       collateralAmount: BigInt(10000000000000000000),
+	//       rate: BigInt(70000000000000000),
+	//       maturity: BigInt(9999999999999999999999999999999),
+	//       maturityMonth: "MAY",
+	//       maturityYear: BigInt(2025),
+	//       lendingOrderType: 1,
+	//     });
+	//   } catch (error) {
+	//     console.error("Failed to place order:", error);
+	//   }
+	// };
 
 	// const {
 	// 	balance: debtBalance,
@@ -58,6 +68,33 @@ export function BorrowAction() {
 		// error: collateralError,
 		// loading: collateralLoading,
 	} = useBalance(address!, state.token.collateralAddress as `0x${string}`);
+
+	const handlePlaceOrder = async () => {
+		// const hashApprove = await writeContract(config, {
+		//   abi: placeOrderAbi,
+		//   address: state.token.debtAddress as `0x${string}`,
+		//   functionName: "approve",
+		//   args: ["0x6f79Ec0beD0b721750477778B25f02Ac104b8F77", _amount],
+		// });
+
+		await approve({
+			amount: BigInt(10000000000000000000),
+			spender: "0x6f79Ec0beD0b721750477778B25f02Ac104b8F77",
+			address: state.token.collateralAddress as `0x${string}`,
+		});
+		// await waitForTransaction(config, { hash: hashApprove });
+		await placeOrder({
+			debtToken: state.token.debtAddress as `0x${string}`,
+			collateralToken: state.token.collateralAddress as `0x${string}`,
+			amount: BigInt(1000000000),
+			collateralAmount: BigInt(10000000000000000000),
+			rate: BigInt(50000000000000000),
+			maturity: BigInt(9999999999999999999999999999999),
+			maturityMonth: "MAY",
+			maturityYear: BigInt(2025),
+			lendingOrderType: 1,
+		});
+	};
 
 	return (
 		<Tabs
@@ -204,10 +241,10 @@ export function BorrowAction() {
 							<Button
 								type="button"
 								className="w-full text-black"
-								onClick={handleClick}
+								onClick={handlePlaceOrder}
 								disabled={isPlacing}
 							>
-								{isPlacing ? "Loading" : "Place Order"}
+								{isPlacing || isApproving ? "Loading" : "Place Order"}
 							</Button>
 						) : (
 							<div className="w-full">
@@ -321,9 +358,10 @@ export function BorrowAction() {
 							<Button
 								type="button"
 								className="w-full text-black"
-								onClick={handleClick}
+								onClick={handlePlaceOrder}
+								disabled={isPlacing}
 							>
-								{isPlacing ? "Loading" : "Place Order"}
+								{isPlacing || isApproving ? "Loading" : "Place Order"}
 							</Button>
 						) : (
 							<div className="w-full">

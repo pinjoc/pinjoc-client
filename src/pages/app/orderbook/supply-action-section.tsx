@@ -12,9 +12,7 @@ import { cn } from "@/lib/utils";
 import { AutoRollSupply } from "./autoroll";
 import { usePlaceOrder } from "@/hooks/use-place-order";
 import { useBalance } from "@/hooks/use-balance";
-import { waitForTransaction, writeContract } from "@wagmi/core";
-import { config } from "@/lib/wallet";
-import { placeOrderAbi } from "@/abis/pinjoc/place-order-abi";
+import { useApprove } from "@/hooks/use-approve";
 
 export function SupplyAction() {
 	const { state, dispatch } = useCLOBState();
@@ -84,14 +82,29 @@ export function SupplyAction() {
 		},
 	});
 
+	const { isApproving, approve } = useApprove({
+		onSuccess: (result: any) => {
+			console.log("Order placed successfully:", result);
+		},
+		onError: (error: any) => {
+			console.error("Error placing order:", error);
+		},
+	});
+
 	const handlePlaceOrder = async () => {
-		const hashApprove = await writeContract(config, {
-			abi: placeOrderAbi,
-			address: "0x0F848482cC12EA259DA229e7c5C4949EdA7E6475",
-			functionName: "approve",
-			args: ["0x6f79Ec0beD0b721750477778B25f02Ac104b8F77", _amount],
+		// const hashApprove = await writeContract(config, {
+		//   abi: placeOrderAbi,
+		//   address: state.token.debtAddress as `0x${string}`,
+		//   functionName: "approve",
+		//   args: ["0x6f79Ec0beD0b721750477778B25f02Ac104b8F77", _amount],
+		// });
+
+		await approve({
+			amount: _amount,
+			spender: "0x6f79Ec0beD0b721750477778B25f02Ac104b8F77",
+			address: state.token.debtAddress as `0x${string}`,
 		});
-		await waitForTransaction(config, { hash: hashApprove });
+		// await waitForTransaction(config, { hash: hashApprove });
 		await placeOrder({
 			debtToken: _debtToken,
 			collateralToken: _collateralToken,
@@ -104,13 +117,6 @@ export function SupplyAction() {
 			lendingOrderType: _lendingOrderType,
 		});
 	};
-
-	//   await supplyTransaction({
-	//     abi: poolAbi,
-	//     address: lendingPool,
-	//     functionName: "supply",
-	//     args: [supplyAmountBigInt],
-	//   });
 
 	const {
 		balance: amountBalance,
@@ -228,15 +234,13 @@ export function SupplyAction() {
 					</CardContent>
 					<CardFooter className="p-0 pr-3">
 						{isConnected ? (
-							<>
-								<Button
-									type="button"
-									className="w-full text-black"
-									onClick={handlePlaceOrder}
-								>
-									{isPlacing ? "Loading" : "Place Order"}
-								</Button>
-							</>
+							<Button
+								type="button"
+								className="w-full text-black"
+								onClick={handlePlaceOrder}
+							>
+								{isPlacing || isApproving ? "Loading" : "Place Order"}
+							</Button>
 						) : (
 							<div className="w-full">
 								<ButtonWallet className="rounded-md w-full" />
@@ -325,8 +329,12 @@ export function SupplyAction() {
 					</CardContent>
 					<CardFooter className="p-0 pr-3">
 						{isConnected ? (
-							<Button type="button" className="w-full text-black">
-								Place Order
+							<Button
+								type="button"
+								className="w-full text-black"
+								onClick={handlePlaceOrder}
+							>
+								{isPlacing || isApproving ? "Loading" : "Place Order"}
 							</Button>
 						) : (
 							<div className="w-full">
