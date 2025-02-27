@@ -32,8 +32,8 @@ export function BorrowAction() {
 	const handleClick = async () => {
 		try {
 			await placeOrder({
-				debtToken: state.token.debtAddress,
-				collateralToken: state.token.collateralAddress,
+				debtToken: state.token.debtAddress as `0x${string}`,
+				collateralToken: state.token.collateralAddress as `0x${string}`,
 				amount: BigInt(1000000000),
 				rate: BigInt(60000000000000000),
 				maturity: BigInt(9999999999999999999999999999999),
@@ -51,13 +51,13 @@ export function BorrowAction() {
 		balance: debtBalance,
 		// error: debtError,
 		// loading: debtLoading,
-	} = useBalance(address!, state.token.debtAddress);
+	} = useBalance(address!, state.token.debtAddress as `0x${string}`);
 
 	const {
 		balance: collateralBalance,
 		// error: collateralError,
 		// loading: collateralLoading,
-	} = useBalance(address!, state.token.debtAddress);
+	} = useBalance(address!, state.token.debtAddress as `0x${string}`);
 
 	return (
 		<Tabs

@@ -1,11 +1,14 @@
 import { cn } from "@/lib/utils";
-import React, { useEffect, useState } from "react";
-import { GroupPoolProps, PoolProps } from "./type";
+import { useEffect, useState } from "react";
+import { PoolProps } from "./type";
 import PoolControls from "./button-select-orderbook";
 import { useCLOBState } from "./clob-state";
 
-const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
-	const { state, dispatch } = useCLOBState();
+const Pool = () => {
+	const {
+		state: { borrow, supply, settled, fixedRate },
+		dispatch,
+	} = useCLOBState();
 	const [selectedOption, setSelectedOption] = useState<string>("all");
 	const [filledPool, setFilledPool] = useState<Array<PoolProps>>([]);
 
@@ -17,8 +20,8 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 
 	useEffect(() => {
 		setAll();
-		dispatch({ type: "SET_BEST_RATE", payload: +settled?.apy! });
-	}, [borrows, supplies, settled]);
+		dispatch({ type: "SET_BEST_RATE", payload: +settled });
+	}, [borrow, supply, settled]);
 
 	useEffect(() => {
 		switch (selectedOption) {
@@ -45,42 +48,40 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 		}));
 
 	const setJustBorrow = () => {
-		let borrowCount = borrows.length;
+		let borrowCount = borrow.length;
 
 		if (borrowCount > maxItems) {
 			// Here borrowRatio is always 1, so we can simply set borrowCount to maxItems.
 			borrowCount = maxItems;
 		}
 
-		const adjustedBorrows = borrows.slice(0, borrowCount);
+		const adjustedBorrow = borrow.slice(0, borrowCount);
 
 		setFilledPool([
 			...createEmptyItems(maxItems - borrowCount),
-			...adjustedBorrows,
-			...(settled ? [settled] : []),
+			...adjustedBorrow,
 		]);
 	};
 
 	const setJustSupply = () => {
-		let supplyCount = supplies.length;
+		let supplyCount = supply.length;
 
 		if (supplyCount > maxItems) {
 			// Here supplyRatio is always 1, so we can simply set supplyCount to maxItems.
 			supplyCount = maxItems;
 		}
 
-		const adjustedSupplies = supplies.slice(0, supplyCount);
+		const adjustedSupply = supply.slice(0, supplyCount);
 
 		setFilledPool([
-			...(settled ? [settled] : []),
-			...adjustedSupplies,
+			...adjustedSupply,
 			...createEmptyItems(maxItems - supplyCount),
 		]);
 	};
 
 	const setAll = () => {
-		let borrowCount = borrows.length;
-		let supplyCount = supplies.length;
+		let borrowCount = borrow.length;
+		let supplyCount = supply.length;
 
 		if (borrowCount + supplyCount > maxItems) {
 			const borrowRatio = borrowCount / (borrowCount + supplyCount);
@@ -88,18 +89,19 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 			supplyCount = maxItems - borrowCount;
 		}
 
-		const adjustedBorrows = borrows.slice(0, borrowCount);
-		const adjustedSupplies = supplies.slice(0, supplyCount);
+		const adjustedBorrow = borrow.slice(0, borrowCount).reverse();
+		const adjustedSupply = supply.slice(0, supplyCount).reverse();
 
 		setFilledPool([
 			...createEmptyItems(
 				maxItems - (borrowCount + supplyCount + (settled ? 1 : 0)),
 			),
-			...adjustedBorrows,
-			...(settled ? [settled] : []),
-			...adjustedSupplies,
+			...adjustedBorrow,
+			...adjustedSupply,
 		]);
 	};
+
+	console.log(filledPool, settled);
 
 	return (
 		<div className="w-full relative">
@@ -121,22 +123,20 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 						<div
 							className={cn(
 								"flex-1 relative h-full flex items-center",
-								item.type === "LEND"
-									? "text-green-700 text-sm"
-									: item.type === "BORROW"
-										? "text-red-700 text-sm"
-										: item.type === "SET"
-											? "text-white text-lg bg-[#22232E]"
-											: "bg-[#22232E]",
+								item.apy !== settled
+									? item.type === "LEND"
+										? "text-green-300 text-sm"
+										: "text-red-300 text-sm"
+									: "text-white text-base font-semibold",
 							)}
 						>
 							{item.type !== "empty" ? (
 								<button
 									type="button"
-									disabled={item.type === "SET"}
+									disabled={item.apy === settled}
 									className={cn(
-										"w-full flex justify-between cursor-pointer disabled:cursor-not-allowed hover:bg-gray-100 p-2",
-										state.fixedRate === item.apy
+										"w-full flex justify-between cursor-pointer disabled:cursor-not-allowed hover:bg-gray-600 p-2",
+										fixedRate === item.apy
 											? "font-bold bg-[#0f0f13]"
 											: "font-medium bg-[#22232E]",
 									)}
@@ -151,7 +151,7 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 								>
 									<span className="flex-1 text-left">{item.apy}%</span>
 									<span className="flex-1 text-right">
-										{item.type === "SET" ? "-" : item.amount}
+										{item.apy === settled ? "-" : item.amount}
 									</span>
 								</button>
 							) : (
