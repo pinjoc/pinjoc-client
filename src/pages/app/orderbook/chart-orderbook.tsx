@@ -13,6 +13,8 @@ import {
 import { ChartData } from "./type";
 import { maturityList } from ".";
 import { useCLOBState } from "./clob-state";
+import { fetchCLOBMaturityBestRateData } from "@/utils/api";
+import { useQuery } from "@tanstack/react-query";
 
 ChartJS.register(
 	CategoryScale,
@@ -26,13 +28,24 @@ ChartJS.register(
 );
 
 const OrderBookChart = () => {
-	const { dispatch } = useCLOBState();
+	const { state, dispatch } = useCLOBState();
+
+	const { data: dataChart } = useQuery({
+		queryKey: ["clobData"],
+		queryFn: () =>
+			fetchCLOBMaturityBestRateData(
+				state.token.collateralAddress!,
+				state.token.debtAddress!,
+			),
+		staleTime: 1000 * 60 * 5,
+	});
+
 	const data: ChartData = {
 		labels: maturityList,
 		datasets: [
 			{
 				label: "APY",
-				data: [5, 7, 6, 8],
+				data: (dataChart || [])?.map((d) => +d.BestRate),
 				fill: true,
 				backgroundColor: "rgba(75,192,192,0.2)",
 				borderColor: "rgba(75,192,192,1)",

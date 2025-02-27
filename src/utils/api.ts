@@ -3,6 +3,7 @@ import {
 	AvailableTokens,
 	BestRate,
 	CLOBAvailable,
+	MaturityBestRate,
 	TokenizedBonds,
 } from "@/types";
 
@@ -31,6 +32,21 @@ export const fetchCLOBData = async (
 		year: +year,
 	};
 	return api.post<CLOBAvailable[]>("/clob/clob", params, {
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
+};
+
+export const fetchCLOBMaturityBestRateData = async (
+	collateralAddress: string,
+	debtTokenAddress: string,
+) => {
+	const params = {
+		collateral_address: collateralAddress,
+		debt_token_address: debtTokenAddress,
+	};
+	return api.post<MaturityBestRate[]>("/clob/maturity-best-rate", params, {
 		headers: {
 			"Content-Type": "application/json",
 		},

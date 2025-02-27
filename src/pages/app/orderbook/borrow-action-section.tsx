@@ -141,7 +141,7 @@ export function BorrowAction() {
 							</div>
 							<div className="space-y-2">
 								<div className="flex items-center justify-between gap-2">
-									<Label htmlFor="debt-limit">Debt</Label>
+									<Label htmlFor="debt-limit">Borrow</Label>
 									<div className="relative flex items-center">
 										<Input
 											id="debt-limit"
@@ -258,7 +258,7 @@ export function BorrowAction() {
 							</div>
 							<div className="space-y-2">
 								<div className="flex items-center justify-between gap-2">
-									<Label htmlFor="debt-market">Debt</Label>
+									<Label htmlFor="debt-market">Borrow</Label>
 									<div className="relative flex items-center">
 										<Input
 											id="debt-market"
