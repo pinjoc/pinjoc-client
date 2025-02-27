@@ -21,6 +21,14 @@ const Stats = (data: AvailableTokens) => {
 	useEffect(() => {
 		dispatch({ type: "SET_DEBT_TOKEN", payload: data.DebtTokenSymbol });
 		dispatch({
+			type: "SET_DEBT_TOKEN_ADDRESS",
+			payload: data.DebtTokenAddress,
+		});
+		dispatch({
+			type: "SET_COLLATERAL_TOKEN_ADDRESS",
+			payload: data.CollateralAddress,
+		});
+		dispatch({
 			type: "SET_COLLATERAL_TOKEN",
 			payload: data.CollateralTokenSymbol,
 		});

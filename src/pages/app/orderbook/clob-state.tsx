@@ -7,8 +7,10 @@ interface State {
 	maxAmount: number;
 	bestRate: number;
 	token: {
-		debt: string;
-		collateral: string;
+		debt: any;
+		collateral: any;
+		debtAddress: any;
+		collateralAddress: any;
 	};
 }
 
@@ -19,7 +21,9 @@ type Action =
 	| { type: "SET_MAX_AMOUNT"; payload: number }
 	| { type: "SET_COLLATERAL_TOKEN"; payload: string }
 	| { type: "SET_DEBT_TOKEN"; payload: string }
-	| { type: "SET_BEST_RATE"; payload: number };
+	| { type: "SET_BEST_RATE"; payload: number }
+	| { type: "SET_DEBT_TOKEN_ADDRESS"; payload: string }
+	| { type: "SET_COLLATERAL_TOKEN_ADDRESS"; payload: string };
 
 // Define Context Type
 interface CLOBStateContextType {
@@ -36,6 +40,8 @@ const initialState: State = {
 	token: {
 		debt: "",
 		collateral: "",
+		collateralAddress: "",
+		debtAddress: "",
 	},
 };
 
@@ -55,10 +61,20 @@ const reducer = (state: State, action: Action): State => {
 			return { ...state, maxAmount: action.payload };
 		case "SET_DEBT_TOKEN":
 			return { ...state, token: { ...state.token, debt: action.payload } };
+		case "SET_DEBT_TOKEN_ADDRESS":
+			return {
+				...state,
+				token: { ...state.token, debtAddress: action.payload },
+			};
 		case "SET_COLLATERAL_TOKEN":
 			return {
 				...state,
 				token: { ...state.token, collateral: action.payload },
+			};
+		case "SET_COLLATERAL_TOKEN_ADDRESS":
+			return {
+				...state,
+				token: { ...state.token, collateralAddress: action.payload },
 			};
 		case "SET_BEST_RATE":
 			return { ...state, bestRate: action.payload };

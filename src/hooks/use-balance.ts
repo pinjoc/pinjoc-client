@@ -1,7 +1,8 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import { readContract } from "@wagmi/core";
 import { config } from "@/lib/wallet";
 import { tokenAbi } from "@/abis/pinjoc/token-abi";
+import { readContract } from "@wagmi/core";
+import { HexAddress } from "@/type";
 
 interface UseBalanceOptions {
 	debounceTime?: number;
@@ -17,8 +18,8 @@ interface UseBalanceResult {
 }
 
 export const useBalance = (
-	address: `0x${string}`,
-	token: `0x${string}`,
+	address: HexAddress,
+	token: HexAddress,
 	options: UseBalanceOptions = {},
 ): UseBalanceResult => {
 	const { debounceTime = 1000, enabled = true } = options;
@@ -51,9 +52,16 @@ export const useBalance = (
 				args: [address],
 			});
 
-			console.log();
+			const decimal = await readContract(config, {
+				address: token,
+				abi: tokenAbi,
+				functionName: "decimals",
+			});
 
-			setBalance(result as bigint);
+			const divisor = BigInt(10) ** BigInt(decimal as number);
+			const formattedBalance = (result as bigint) / divisor;
+
+			setBalance(formattedBalance);
 		} catch (err: unknown) {
 			const error =
 				err instanceof Error ? err : new Error("Failed to fetch balance");

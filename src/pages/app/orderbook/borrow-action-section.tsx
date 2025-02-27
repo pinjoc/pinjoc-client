@@ -10,11 +10,11 @@ import { useAccount } from "wagmi";
 import { useCLOBState } from "./clob-state";
 import { cn } from "@/lib/utils";
 import { usePlaceOrder } from "@/hooks/use-place-order";
-// import { useBalance } from "@/hooks/use-balance";
+import { useBalance } from "@/hooks/use-balance";
 
 export function BorrowAction() {
 	const { state, dispatch } = useCLOBState();
-	const { isConnected } = useAccount();
+	const { isConnected, address } = useAccount();
 	const [collateralMarket, setCollacteralMarket] = useState(0);
 	const [debtMarket, setDebtMarket] = useState(0);
 	const [debtLimit, setDebtLimit] = useState(0);
@@ -32,8 +32,8 @@ export function BorrowAction() {
 	const handleClick = async () => {
 		try {
 			await placeOrder({
-				debtToken: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-				collateralToken: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+				debtToken: state.token.debtAddress,
+				collateralToken: state.token.collateralAddress,
 				amount: BigInt(1000000000),
 				rate: BigInt(60000000000000000),
 				maturity: BigInt(9999999999999999999999999999999),
@@ -47,11 +47,17 @@ export function BorrowAction() {
 		}
 	};
 
-	//   const contractAddr = "0x8d37312f46377C4cEa898c5183dbb8c4aD1c4e18" as const;
-	//   const { balance, error, loading } = useBalance(
-	//     "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-	//     contractAddr
-	//   );
+	const {
+		balance: debtBalance,
+		// error: debtError,
+		// loading: debtLoading,
+	} = useBalance(address!, state.token.debtAddress);
+
+	const {
+		balance: collateralBalance,
+		// error: collateralError,
+		// loading: collateralLoading,
+	} = useBalance(address!, state.token.debtAddress);
 
 	return (
 		<Tabs
@@ -129,7 +135,7 @@ export function BorrowAction() {
 										type="button"
 										onClick={() => setCollateralLimit(state.maxAmount)}
 									>
-										Max
+										Max {collateralBalance?.toString()}
 									</button>
 								</div>
 							</div>
@@ -167,7 +173,7 @@ export function BorrowAction() {
 										type="button"
 										onClick={() => setDebtLimit(state.maxAmount)}
 									>
-										Max
+										Max {debtBalance?.toString()}
 									</button>
 								</div>
 							</div>
@@ -244,9 +250,9 @@ export function BorrowAction() {
 									<button
 										className="text-xs bg-gray-900 p-1 rounded-sm"
 										type="button"
-										onClick={() => setCollacteralMarket(state.maxAmount)}
+										onClick={() => setCollateralLimit(state.maxAmount)}
 									>
-										Max
+										Max {collateralBalance?.toString()}
 									</button>
 								</div>
 							</div>
@@ -282,9 +288,9 @@ export function BorrowAction() {
 									<button
 										className="text-xs bg-gray-900 p-1 rounded-sm"
 										type="button"
-										onClick={() => setDebtMarket(state.maxAmount)}
+										onClick={() => setCollateralLimit(state.maxAmount)}
 									>
-										Max
+										Max {debtBalance?.toString()}
 									</button>
 								</div>
 							</div>
