@@ -1,6 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SupplyAction } from "./supply-action-section";
 import { BorrowAction } from "./borrow-action-section";
+import SelectMaturity from "./select-maturity";
 
 export function Action() {
 	return (
@@ -14,6 +15,8 @@ export function Action() {
 					<TabsTrigger value="borrow">Borrow</TabsTrigger>
 				</TabsList>
 				<TabsContent value="borrow">
+					<SelectMaturity />
+					<br />
 					<div className="p-6 border border-gray-300 rounded-md">
 						<div className="mb-6">
 							<h3 className="text-xl font-semibold text-gray-900">Borrow</h3>
@@ -22,6 +25,8 @@ export function Action() {
 					</div>
 				</TabsContent>
 				<TabsContent value="supply">
+					<SelectMaturity />
+					<br />
 					<div className="p-6 border border-gray-300 rounded-md">
 						<div className="mb-6">
 							<h3 className="text-xl font-semibold text-gray-900">Supply</h3>

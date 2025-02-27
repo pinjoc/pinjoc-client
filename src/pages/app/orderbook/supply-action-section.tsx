@@ -10,6 +10,7 @@ import { useAccount } from "wagmi";
 import { useCLOBState } from "./clob-state";
 import { cn } from "@/lib/utils";
 import { usePlaceOrder } from "@/hooks/use-place-order";
+import { AutoRollSupply } from "./autoroll";
 
 export function SupplyAction() {
 	const { state } = useCLOBState();
@@ -136,7 +137,6 @@ export function SupplyAction() {
 									className="w-24 text-right border-0 text-gray-900"
 								/>
 							</div>
-							<br />
 							<div className="flex items-center justify-between gap-2">
 								<Label htmlFor="amount-limit">Amount</Label>
 								<div className="relative flex items-center">
@@ -172,6 +172,11 @@ export function SupplyAction() {
 								>
 									Max
 								</button>
+							</div>
+							<br />
+							<div className="flex justify-between items-center mb-6">
+								<Label htmlFor="autoroll">Auto-roll Supply</Label>
+								<AutoRollSupply />
 							</div>
 						</div>
 					</CardContent>
@@ -254,6 +259,11 @@ export function SupplyAction() {
 								>
 									Max
 								</button>
+							</div>
+							<br />
+							<div className="flex justify-between items-center mb-6">
+								<Label htmlFor="autoroll">Auto-roll Supply</Label>
+								<AutoRollSupply />
 							</div>
 						</div>
 					</CardContent>

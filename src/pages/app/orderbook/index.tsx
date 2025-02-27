@@ -81,7 +81,7 @@ export default function OrderbookPage() {
 			const bestPrice = {
 				amount: 0,
 				apy: +(dataBestRate?.best_rate || "0"),
-				type: "settled",
+				type: "SET",
 			};
 
 			setSettled(bestPrice);
