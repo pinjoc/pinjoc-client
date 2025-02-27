@@ -14,8 +14,6 @@ import { usePlaceOrder } from "@/hooks/use-place-order";
 export function BorrowAction() {
 	const { state } = useCLOBState();
 	const { isConnected } = useAccount();
-	//   const [amount, setAmount] = useState(0);
-	//   const [amountMarket, setAmountMarket] = useState(0);
 	const [collateralMarket, setCollacteralMarket] = useState(0);
 	const [debtMarket, setDebtMarket] = useState(0);
 	const [debtLimit, setDebtLimit] = useState(0);

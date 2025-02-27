@@ -132,8 +132,9 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 							{item.type !== "empty" ? (
 								<button
 									type="button"
+									disabled={item.type === "SET"}
 									className={cn(
-										"w-full flex justify-between cursor-pointer hover:bg-gray-100 p-2 rounded",
+										"w-full flex justify-between cursor-pointer disabled:cursor-crosshair hover:bg-gray-100 p-2 rounded",
 										state.fixedRate === item.apy
 											? "font-bold bg-blue-50"
 											: "font-medium bg-white",

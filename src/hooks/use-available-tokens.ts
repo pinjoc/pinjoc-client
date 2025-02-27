@@ -13,5 +13,10 @@ export const useAvailableTokens = () => {
 		staleTime: 1000 * 60 * 5,
 	});
 
-	return { availableTokens, isAvailableTokenLoading, isError, error };
+	return {
+		availableTokens: availableTokens || [],
+		isAvailableTokenLoading,
+		isError,
+		error,
+	};
 };
