@@ -135,8 +135,8 @@ export const usePlaceOrder = (
 
 				setError(error);
 				toast.dismiss(); // Hapus loading toast
-				// toast.error("Transaction failed ❌");
-				toast.success("Order placed successfully! 🚀");
+				toast.error("Transaction failed ❌");
+				// toast.success("Order placed successfully! 🚀");
 				onError?.(error);
 				throw error;
 			} finally {
