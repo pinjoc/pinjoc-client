@@ -10,6 +10,7 @@ import { useAccount } from "wagmi";
 import { useCLOBState } from "./clob-state";
 import { cn } from "@/lib/utils";
 import { usePlaceOrder } from "@/hooks/use-place-order";
+// import { useBalance } from "@/hooks/use-balance";
 
 export function BorrowAction() {
 	const { state, dispatch } = useCLOBState();
@@ -45,6 +46,12 @@ export function BorrowAction() {
 			console.error("Failed to place order:", error);
 		}
 	};
+
+	//   const contractAddr = "0x8d37312f46377C4cEa898c5183dbb8c4aD1c4e18" as const;
+	//   const { balance, error, loading } = useBalance(
+	//     "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+	//     contractAddr
+	//   );
 
 	return (
 		<Tabs
