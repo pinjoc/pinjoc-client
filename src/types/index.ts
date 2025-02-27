@@ -34,3 +34,8 @@ export interface CLOBAvailable {
 export interface BestRate {
 	best_rate: string;
 }
+
+export interface MaturityBestRate {
+	Maturity: string;
+	BestRate: string;
+}
