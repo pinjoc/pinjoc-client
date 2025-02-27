@@ -50,22 +50,22 @@ export function BorrowAction() {
 
 	return (
 		<Tabs defaultValue="limit" className="w-full">
-			<TabsList className="grid w-full grid-cols-2">
+			<TabsList className="grid w-full grid-cols-2 bg-transparent">
 				<TabsTrigger
-					className="data-[state=active]:bg-gray-200 data-[state=active]:text-gray-600"
+					className="data-[state=active]:bg-[#4A5565] bg-[#121421] hover:bg-gray-900 text-white border border-gray-800"
 					value="limit"
 				>
 					Limit
 				</TabsTrigger>
 				<TabsTrigger
-					className="data-[state=active]:bg-gray-200 data-[state=active]:text-gray-600"
+					className="data-[state=active]:bg-[#4A5565] bg-[#121421] hover:bg-gray-900 text-white border border-gray-800"
 					value="market"
 				>
 					Market
 				</TabsTrigger>
 			</TabsList>
 			<TabsContent value="limit">
-				<Card className="border-0 shadow-none p-0">
+				<Card className="border-0 shadow-none bg-transparent text-white p-0">
 					<CardContent className="space-y-2 p-0 my-3">
 						<div className="space-y-2 text-lg">
 							<div className="flex justify-between items-center">
@@ -108,7 +108,7 @@ export function BorrowAction() {
 								/>
 								<div className="flex justify-end w-full">
 									<button
-										className="text-xs bg-gray-100 p-1 rounded-sm"
+										className="text-xs bg-gray-100 text-black p-1 rounded-sm"
 										type="button"
 										onClick={() => setCollateralLimit(state.maxAmount)}
 									>
@@ -146,7 +146,7 @@ export function BorrowAction() {
 								/>
 								<div className="flex justify-end w-full">
 									<button
-										className="text-xs bg-gray-100 p-1 rounded-sm"
+										className="text-xs bg-gray-100 text-black p-1 rounded-sm"
 										type="button"
 										onClick={() => setDebtLimit(state.maxAmount)}
 									>
@@ -156,7 +156,7 @@ export function BorrowAction() {
 							</div>
 						</div>
 					</CardContent>
-					<CardFooter className="p-0 pr-3">
+					<CardFooter className="p-0 pr-3 text-black">
 						{isConnected ? (
 							<Button
 								type="button"
@@ -175,7 +175,7 @@ export function BorrowAction() {
 				</Card>
 			</TabsContent>
 			<TabsContent value="market">
-				<Card className="border-0 shadow-none p-0">
+				<Card className="border-0 shadow-none p-0 bg-transparent text-white">
 					<CardContent className="space-y-2 p-0 my-3">
 						<div className="space-y-2 text-lg">
 							<div className="flex justify-between items-center">
@@ -225,7 +225,7 @@ export function BorrowAction() {
 								/>
 								<div className="flex justify-end w-full">
 									<button
-										className="text-xs bg-gray-100 p-1 rounded-sm"
+										className="text-xs bg-gray-100 text-black p-1 rounded-sm"
 										type="button"
 										onClick={() => setCollacteralMarket(state.maxAmount)}
 									>
@@ -263,7 +263,7 @@ export function BorrowAction() {
 								/>
 								<div className="flex justify-end w-full">
 									<button
-										className="text-xs bg-gray-100 p-1 rounded-sm"
+										className="text-xs bg-gray-100 p-1 text-black rounded-sm"
 										type="button"
 										onClick={() => setDebtMarket(state.maxAmount)}
 									>
@@ -273,7 +273,7 @@ export function BorrowAction() {
 							</div>
 						</div>
 					</CardContent>
-					<CardFooter className="p-0 pr-3">
+					<CardFooter className="p-0 pr-3 text-black">
 						{isConnected ? (
 							<Button type="button" className="w-full" onClick={handleClick}>
 								{isPlacing ? "Loading" : "Place Order"}

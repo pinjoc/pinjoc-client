@@ -110,13 +110,13 @@ export default function OrderbookPage() {
 			<CLOBStateProvider>
 				<Stats {...summary} />
 				<div className="w-full grid grid-cols-4 overflow-x-hidden">
-					<div className="col-span-2 p-6 border-r border-gray-300">
+					<div className="col-span-2 p-6 border-r border-gray-500">
 						<div>
 							<OrderBookChart data={chartData} onPointClick={() => {}} />
 						</div>
 						<div className="mt-4">Position</div>
 					</div>
-					<div className="col-span-1 p-6 border-r border-gray-300">
+					<div className="col-span-1 p-6 border-r border-gray-500">
 						<Pool
 							borrows={borrow || []}
 							settled={settled}
