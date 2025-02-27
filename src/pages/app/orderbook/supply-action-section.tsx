@@ -12,7 +12,9 @@ import { cn } from "@/lib/utils";
 import { AutoRollSupply } from "./autoroll";
 import { usePlaceOrder } from "@/hooks/use-place-order";
 import { useBalance } from "@/hooks/use-balance";
-import useApprove from "@/hooks/use-approve";
+import { waitForTransaction, writeContract } from "@wagmi/core";
+import { config } from "@/lib/wallet";
+import { placeOrderAbi } from "@/abis/pinjoc/place-order-abi";
 
 export function SupplyAction() {
 	const { state, dispatch } = useCLOBState();
@@ -82,20 +84,14 @@ export function SupplyAction() {
 		},
 	});
 
-	const { isApproving, approve } = useApprove({
-		onSuccess: (result: any) => {
-			console.log("Order placed successfully:", result);
-		},
-		onError: (error: any) => {
-			console.error("Error placing order:", error);
-		},
-	});
-
 	const handlePlaceOrder = async () => {
-		await approve({
-			spender: "0x6f79Ec0beD0b721750477778B25f02Ac104b8F77",
-			amount: BigInt(100),
+		const hashApprove = await writeContract(config, {
+			abi: placeOrderAbi,
+			address: "0x0F848482cC12EA259DA229e7c5C4949EdA7E6475",
+			functionName: "approve",
+			args: ["0x6f79Ec0beD0b721750477778B25f02Ac104b8F77", _amount],
 		});
+		await waitForTransaction(config, { hash: hashApprove });
 		await placeOrder({
 			debtToken: _debtToken,
 			collateralToken: _collateralToken,
@@ -238,7 +234,7 @@ export function SupplyAction() {
 									className="w-full text-black"
 									onClick={handlePlaceOrder}
 								>
-									{isPlacing || isApproving ? "Loading" : "Place Order"}
+									{isPlacing ? "Loading" : "Place Order"}
 								</Button>
 							</>
 						) : (
