@@ -14,6 +14,7 @@ import { PoolProps } from "./type";
 
 interface State {
 	bestRateAmount: number;
+	orderbookBestRateAmount: number;
 	fixedRate: number;
 	orderbookFixedRate: number;
 	maxAmount: number;
@@ -35,6 +36,7 @@ interface State {
 
 type Action =
 	| { type: "SET_BEST_RATE_AMOUNT"; payload: number }
+	| { type: "SET_BEST_RATE_AMOUNT_ORDERBOOK"; payload: number }
 	| { type: "SET_FIXED_RATE"; payload: number }
 	| { type: "SET_CLOB_FIXED_RATE"; payload: number }
 	| { type: "SET_MAX_AMOUNT"; payload: number }
@@ -56,6 +58,7 @@ interface CLOBStateContextType {
 
 const initialState: State = {
 	bestRateAmount: 0,
+	orderbookBestRateAmount: 0,
 	fixedRate: 0,
 	orderbookFixedRate: 0,
 	maxAmount: 0,
@@ -114,6 +117,10 @@ const reducer = (state: State, action: Action): State => {
 			return { ...state, borrow: action.payload };
 		case "SET_SETTLED":
 			return { ...state, settled: action.payload };
+		case "SET_BEST_RATE_AMOUNT":
+			return { ...state, bestRateAmount: action.payload };
+		case "SET_BEST_RATE_AMOUNT_ORDERBOOK":
+			return { ...state, orderbookBestRateAmount: action.payload };
 		default:
 			return state;
 	}
@@ -207,6 +214,12 @@ export const CLOBStateProvider: React.FC<{ children: React.ReactNode }> = ({
 		if (dataBestRate && data) {
 			dispatch({
 				type: "SET_BEST_RATE_AMOUNT",
+				payload:
+					(data || []).find((d) => +d.Rate === +dataBestRate.best_rate)
+						?.AvailableToken || 0,
+			});
+			dispatch({
+				type: "SET_BEST_RATE_AMOUNT_ORDERBOOK",
 				payload:
 					(data || []).find((d) => +d.Rate === +dataBestRate.best_rate)
 						?.AvailableToken || 0,

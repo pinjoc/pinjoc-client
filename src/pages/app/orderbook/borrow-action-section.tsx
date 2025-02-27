@@ -47,11 +47,11 @@ export function BorrowAction() {
 		}
 	};
 
-	const {
-		balance: debtBalance,
-		// error: debtError,
-		// loading: debtLoading,
-	} = useBalance(address!, state.token.debtAddress as `0x${string}`);
+	// const {
+	// 	balance: debtBalance,
+	// 	// error: debtError,
+	// 	// loading: debtLoading,
+	// } = useBalance(address!, state.token.debtAddress as `0x${string}`);
 
 	const {
 		balance: collateralBalance,
@@ -63,13 +63,18 @@ export function BorrowAction() {
 		<Tabs
 			defaultValue="limit"
 			onValueChange={(value) => {
-				if (value === "market")
+				if (value === "market") {
 					dispatch({ type: "SET_FIXED_RATE", payload: state.bestRate });
-				else
+					dispatch({
+						type: "SET_BEST_RATE_AMOUNT",
+						payload: state.bestRateAmount,
+					});
+				} else {
 					dispatch({
 						type: "SET_FIXED_RATE",
 						payload: state.orderbookFixedRate,
 					});
+				}
 			}}
 			className="w-full"
 		>
@@ -125,7 +130,7 @@ export function BorrowAction() {
 								</div>
 								<Slider
 									value={[collateralLimit]}
-									max={state.maxAmount}
+									max={Number(collateralBalance)}
 									step={1}
 									onValueChange={(value) => setCollateralLimit(value[0])}
 								/>
@@ -173,7 +178,7 @@ export function BorrowAction() {
 										type="button"
 										onClick={() => setDebtLimit(state.maxAmount)}
 									>
-										Max {debtBalance?.toString()}
+										Max {state.maxAmount}
 									</button>
 								</div>
 							</div>
@@ -242,7 +247,7 @@ export function BorrowAction() {
 								</div>
 								<Slider
 									value={[collateralMarket]}
-									max={state.maxAmount}
+									max={Number(collateralBalance)}
 									step={1}
 									onValueChange={(value) => setCollacteralMarket(value[0])}
 								/>
@@ -290,7 +295,7 @@ export function BorrowAction() {
 										type="button"
 										onClick={() => setCollateralLimit(state.maxAmount)}
 									>
-										Max {debtBalance?.toString()}
+										Max {state.maxAmount}
 									</button>
 								</div>
 							</div>

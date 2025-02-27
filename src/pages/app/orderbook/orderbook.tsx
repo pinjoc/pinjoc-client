@@ -229,9 +229,7 @@ const Pool = () => {
 									}}
 								>
 									<span className="flex-1 text-left">{item.apy}%</span>
-									<span className="flex-1 text-right">
-										{item.apy === settled ? "-" : item.amount}
-									</span>
+									<span className="flex-1 text-right">{item.amount}</span>
 								</button>
 							) : (
 								<div className="w-full h-full" />
