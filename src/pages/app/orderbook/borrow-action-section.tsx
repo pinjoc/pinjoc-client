@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 import { usePlaceOrder } from "@/hooks/use-place-order";
 
 export function BorrowAction() {
-	const { state } = useCLOBState();
+	const { state, dispatch } = useCLOBState();
 	const { isConnected } = useAccount();
 	const [collateralMarket, setCollacteralMarket] = useState(0);
 	const [debtMarket, setDebtMarket] = useState(0);
@@ -47,7 +47,19 @@ export function BorrowAction() {
 	};
 
 	return (
-		<Tabs defaultValue="limit" className="w-full">
+		<Tabs
+			defaultValue="limit"
+			onValueChange={(value) => {
+				if (value === "market")
+					dispatch({ type: "SET_FIXED_RATE", payload: state.bestRate });
+				else
+					dispatch({
+						type: "SET_FIXED_RATE",
+						payload: state.orderbookFixedRate,
+					});
+			}}
+			className="w-full"
+		>
 			<TabsList className="grid w-full grid-cols-2">
 				<TabsTrigger
 					className="data-[state=active]:bg-gray-200 data-[state=active]:text-gray-600"
@@ -94,7 +106,7 @@ export function BorrowAction() {
 											)}
 										/>
 										<span className="absolute right-3 text-gray-500 text-sm">
-											ETH
+											{state.token.collateral}
 										</span>
 									</div>
 								</div>
@@ -132,7 +144,7 @@ export function BorrowAction() {
 											)}
 										/>
 										<span className="absolute right-3 text-gray-500 text-sm">
-											USDC
+											{state.token.debt}
 										</span>
 									</div>
 								</div>
@@ -211,7 +223,7 @@ export function BorrowAction() {
 											)}
 										/>
 										<span className="absolute right-3 text-gray-500 text-sm">
-											ETH
+											{state.token.collateral}
 										</span>
 									</div>
 								</div>
@@ -249,7 +261,7 @@ export function BorrowAction() {
 											)}
 										/>
 										<span className="absolute right-3 text-gray-500 text-sm">
-											USDC
+											{state.token.debt}
 										</span>
 									</div>
 								</div>

@@ -17,6 +17,7 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 
 	useEffect(() => {
 		setAll();
+		dispatch({ type: "SET_BEST_RATE", payload: +settled?.apy! });
 	}, [borrows, supplies, settled]);
 
 	useEffect(() => {
@@ -134,18 +135,24 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 									type="button"
 									disabled={item.type === "SET"}
 									className={cn(
-										"w-full flex justify-between cursor-pointer disabled:cursor-crosshair hover:bg-gray-100 p-2 rounded",
+										"w-full flex justify-between cursor-pointer disabled:cursor-not-allowed hover:bg-gray-100 p-2 rounded",
 										state.fixedRate === item.apy
 											? "font-bold bg-blue-50"
 											: "font-medium bg-white",
 									)}
 									onClick={() => {
+										dispatch({
+											type: "SET_CLOB_FIXED_RATE",
+											payload: +item.apy,
+										});
 										dispatch({ type: "SET_FIXED_RATE", payload: +item.apy });
 										dispatch({ type: "SET_MAX_AMOUNT", payload: +item.amount });
 									}}
 								>
 									<span className="flex-1 text-left">{item.apy}%</span>
-									<span className="flex-1 text-right">{item.amount}</span>
+									<span className="flex-1 text-right">
+										{item.type === "SET" ? "-" : item.amount}
+									</span>
 								</button>
 							) : (
 								<div className="w-full h-full" />

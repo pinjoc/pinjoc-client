@@ -1,5 +1,6 @@
 import { AvailableTokens } from "@/types";
-import React from "react";
+import React, { useEffect } from "react";
+import { useCLOBState } from "./clob-state";
 
 interface StatItemProps {
 	label: string;
@@ -16,6 +17,14 @@ const StatItem: React.FC<StatItemProps> = ({ label, value }) => {
 };
 
 const Stats = (data: AvailableTokens) => {
+	const { dispatch } = useCLOBState();
+	useEffect(() => {
+		dispatch({ type: "SET_DEBT_TOKEN", payload: data.DebtTokenSymbol });
+		dispatch({
+			type: "SET_COLLATERAL_TOKEN",
+			payload: data.CollateralTokenSymbol,
+		});
+	}, [data]);
 	return (
 		<div className="w-full border-b border-gray-300">
 			<div className="w-full bg-white p-6 rounded-lg ml-8">

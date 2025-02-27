@@ -9,7 +9,6 @@ import { AvailableTokens } from "@/types";
 import { useEffect, useMemo, useState } from "react";
 import { fetchCLOBBestPrice, fetchCLOBData } from "@/utils/api";
 import { useQuery } from "@tanstack/react-query";
-import { CLOBStateProvider } from "./clob-state";
 
 export default function OrderbookPage() {
 	const { address } = useParams<{ address?: string }>();
@@ -59,7 +58,6 @@ export default function OrderbookPage() {
 			),
 		staleTime: 1000 * 60 * 5,
 	});
-
 	useEffect(() => {
 		if (data) {
 			const sup: PoolProps[] = data
@@ -107,27 +105,25 @@ export default function OrderbookPage() {
 	};
 	return (
 		<V2_AppLayout>
-			<CLOBStateProvider>
-				<Stats {...summary} />
-				<div className="w-full grid grid-cols-4 overflow-x-hidden">
-					<div className="col-span-2 p-6 border-r border-gray-300">
-						<div>
-							<OrderBookChart data={chartData} onPointClick={() => {}} />
-						</div>
-						<div className="mt-4">Position</div>
+			<Stats {...summary} />
+			<div className="w-full grid grid-cols-4 overflow-x-hidden">
+				<div className="col-span-2 p-6 border-r border-gray-300">
+					<div>
+						<OrderBookChart data={chartData} onPointClick={() => {}} />
 					</div>
-					<div className="col-span-1 p-6 border-r border-gray-300">
-						<Pool
-							borrows={borrow || []}
-							settled={settled}
-							supplies={supply || []}
-						/>
-					</div>
-					<div className="col-span-1 p-6">
-						<Action />
-					</div>
+					<div className="mt-4">Position</div>
 				</div>
-			</CLOBStateProvider>
+				<div className="col-span-1 p-6 border-r border-gray-300">
+					<Pool
+						borrows={borrow || []}
+						settled={settled}
+						supplies={supply || []}
+					/>
+				</div>
+				<div className="col-span-1 p-6">
+					<Action />
+				</div>
+			</div>
 		</V2_AppLayout>
 	);
 }
