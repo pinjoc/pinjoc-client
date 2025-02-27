@@ -8,6 +8,7 @@ import "@/index.css";
 import "@rainbow-me/rainbowkit/styles.css";
 import { config } from "@/lib/wallet";
 import App from "@/app/index";
+import { Toaster } from "./components/ui/sonner";
 
 const queryClient = new QueryClient();
 const reactApp = document.getElementById("root") as HTMLElement;
@@ -18,6 +19,7 @@ ReactDOM.createRoot(reactApp).render(
 			<QueryClientProvider client={queryClient}>
 				<RainbowKitProvider modalSize="compact" theme={darkTheme()} coolMode>
 					<App />
+					<Toaster />
 				</RainbowKitProvider>
 			</QueryClientProvider>
 		</WagmiProvider>

@@ -9,12 +9,45 @@ import { useState } from "react";
 import { useAccount } from "wagmi";
 import { useCLOBState } from "./clob-state";
 import { cn } from "@/lib/utils";
+import { usePlaceOrder } from "@/hooks/use-place-order";
 
 export function BorrowAction() {
 	const { state } = useCLOBState();
 	const { isConnected } = useAccount();
-	const [amount, setAmount] = useState(0);
-	const [amountMarket, setAmountMarket] = useState(0);
+	//   const [amount, setAmount] = useState(0);
+	//   const [amountMarket, setAmountMarket] = useState(0);
+	const [collateralMarket, setCollacteralMarket] = useState(0);
+	const [debtMarket, setDebtMarket] = useState(0);
+	const [debtLimit, setDebtLimit] = useState(0);
+	const [collateralLimit, setCollateralLimit] = useState(0);
+
+	const { placeOrder, isPlacing } = usePlaceOrder({
+		onSuccess: (result) => {
+			console.log("Order placed successfully:", result);
+		},
+		onError: (error) => {
+			console.error("Error placing order:", error);
+		},
+	});
+
+	const handleClick = async () => {
+		try {
+			await placeOrder({
+				debtToken: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+				collateralToken: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+				amount: BigInt(1000000000),
+				rate: BigInt(60000000000000000),
+				maturity: BigInt(9999999999999999999999999999999),
+				maturityMonth: "MAY",
+				maturityYear: BigInt(2025),
+				lendingOrderType: 1,
+				isMatchOrder: false,
+			});
+		} catch (error) {
+			console.error("Failed to place order:", error);
+		}
+	};
+
 	return (
 		<Tabs defaultValue="limit" className="w-full">
 			<TabsList className="grid w-full grid-cols-2">
@@ -44,48 +77,94 @@ export function BorrowAction() {
 								/>
 							</div>
 							<br />
-							<div className="flex items-center justify-between gap-2">
-								<Label htmlFor="amount-limit">Amount</Label>
-								<div className="relative flex items-center">
-									<Input
-										id="amount-limit"
-										value={amount}
-										onChange={(e) => {
-											const max = state.maxAmount;
-											const value = Number(e.target.value) || 0;
-											setAmount(value > max ? max : value);
-										}}
-										className={cn(
-											"w-48 text-right border-0 text-gray-900 pr-14",
-											amount > state.maxAmount && "border border-red-500",
-										)}
-									/>
-									<span className="absolute right-3 text-gray-500 text-sm">
-										USDC
-									</span>
+							<div className="space-y-2">
+								<div className="flex items-center justify-between gap-2">
+									<Label htmlFor="collateral-limit">Collateral</Label>
+									<div className="relative flex items-center">
+										<Input
+											id="collateral-limit"
+											value={collateralLimit}
+											onChange={(e) => {
+												const max = state.maxAmount;
+												const value = Number(e.target.value) || 0;
+												setCollateralLimit(value > max ? max : value);
+											}}
+											className={cn(
+												"w-48 text-right border-0 text-gray-900 pr-14",
+												collateralLimit > state.maxAmount &&
+													"border border-red-500",
+											)}
+										/>
+										<span className="absolute right-3 text-gray-500 text-sm">
+											ETH
+										</span>
+									</div>
+								</div>
+								<Slider
+									value={[collateralLimit]}
+									max={state.maxAmount}
+									step={1}
+									onValueChange={(value) => setCollateralLimit(value[0])}
+								/>
+								<div className="flex justify-end w-full">
+									<button
+										className="text-xs bg-gray-100 p-1 rounded-sm"
+										type="button"
+										onClick={() => setCollateralLimit(state.maxAmount)}
+									>
+										Max
+									</button>
 								</div>
 							</div>
-							<Slider
-								value={[amount]}
-								max={state.maxAmount}
-								step={1}
-								onValueChange={(value) => setAmount(value[0])}
-							/>
-							<div className="flex justify-end w-full">
-								<button
-									className="text-xs bg-gray-100 p-1 rounded-sm"
-									type="button"
-									onClick={() => setAmount(state.maxAmount)}
-								>
-									Max
-								</button>
+							<div className="space-y-2">
+								<div className="flex items-center justify-between gap-2">
+									<Label htmlFor="debt-limit">Debt</Label>
+									<div className="relative flex items-center">
+										<Input
+											id="debt-limit"
+											value={debtLimit}
+											onChange={(e) => {
+												const max = state.maxAmount;
+												const value = Number(e.target.value) || 0;
+												setDebtLimit(value > max ? max : value);
+											}}
+											className={cn(
+												"w-48 text-right border-0 text-gray-900 pr-14",
+												debtLimit > state.maxAmount && "border border-red-500",
+											)}
+										/>
+										<span className="absolute right-3 text-gray-500 text-sm">
+											USDC
+										</span>
+									</div>
+								</div>
+								<Slider
+									value={[debtLimit]}
+									max={state.maxAmount}
+									step={1}
+									onValueChange={(value) => setDebtLimit(value[0])}
+								/>
+								<div className="flex justify-end w-full">
+									<button
+										className="text-xs bg-gray-100 p-1 rounded-sm"
+										type="button"
+										onClick={() => setDebtLimit(state.maxAmount)}
+									>
+										Max
+									</button>
+								</div>
 							</div>
 						</div>
 					</CardContent>
 					<CardFooter className="p-0 pr-3">
 						{isConnected ? (
-							<Button type="button" className="w-full">
-								Place Order
+							<Button
+								type="button"
+								className="w-full"
+								onClick={handleClick}
+								disabled={isPlacing}
+							>
+								{isPlacing ? "Loading" : "Place Order"}
 							</Button>
 						) : (
 							<div className="w-full">
@@ -115,48 +194,89 @@ export function BorrowAction() {
 								/>
 							</div>
 							<br />
-							<div className="flex items-center justify-between gap-2">
-								<Label htmlFor="amount-market">Amount</Label>
-								<div className="relative flex items-center">
-									<Input
-										id="amount-market"
-										value={amountMarket}
-										onChange={(e) => {
-											const max = state.maxAmount;
-											const value = Number(e.target.value) || 0;
-											setAmountMarket(value > max ? max : value);
-										}}
-										className={cn(
-											"w-48 text-right border-0 text-gray-900 pr-14",
-											amountMarket > state.maxAmount && "border border-red-500",
-										)}
-									/>
-									<span className="absolute right-3 text-gray-500 text-sm">
-										USDC
-									</span>
+							<div className="space-y-2">
+								<div className="flex items-center justify-between gap-2">
+									<Label htmlFor="collateral-market">Collateral</Label>
+									<div className="relative flex items-center">
+										<Input
+											id="collateral-market"
+											value={collateralMarket}
+											onChange={(e) => {
+												const max = state.maxAmount;
+												const value = Number(e.target.value) || 0;
+												setCollacteralMarket(value > max ? max : value);
+											}}
+											className={cn(
+												"w-48 text-right border-0 text-gray-900 pr-14",
+												collateralMarket > state.maxAmount &&
+													"border border-red-500",
+											)}
+										/>
+										<span className="absolute right-3 text-gray-500 text-sm">
+											ETH
+										</span>
+									</div>
+								</div>
+								<Slider
+									value={[collateralMarket]}
+									max={state.maxAmount}
+									step={1}
+									onValueChange={(value) => setCollacteralMarket(value[0])}
+								/>
+								<div className="flex justify-end w-full">
+									<button
+										className="text-xs bg-gray-100 p-1 rounded-sm"
+										type="button"
+										onClick={() => setCollacteralMarket(state.maxAmount)}
+									>
+										Max
+									</button>
 								</div>
 							</div>
-							<Slider
-								value={[amountMarket]}
-								max={state.maxAmount}
-								step={1}
-								onValueChange={(value) => setAmountMarket(value[0])}
-							/>
-							<div className="flex justify-end w-full">
-								<button
-									className="text-xs bg-gray-100 p-1 rounded-sm"
-									type="button"
-									onClick={() => setAmountMarket(state.maxAmount)}
-								>
-									Max
-								</button>
+							<div className="space-y-2">
+								<div className="flex items-center justify-between gap-2">
+									<Label htmlFor="debt-market">Debt</Label>
+									<div className="relative flex items-center">
+										<Input
+											id="debt-market"
+											value={debtMarket}
+											onChange={(e) => {
+												const max = state.maxAmount;
+												const value = Number(e.target.value) || 0;
+												setDebtMarket(value > max ? max : value);
+											}}
+											className={cn(
+												"w-48 text-right border-0 text-gray-900 pr-14",
+												debtMarket > state.maxAmount && "border border-red-500",
+											)}
+										/>
+										<span className="absolute right-3 text-gray-500 text-sm">
+											USDC
+										</span>
+									</div>
+								</div>
+								<Slider
+									value={[debtMarket]}
+									max={state.maxAmount}
+									step={1}
+									onValueChange={(value) => setDebtMarket(value[0])}
+								/>
+								<div className="flex justify-end w-full">
+									<button
+										className="text-xs bg-gray-100 p-1 rounded-sm"
+										type="button"
+										onClick={() => setDebtMarket(state.maxAmount)}
+									>
+										Max
+									</button>
+								</div>
 							</div>
 						</div>
 					</CardContent>
 					<CardFooter className="p-0 pr-3">
 						{isConnected ? (
-							<Button type="button" className="w-full">
-								Place Order
+							<Button type="button" className="w-full" onClick={handleClick}>
+								{isPlacing ? "Loading" : "Place Order"}
 							</Button>
 						) : (
 							<div className="w-full">

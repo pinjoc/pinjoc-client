@@ -91,9 +91,16 @@ export const ButtonWallet = ({
 									onClick={openAccountModal}
 									{...props}
 								>
-									{account.displayName} <span className="font-semibold">|</span>{" "}
+									{account.displayName}
 									{chain.hasIcon && (
-										<img src={chain.iconUrl} className="w-5 h-5" alt="chain" />
+										<>
+											<span className="font-semibold">|</span>
+											<img
+												src={chain.iconUrl}
+												className="w-5 h-5"
+												alt="chain"
+											/>
+										</>
 									)}
 									<div className="before:absolute before:inset-0 before:rounded-[inherit] before:bg-[linear-gradient(45deg,transparent_5%,theme(colors.white/.3)_50%,transparent_50%,transparent_100%)] before:bg-[length:250%_250%,100%_100%] before:bg-[position:200%_0,0_0] before:bg-no-repeat before:[transition:background-position_0s_ease] group-hover:before:bg-[position:-100%_0,0_0] group-hover:before:duration-[2500ms] group-hover:rounded-full" />
 								</Button>

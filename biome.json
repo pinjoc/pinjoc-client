@@ -17,7 +17,8 @@
 		"rules": {
 			"recommended": true,
 			"correctness": {
-				"useExhaustiveDependencies": "off"
+				"useExhaustiveDependencies": "off",
+				"noPrecisionLoss": "off"
 			},
 			"suspicious": {
 				"noExplicitAny": "off",

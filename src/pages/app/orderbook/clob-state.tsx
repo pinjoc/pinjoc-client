@@ -20,7 +20,7 @@ interface CLOBStateContextType {
 // Initial State
 const initialState: State = {
 	fixedRate: 0,
-	maxAmount: 0,
+	maxAmount: 100,
 };
 
 // Create Context with Default Value

@@ -9,12 +9,94 @@ import { useState } from "react";
 import { useAccount } from "wagmi";
 import { useCLOBState } from "./clob-state";
 import { cn } from "@/lib/utils";
+import { usePlaceOrder } from "@/hooks/use-place-order";
 
 export function SupplyAction() {
 	const { state } = useCLOBState();
 	const { isConnected } = useAccount();
 	const [amount, setAmount] = useState(0);
 	const [amountMarket, setAmountMarket] = useState(0);
+
+	// TODO: Berikut adalah cara integerasi smart contract yang masih (mungkin) salah
+	// const contractAddr = "0x8d37312f46377C4cEa898c5183dbb8c4aD1c4e18" as const;
+	// const { writeContract, isPending, data: hash } = useWriteContract();
+	// const { isLoading, isSuccess, isError } = useWaitForTransactionReceipt({
+	//   hash,
+	// });
+
+	// const _debtToken = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+	// const _collateralToken = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
+	// const _amount = BigInt(1000000000);
+	// const _rate = BigInt(60000000000000000);
+	// const _maturity = BigInt(9999999999999999999999999999999);
+	// const _maturityMonth = "MAY";
+	// const _maturityYear = BigInt(2025);
+	// const _lendingOrderType = 0;
+	// const _isMatchOrder = false; // Tambahkan nilai default untuk _isMatchOrder
+
+	// const handlePlaceOrder = async () => {
+	//   try {
+	//     await writeContract({
+	//       abi: placeOrderAbi,
+	//       address: contractAddr,
+	//       functionName: "placeOrder",
+	//       args: [
+	//         _debtToken,
+	//         _collateralToken,
+	//         _amount,
+	//         _rate,
+	//         _maturity,
+	//         _maturityMonth,
+	//         _maturityYear,
+	//         _lendingOrderType,
+	//         _isMatchOrder,
+	//       ],
+	//     });
+	//   } catch (error) {
+	//     console.error("Error placing order:", error);
+	//     toast.dismiss();
+	//     toast.error("Transaction failed!");
+	//   }
+	// };
+
+	// useEffect(() => {
+	//   if (isLoading) {
+	//     toast.loading("Transaction is being processed...");
+	//   }
+
+	//   if (isError || isSuccess) {
+	//     toast.dismiss();
+	//     toast.success("Order placed successfully!");
+	//   }
+	// }, [isLoading, isSuccess, isError]);
+
+	const { placeOrder, isPlacing } = usePlaceOrder({
+		onSuccess: (result) => {
+			console.log("Order placed successfully:", result);
+		},
+		onError: (error) => {
+			console.error("Error placing order:", error);
+		},
+	});
+
+	const handleClick = async () => {
+		try {
+			await placeOrder({
+				debtToken: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+				collateralToken: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+				amount: BigInt(1000000000),
+				rate: BigInt(60000000000000000),
+				maturity: BigInt(9999999999999999999999999999999),
+				maturityMonth: "MAY",
+				maturityYear: BigInt(2025),
+				lendingOrderType: 0,
+				isMatchOrder: false,
+			});
+		} catch (error) {
+			console.error("Failed to place order:", error);
+		}
+	};
+
 	return (
 		<Tabs defaultValue="limit" className="w-full">
 			<TabsList className="grid w-full grid-cols-2">
@@ -68,7 +150,7 @@ export function SupplyAction() {
 										}}
 										className={cn(
 											"w-48 text-right border-0 text-gray-900 pr-14",
-											amount > state.maxAmount && "border border-red-500",
+											amount > state.maxAmount && "border",
 										)}
 									/>
 									<span className="absolute right-3 text-gray-500 text-sm">
@@ -95,8 +177,8 @@ export function SupplyAction() {
 					</CardContent>
 					<CardFooter className="p-0 pr-3">
 						{isConnected ? (
-							<Button type="button" className="w-full">
-								Place Order
+							<Button type="button" className="w-full" onClick={handleClick}>
+								{isPlacing ? "Loading" : "Place Order"}
 							</Button>
 						) : (
 							<div className="w-full">
@@ -150,7 +232,7 @@ export function SupplyAction() {
 										}}
 										className={cn(
 											"w-48 text-right border-0 text-gray-900 pr-14",
-											amountMarket > state.maxAmount && "border border-red-500",
+											amountMarket > state.maxAmount && "border",
 										)}
 									/>
 									<span className="absolute right-3 text-gray-500 text-sm">

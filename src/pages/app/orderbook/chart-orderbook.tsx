@@ -74,7 +74,7 @@ const OrderBookChart: React.FC<OrderBookChartProps> = ({
 	return (
 		<div>
 			<div className="mb-6 pl-6">
-				<h2 className="text-xl font-semibold text-gray-900">Yield Curve</h2>
+				<h2 className="text-xl font-semibold text-white">Yield Curve</h2>
 			</div>
 			<Line data={data} options={options} />
 		</div>
