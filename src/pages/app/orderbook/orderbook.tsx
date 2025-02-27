@@ -101,8 +101,6 @@ const Pool = () => {
 		]);
 	};
 
-	console.log(filledPool, settled);
-
 	return (
 		<div className="w-full relative">
 			<div className="mb-6">
