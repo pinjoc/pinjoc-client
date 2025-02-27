@@ -226,6 +226,10 @@ const Pool = () => {
 										});
 										dispatch({ type: "SET_FIXED_RATE", payload: +item.apy });
 										dispatch({ type: "SET_MAX_AMOUNT", payload: +item.amount });
+										dispatch({
+											type: "SET_IS_MARKET",
+											payload: false,
+										});
 									}}
 								>
 									<span className="flex-1 text-left">{item.apy}%</span>

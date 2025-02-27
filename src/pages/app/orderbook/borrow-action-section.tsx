@@ -61,18 +61,33 @@ export function BorrowAction() {
 
 	return (
 		<Tabs
-			defaultValue="limit"
+			value={state.isMarket ? "market" : "limit"}
 			onValueChange={(value) => {
 				if (value === "market") {
-					dispatch({ type: "SET_FIXED_RATE", payload: state.bestRate });
 					dispatch({
-						type: "SET_BEST_RATE_AMOUNT",
+						type: "SET_FIXED_RATE",
+						payload: state.bestRate,
+					});
+					dispatch({
+						type: "SET_MAX_AMOUNT",
 						payload: state.bestRateAmount,
+					});
+					dispatch({
+						type: "SET_IS_MARKET",
+						payload: true,
 					});
 				} else {
 					dispatch({
 						type: "SET_FIXED_RATE",
 						payload: state.orderbookFixedRate,
+					});
+					dispatch({
+						type: "SET_MAX_AMOUNT",
+						payload: state.maxAmount,
+					});
+					dispatch({
+						type: "SET_IS_MARKET",
+						payload: false,
 					});
 				}
 			}}
