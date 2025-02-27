@@ -1,6 +1,7 @@
 import { AvailableTokens } from "@/types";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useCLOBState } from "./clob-state";
+import { useParams } from "react-router-dom";
 
 interface StatItemProps {
 	label: string;
@@ -16,7 +17,12 @@ const StatItem: React.FC<StatItemProps> = ({ label, value }) => {
 	);
 };
 
-const Stats = (data: AvailableTokens) => {
+const Stats = () => {
+	const { address } = useParams<{ address?: string }>();
+	const data = useMemo(
+		() => JSON.parse(atob(address || "")) as AvailableTokens,
+		[address],
+	);
 	const { dispatch } = useCLOBState();
 	useEffect(() => {
 		dispatch({ type: "SET_DEBT_TOKEN", payload: data.DebtTokenSymbol });

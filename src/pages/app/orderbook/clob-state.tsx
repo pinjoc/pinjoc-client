@@ -1,56 +1,73 @@
-import React, { createContext, useContext, useReducer, Dispatch } from "react";
+import { AvailableTokens } from "@/types";
+import { fetchCLOBData, fetchCLOBBestPrice } from "@/utils/api";
+import { useQuery } from "@tanstack/react-query";
+import React, {
+	createContext,
+	useContext,
+	useReducer,
+	Dispatch,
+	useMemo,
+	useEffect,
+} from "react";
+import { useParams } from "react-router-dom";
+import { PoolProps } from "./type";
 
-// Define State Type
 interface State {
 	fixedRate: number;
 	orderbookFixedRate: number;
 	maxAmount: number;
 	bestRate: number;
+	supply: PoolProps[];
+	borrow: PoolProps[];
+	settled: number;
 	token: {
-		debt: any;
-		collateral: any;
-		debtAddress: any;
-		collateralAddress: any;
+		debt: string;
+		collateral: string;
+		debtAddress: string;
+		collateralAddress: string;
+	};
+	maturity: {
+		month: string;
+		year: string;
 	};
 }
 
-// Define Action Types
 type Action =
 	| { type: "SET_FIXED_RATE"; payload: number }
 	| { type: "SET_CLOB_FIXED_RATE"; payload: number }
 	| { type: "SET_MAX_AMOUNT"; payload: number }
 	| { type: "SET_COLLATERAL_TOKEN"; payload: string }
+	| { type: "SET_MATURITY_MONTH"; payload: string }
+	| { type: "SET_MATURITY_YEAR"; payload: string }
 	| { type: "SET_DEBT_TOKEN"; payload: string }
 	| { type: "SET_BEST_RATE"; payload: number }
 	| { type: "SET_DEBT_TOKEN_ADDRESS"; payload: string }
-	| { type: "SET_COLLATERAL_TOKEN_ADDRESS"; payload: string };
+	| { type: "SET_COLLATERAL_TOKEN_ADDRESS"; payload: string }
+	| { type: "SET_SUPPLY"; payload: PoolProps[] }
+	| { type: "SET_BORROW"; payload: PoolProps[] }
+	| { type: "SET_SETTLED"; payload: number };
 
-// Define Context Type
 interface CLOBStateContextType {
 	state: State;
 	dispatch: Dispatch<Action>;
 }
 
-// Initial State
 const initialState: State = {
 	fixedRate: 0,
 	orderbookFixedRate: 0,
 	maxAmount: 0,
 	bestRate: 0,
-	token: {
-		debt: "",
-		collateral: "",
-		collateralAddress: "",
-		debtAddress: "",
-	},
+	supply: [],
+	borrow: [],
+	settled: 0,
+	maturity: { month: "MAY", year: "2025" },
+	token: { debt: "", collateral: "", collateralAddress: "", debtAddress: "" },
 };
 
-// Create Context with Default Value
 const CLOBStateContext = createContext<CLOBStateContextType | undefined>(
 	undefined,
 );
 
-// Reducer Function
 const reducer = (state: State, action: Action): State => {
 	switch (action.type) {
 		case "SET_FIXED_RATE":
@@ -66,6 +83,16 @@ const reducer = (state: State, action: Action): State => {
 				...state,
 				token: { ...state.token, debtAddress: action.payload },
 			};
+		case "SET_MATURITY_MONTH":
+			return {
+				...state,
+				maturity: { ...state.maturity, month: action.payload },
+			};
+		case "SET_MATURITY_YEAR":
+			return {
+				...state,
+				maturity: { ...state.maturity, year: action.payload },
+			};
 		case "SET_COLLATERAL_TOKEN":
 			return {
 				...state,
@@ -78,16 +105,102 @@ const reducer = (state: State, action: Action): State => {
 			};
 		case "SET_BEST_RATE":
 			return { ...state, bestRate: action.payload };
+		case "SET_SUPPLY":
+			return { ...state, supply: action.payload };
+		case "SET_BORROW":
+			return { ...state, borrow: action.payload };
+		case "SET_SETTLED":
+			return { ...state, settled: action.payload };
 		default:
 			return state;
 	}
 };
 
-// Provider Component
 export const CLOBStateProvider: React.FC<{ children: React.ReactNode }> = ({
 	children,
 }) => {
 	const [state, dispatch] = useReducer(reducer, initialState);
+	const { address } = useParams<{ address?: string }>();
+
+	const summary = useMemo(
+		() => JSON.parse(atob(address || "")) as AvailableTokens,
+		[address],
+	);
+
+	useEffect(() => {
+		if (summary.MaturityRange) {
+			const [month, year] = summary.MaturityRange.slice(0, 8).split(" ");
+			dispatch({ type: "SET_MATURITY_MONTH", payload: month });
+			dispatch({ type: "SET_MATURITY_YEAR", payload: year });
+		}
+	}, [summary.MaturityRange]);
+
+	const { data } = useQuery({
+		queryKey: [
+			"clobData",
+			summary.CollateralAddress,
+			summary.DebtTokenAddress,
+			state.maturity.month,
+			state.maturity.year,
+		],
+		queryFn: () =>
+			fetchCLOBData(
+				summary.CollateralAddress!,
+				summary.DebtTokenAddress!,
+				state.maturity.month,
+				state.maturity.year,
+			),
+		staleTime: 1000 * 60 * 5,
+	});
+
+	const { data: dataBestRate } = useQuery({
+		queryKey: [
+			"bestRate",
+			summary.CollateralAddress,
+			summary.DebtTokenAddress,
+			state.maturity.month,
+			state.maturity.year,
+		],
+		queryFn: () =>
+			fetchCLOBBestPrice(
+				summary.CollateralAddress!,
+				summary.DebtTokenAddress!,
+				state.maturity.month,
+				state.maturity.year,
+			),
+		staleTime: 1000 * 60 * 5,
+	});
+
+	useEffect(() => {
+		if (data) {
+			dispatch({
+				type: "SET_SUPPLY",
+				payload: data
+					.filter((d) => d.OrderType === "LEND")
+					.map((d) => ({
+						amount: Number(d.AvailableToken),
+						apy: Number(d.Rate),
+						type: d.OrderType,
+					})),
+			});
+			dispatch({
+				type: "SET_BORROW",
+				payload: data
+					.filter((d) => d.OrderType === "BORROW")
+					.map((d) => ({
+						amount: Number(d.AvailableToken),
+						apy: Number(d.Rate),
+						type: d.OrderType,
+					})),
+			});
+		}
+		if (dataBestRate) {
+			dispatch({
+				type: "SET_SETTLED",
+				payload: +(dataBestRate.best_rate || "0"),
+			});
+		}
+	}, [data, dataBestRate]);
 
 	return (
 		<CLOBStateContext.Provider value={{ state, dispatch }}>
@@ -96,11 +209,9 @@ export const CLOBStateProvider: React.FC<{ children: React.ReactNode }> = ({
 	);
 };
 
-// Custom Hook to Use Global State
 export const useCLOBState = (): CLOBStateContextType => {
 	const context = useContext(CLOBStateContext);
-	if (!context) {
+	if (!context)
 		throw new Error("useCLOBState must be used within a CLOBStateProvider");
-	}
 	return context;
 };
