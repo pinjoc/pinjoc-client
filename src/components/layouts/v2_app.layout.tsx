@@ -12,7 +12,7 @@ const V2_AppLayout = ({ children }: PropsWithChildren) => {
 	const { pathname } = location;
 	return (
 		<CLOBStateProvider>
-			<div className="flex flex-col items-center bg-white overflow-y-scroll">
+			<div className="flex flex-col items-center bg-[#121323] overflow-y-scroll">
 				{/* Header */}
 				<header className="fixed w-full z-[99999]">
 					<nav
@@ -32,7 +32,7 @@ const V2_AppLayout = ({ children }: PropsWithChildren) => {
 										aria-label="logo"
 										className="flex items-center"
 									>
-										<h1 className="text-3xl font-bold text-black">PINJ 🪙 C</h1>
+										<h1 className="text-3xl font-bold text-white">PINJ 🪙 C</h1>
 									</Link>
 									<div className="relative flex max-h-10 items-center lg:hidden">
 										<label
@@ -63,9 +63,9 @@ const V2_AppLayout = ({ children }: PropsWithChildren) => {
 									<Link to={"/borrow-lend"}>
 										<Button
 											className={cn(
-												" text-black cursor-pointer rounded-full font-extralight hover:bg-gray-100",
+												" text-white cursor-pointer rounded-full font-extralight hover:bg-[#31323D]",
 												pathname === "/borrow-lend"
-													? "bg-gray-100"
+													? "bg-[#31323D]"
 													: "bg-transparent",
 											)}
 										>
@@ -75,9 +75,9 @@ const V2_AppLayout = ({ children }: PropsWithChildren) => {
 									<Link to={"/tokenizebond"}>
 										<Button
 											className={cn(
-												" text-black cursor-pointer rounded-full font-extralight hover:bg-gray-100",
+												" text-white cursor-pointer rounded-full font-extralight hover:bg-[#31323D]",
 												pathname === "/tokenizebond"
-													? "bg-gray-100"
+													? "bg-[#31323D]"
 													: "bg-transparent",
 											)}
 										>
@@ -87,9 +87,9 @@ const V2_AppLayout = ({ children }: PropsWithChildren) => {
 									<Link to={"/portfolio"}>
 										<Button
 											className={cn(
-												" text-black rounded-full font-extralight hover:bg-gray-100",
+												" text-white rounded-full font-extralight hover:bg-[#31323D]",
 												pathname === "/portfolio"
-													? "bg-gray-100"
+													? "bg-[#31323D]"
 													: "bg-transparent",
 											)}
 										>
@@ -99,9 +99,9 @@ const V2_AppLayout = ({ children }: PropsWithChildren) => {
 									<Link to={"/history"}>
 										<Button
 											className={cn(
-												" text-black rounded-full font-extralight hover:bg-gray-100",
+												" text-white rounded-full font-extralight hover:bg-[#31323D]",
 												pathname === "/history"
-													? "bg-gray-100"
+													? "bg-[#31323D]"
 													: "bg-transparent",
 											)}
 										>
@@ -124,10 +124,8 @@ const V2_AppLayout = ({ children }: PropsWithChildren) => {
 					{children}
 				</main>
 
-				<hr className="border-t border-gray-300" />
-
 				{/* Footer */}
-				<footer className="w-full p-6 bg-white text-sm shadow-md text-center text-gray-400 rounded-b-lg">
+				<footer className="w-full p-6 bg-[#121323] border-t border-gray-300 text-sm shadow-md text-center text-gray-400 rounded-b-lg">
 					&copy; {new Date().getFullYear()} PINJ🪙C
 				</footer>
 			</div>

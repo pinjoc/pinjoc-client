@@ -102,21 +102,21 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 	};
 
 	return (
-		<div className="w-full relative bg-white">
+		<div className="w-full relative">
 			<div className="mb-6">
-				<h2 className="text-xl font-semibold text-gray-900">Order Book</h2>
+				<h2 className="text-xl font-semibold text-white">Order Book</h2>
 				<br />
 				<PoolControls onSelectionChange={handleSelectionChange} />
 			</div>
-			<div className="flex flex-col rounded-md overflow-hidden border border-gray-300">
-				<div className="w-full p-3 flex font-medium bg-gray-200 border-b">
+			<div className="flex flex-col rounded-md overflow-hidden border bg-[#22232E] border-gray-700">
+				<div className="w-full p-3 flex font-medium bg-[#22232E] text-white border-b border-gray-700">
 					<span className="flex-1 text-left">APY (%)</span>
 					<span className="flex-1 text-right">Amount</span>
 				</div>
 				{filledPool.map((item, index) => (
 					<div
 						key={index}
-						className="flex items-center h-10 border-b border-gray-200 last:border-0"
+						className="flex items-center border-b h-10 border-gray-700 last:border-0"
 					>
 						<div
 							className={cn(
@@ -126,8 +126,8 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 									: item.type === "BORROW"
 										? "text-red-700 text-sm"
 										: item.type === "SET"
-											? "text-gray-900 text-lg bg-gray-300"
-											: "bg-white",
+											? "text-white text-lg bg-[#22232E]"
+											: "bg-[#22232E]",
 							)}
 						>
 							{item.type !== "empty" ? (
@@ -135,10 +135,10 @@ const Pool: React.FC<GroupPoolProps> = ({ borrows, supplies, settled }) => {
 									type="button"
 									disabled={item.type === "SET"}
 									className={cn(
-										"w-full flex justify-between cursor-pointer disabled:cursor-not-allowed hover:bg-gray-100 p-2 rounded",
+										"w-full flex justify-between cursor-pointer disabled:cursor-not-allowed hover:bg-gray-100 p-2",
 										state.fixedRate === item.apy
-											? "font-bold bg-blue-50"
-											: "font-medium bg-white",
+											? "font-bold bg-[#0f0f13]"
+											: "font-medium bg-[#22232E]",
 									)}
 									onClick={() => {
 										dispatch({

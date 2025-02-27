@@ -107,20 +107,20 @@ export default function OrderbookPage() {
 		<V2_AppLayout>
 			<Stats {...summary} />
 			<div className="w-full grid grid-cols-4 overflow-x-hidden">
-				<div className="col-span-2 p-6 border-r border-gray-300">
+				<div className="col-span-2 p-6 border-r bg-[#121323] border-gray-300">
 					<div>
 						<OrderBookChart data={chartData} onPointClick={() => {}} />
 					</div>
-					<div className="mt-4">Position</div>
+					<div className="mt-4 text-white">Position</div>
 				</div>
-				<div className="col-span-1 p-6 border-r border-gray-300">
+				<div className="col-span-1 p-6 border-r border-gray-300 bg-[#121422]">
 					<Pool
 						borrows={borrow || []}
 						settled={settled}
 						supplies={supply || []}
 					/>
 				</div>
-				<div className="col-span-1 p-6">
+				<div className="col-span-1 p-6 bg-[#121422]">
 					<Action />
 				</div>
 			</div>
