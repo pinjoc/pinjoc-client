@@ -9,12 +9,12 @@ interface PlaceOrderParams {
 	debtToken: `0x${string}`;
 	collateralToken: `0x${string}`;
 	amount: bigint;
+	collateralAmount: bigint;
 	rate: bigint;
 	maturity: bigint;
 	maturityMonth: string;
 	maturityYear: bigint;
 	lendingOrderType: number;
-	isMatchOrder: boolean;
 }
 
 export interface PlaceOrderResult {
@@ -51,23 +51,24 @@ export const usePlaceOrder = (
 	const { onSuccess, onError } = options;
 	const [isPlacing, setIsPlacing] = useState(false);
 	const [error, setError] = useState<Error | null>(null);
-	const contractAddr = "0x8d37312f46377C4cEa898c5183dbb8c4aD1c4e18" as const;
+	const contractAddr = "0x6f79Ec0beD0b721750477778B25f02Ac104b8F77" as const;
 
 	const placeOrder = useCallback(
 		async ({
 			debtToken,
 			collateralToken,
 			amount,
+			collateralAmount,
 			rate,
 			maturity,
 			maturityMonth,
 			maturityYear,
 			lendingOrderType,
-			isMatchOrder,
 		}: PlaceOrderParams): Promise<PlaceOrderResult> => {
 			setIsPlacing(true);
 			setError(null);
 			toast.loading("Processing transaction...");
+			console.log({ maturityMonth });
 
 			try {
 				// Kirim transaksi ke smart contract
@@ -79,12 +80,12 @@ export const usePlaceOrder = (
 						debtToken,
 						collateralToken,
 						amount,
+						collateralAmount,
 						rate,
 						maturity,
 						maturityMonth,
 						maturityYear,
 						lendingOrderType,
-						isMatchOrder,
 					],
 				});
 

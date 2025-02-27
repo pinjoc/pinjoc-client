@@ -35,12 +35,12 @@ export function BorrowAction() {
 				debtToken: state.token.debtAddress as `0x${string}`,
 				collateralToken: state.token.collateralAddress as `0x${string}`,
 				amount: BigInt(1000000000),
+				collateralAmount: BigInt(1000000000),
 				rate: BigInt(60000000000000000),
 				maturity: BigInt(9999999999999999999999999999999),
 				maturityMonth: "MAY",
 				maturityYear: BigInt(2025),
 				lendingOrderType: 1,
-				isMatchOrder: false,
 			});
 		} catch (error) {
 			console.error("Failed to place order:", error);
