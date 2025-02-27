@@ -10,8 +10,8 @@ interface StatItemProps {
 const StatItem: React.FC<StatItemProps> = ({ label, value }) => {
 	return (
 		<div className="flex flex-col items-left">
-			<span className="text-sm text-gray-500">{label}</span>
-			<strong className="text-xl font-semibold text-gray-900">{value}</strong>
+			<span className="text-sm text-white">{label}</span>
+			<strong className="text-xl font-semibold text-white">{value}</strong>
 		</div>
 	);
 };
@@ -26,11 +26,11 @@ const Stats = (data: AvailableTokens) => {
 		});
 	}, [data]);
 	return (
-		<div className="w-full border-b border-gray-300">
-			<div className="w-full bg-white p-6 rounded-lg ml-8">
+		<div className="w-full border-b bg-[#121323] border-gray-300">
+			<div className="w-full  p-6 rounded-lg ml-8">
 				{/* Token Information */}
 				<div className="flex items-start gap-4">
-					<h2 className="flex items-center text-lg font-semibold text-gray-800">
+					<h2 className="flex items-center text-lg font-semibold text-white">
 						<img
 							className="w-6 h-6 mr-2"
 							src={data.CollateralTokenIcon}
@@ -38,7 +38,7 @@ const Stats = (data: AvailableTokens) => {
 						/>
 						{data.CollateralTokenSymbol}
 					</h2>
-					<h2 className="flex items-center text-lg font-semibold text-gray-800">
+					<h2 className="flex items-center text-lg font-semibold text-white">
 						<img
 							className="w-6 h-6 mr-2"
 							src={data.DebtTokenIcon}

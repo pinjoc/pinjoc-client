@@ -112,22 +112,22 @@ export function SupplyAction() {
 			defaultValue="limit"
 			className="w-full"
 		>
-			<TabsList className="grid w-full grid-cols-2">
+			<TabsList className="grid w-full grid-cols-2 bg-transparent">
 				<TabsTrigger
-					className="data-[state=active]:bg-gray-200 data-[state=active]:text-gray-600"
+					className="data-[state=active]:bg-[#22232E] border-gray-500 data-[state=active]:text-white"
 					value="limit"
 				>
 					Limit
 				</TabsTrigger>
 				<TabsTrigger
-					className="data-[state=active]:bg-gray-200 data-[state=active]:text-gray-600"
+					className="data-[state=active]:bg-[#22232E] border-gray-500 data-[state=active]:text-white"
 					value="market"
 				>
 					Market
 				</TabsTrigger>
 			</TabsList>
 			<TabsContent value="limit">
-				<Card className="border-0 shadow-none p-0">
+				<Card className="border-0 shadow-none bg-[#22232E] p-3 text-white">
 					<CardContent className="space-y-2 p-0 my-3">
 						<div className="space-y-2 text-lg">
 							<div className="flex justify-between items-center mb-6">
@@ -139,7 +139,7 @@ export function SupplyAction() {
 										id="amount-market"
 										value={56}
 										disabled
-										className="w-24 text-right border-0 mr-8 text-gray-900"
+										className="w-24 text-right border-0 mr-8 bg-transparent text-white"
 									/>
 									<span className="absolute right-3 text-gray-500 text-sm">
 										{state.token.debt}
@@ -151,7 +151,7 @@ export function SupplyAction() {
 								<Input
 									id="rate-limit"
 									value={`${state.fixedRate}%`}
-									className="w-24 text-right border-0 text-gray-900"
+									className="w-24 text-right border-0 bg-transparent text-white"
 								/>
 							</div>
 							<div className="flex items-center justify-between gap-2">
@@ -166,7 +166,7 @@ export function SupplyAction() {
 											setAmount(value > max ? max : value);
 										}}
 										className={cn(
-											"w-48 text-right border-0 text-gray-900 pr-14",
+											"w-48 text-right border-0 bg-transparent text-white pr-14",
 											amount > state.maxAmount && "border",
 										)}
 									/>
@@ -183,7 +183,7 @@ export function SupplyAction() {
 							/>
 							<div className="flex justify-end w-full">
 								<button
-									className="text-xs bg-gray-100 p-1 rounded-sm"
+									className="text-xs bg-gray-900 p-1 rounded-sm"
 									type="button"
 									onClick={() => setAmount(state.maxAmount)}
 								>
@@ -199,7 +199,11 @@ export function SupplyAction() {
 					</CardContent>
 					<CardFooter className="p-0 pr-3">
 						{isConnected ? (
-							<Button type="button" className="w-full" onClick={handleClick}>
+							<Button
+								type="button"
+								className="w-full text-black"
+								onClick={handleClick}
+							>
 								{isPlacing ? "Loading" : "Place Order"}
 							</Button>
 						) : (
@@ -211,7 +215,7 @@ export function SupplyAction() {
 				</Card>
 			</TabsContent>
 			<TabsContent value="market">
-				<Card className="border-0 shadow-none p-0">
+				<Card className="border-0 shadow-none bg-[#22232E] p-3 text-white">
 					<CardContent className="space-y-2 p-0 my-3">
 						<div className="space-y-2 text-lg">
 							<div className="flex justify-between items-center mb-6">
@@ -223,7 +227,7 @@ export function SupplyAction() {
 										id="amount-limit"
 										value={56}
 										disabled
-										className="w-24 text-right border-0 mr-8 text-gray-900"
+										className="w-24 text-right border-0 mr-8 bg-transparent text-white"
 									/>
 									<span className="absolute right-3 text-gray-500 text-sm">
 										{state.token.debt}
@@ -234,7 +238,7 @@ export function SupplyAction() {
 								<Input
 									id="price-market"
 									value="98.8"
-									className="w-24 hidden text-right border-0 text-gray-900"
+									className="w-24 hidden text-right border-0 bg-transparent text-white"
 								/>
 							</div>
 							<div className="flex justify-between items-center">
@@ -242,7 +246,7 @@ export function SupplyAction() {
 								<Input
 									id="rate-market"
 									value={`${state.fixedRate}%`}
-									className="w-24 text-right border-0 text-gray-900"
+									className="w-24 text-right border-0 bg-transparent text-white"
 								/>
 							</div>
 							<div className="flex items-center justify-between gap-2">
@@ -257,7 +261,7 @@ export function SupplyAction() {
 											setAmountMarket(value > max ? max : value);
 										}}
 										className={cn(
-											"w-48 text-right border-0 text-gray-900 pr-14",
+											"w-48 text-right border-0 bg-transparent text-white pr-14",
 											amountMarket > state.maxAmount && "border",
 										)}
 									/>
@@ -274,7 +278,7 @@ export function SupplyAction() {
 							/>
 							<div className="flex justify-end w-full">
 								<button
-									className="text-xs bg-gray-100 p-1 rounded-sm"
+									className="text-xs bg-gray-900 p-1 rounded-sm"
 									type="button"
 									onClick={() => setAmount(state.maxAmount)}
 								>
@@ -290,7 +294,7 @@ export function SupplyAction() {
 					</CardContent>
 					<CardFooter className="p-0 pr-3">
 						{isConnected ? (
-							<Button type="button" className="w-full">
+							<Button type="button" className="w-full text-black">
 								Place Order
 							</Button>
 						) : (
