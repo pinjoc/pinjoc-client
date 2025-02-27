@@ -108,7 +108,7 @@ export function BorrowAction() {
 											id="collateral-limit"
 											value={collateralLimit}
 											onChange={(e) => {
-												const max = state.maxAmount;
+												const max = state.bestRateAmount;
 												const value = Number(e.target.value) || 0;
 												setCollateralLimit(value > max ? max : value);
 											}}
@@ -225,7 +225,7 @@ export function BorrowAction() {
 											id="collateral-market"
 											value={collateralMarket}
 											onChange={(e) => {
-												const max = state.maxAmount;
+												const max = state.bestRateAmount;
 												const value = Number(e.target.value) || 0;
 												setCollacteralMarket(value > max ? max : value);
 											}}

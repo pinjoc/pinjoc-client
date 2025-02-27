@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import { PoolProps } from "./type";
 
 interface State {
+	bestRateAmount: number;
 	fixedRate: number;
 	orderbookFixedRate: number;
 	maxAmount: number;
@@ -33,6 +34,7 @@ interface State {
 }
 
 type Action =
+	| { type: "SET_BEST_RATE_AMOUNT"; payload: number }
 	| { type: "SET_FIXED_RATE"; payload: number }
 	| { type: "SET_CLOB_FIXED_RATE"; payload: number }
 	| { type: "SET_MAX_AMOUNT"; payload: number }
@@ -53,6 +55,7 @@ interface CLOBStateContextType {
 }
 
 const initialState: State = {
+	bestRateAmount: 0,
 	fixedRate: 0,
 	orderbookFixedRate: 0,
 	maxAmount: 0,
@@ -198,6 +201,15 @@ export const CLOBStateProvider: React.FC<{ children: React.ReactNode }> = ({
 			dispatch({
 				type: "SET_SETTLED",
 				payload: +(dataBestRate.best_rate || "0"),
+			});
+		}
+
+		if (dataBestRate && data) {
+			dispatch({
+				type: "SET_BEST_RATE_AMOUNT",
+				payload:
+					(data || []).find((d) => +d.Rate === +dataBestRate.best_rate)
+						?.AvailableToken || 0,
 			});
 		}
 	}, [data, dataBestRate]);
