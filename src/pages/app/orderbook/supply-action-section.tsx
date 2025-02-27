@@ -139,7 +139,7 @@ export function SupplyAction() {
 										id="amount-market"
 										value={56}
 										disabled
-										className="w-24 text-right border-0 mr-8 text-gray-900"
+										className="w-24 text-right border-0 mr-10 text-gray-900"
 									/>
 									<span className="absolute right-3 text-gray-500 text-sm">
 										{state.token.debt}
@@ -223,7 +223,7 @@ export function SupplyAction() {
 										id="amount-limit"
 										value={56}
 										disabled
-										className="w-24 text-right border-0 mr-8 text-gray-900"
+										className="w-24 text-right border-0 mr-10 text-gray-900"
 									/>
 									<span className="absolute right-3 text-gray-500 text-sm">
 										{state.token.debt}
