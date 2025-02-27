@@ -16,10 +16,10 @@ const PoolControls: React.FC<PoolControlsProps> = ({ onSelectionChange }) => {
 		<div className="flex items-center rounded-lg space-x-2">
 			<button
 				onClick={() => handleSelectionChange("all")}
-				className={`relative text-sm border border-gray-300 font-medium rounded-md transition px-3 h-10 flex items-center justify-center ${
+				className={`relative text-sm border border-gray-500 font-medium rounded-md transition px-3 h-10 flex items-center justify-center ${
 					selected === "all"
-						? "bg-gray-600 text-white"
-						: "text-gray-700 bg-white hover:bg-gray-200"
+						? "bg-[#22232E] text-white"
+						: "text-gray-700 bg-[#22232E]/20 hover:bg-[#22232E]/50"
 				}`}
 				aria-pressed={selected === "all" ? "true" : "false"}
 				aria-label="Toggle Borrow/Supply"
@@ -31,10 +31,10 @@ const PoolControls: React.FC<PoolControlsProps> = ({ onSelectionChange }) => {
 
 			<button
 				onClick={() => handleSelectionChange("borrow")}
-				className={`text-sm border border-gray-300 font-medium rounded-md transition px-3 h-10 flex items-center justify-center ${
+				className={`text-sm border border-gray-500 font-medium rounded-md transition px-3 h-10 flex items-center justify-center ${
 					selected === "borrow"
-						? "bg-gray-600 text-white"
-						: "text-gray-700 bg-white hover:bg-gray-200"
+						? "bg-[#22232E] text-white"
+						: "text-gray-700 bg-[#22232E]/20 hover:bg-[#22232E]/50"
 				}`}
 				aria-pressed={selected === "borrow" ? "true" : "false"}
 				aria-label="Select Borrow option"
@@ -46,10 +46,10 @@ const PoolControls: React.FC<PoolControlsProps> = ({ onSelectionChange }) => {
 
 			<button
 				onClick={() => handleSelectionChange("supply")}
-				className={`text-sm border border-gray-300 font-medium rounded-md transition px-3 h-10 flex items-center justify-center ${
+				className={`text-sm border border-gray-500 font-medium rounded-md transition px-3 h-10 flex items-center justify-center ${
 					selected === "supply"
-						? "bg-gray-600 text-white"
-						: "text-gray-700 bg-white hover:bg-gray-200"
+						? "bg-[#22232E] text-white"
+						: "text-gray-700 bg-[#22232E]/20 hover:bg-[#22232E]/50"
 				}`}
 				aria-pressed={selected === "supply" ? "true" : "false"}
 				aria-label="Select Supply option"

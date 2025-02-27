@@ -45,17 +45,25 @@ const OrderBookChart: React.FC<OrderBookChartProps> = ({
 				title: {
 					display: true,
 					text: "Maturity (Months)",
+					color: "#ffff",
 				},
 				grid: {
 					drawTicks: false,
+				},
+				ticks: {
+					color: "#ffff",
 				},
 			},
 			y: {
 				title: {
 					display: true,
 					text: "APY (%)",
+					color: "#ffff",
 				},
 				beginAtZero: true,
+				ticks: {
+					color: "#ffff",
+				},
 				grid: {
 					drawTicks: false,
 				},
