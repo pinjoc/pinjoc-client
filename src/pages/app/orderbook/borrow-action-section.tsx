@@ -57,7 +57,7 @@ export function BorrowAction() {
 		balance: collateralBalance,
 		// error: collateralError,
 		// loading: collateralLoading,
-	} = useBalance(address!, state.token.debtAddress as `0x${string}`);
+	} = useBalance(address!, state.token.collateralAddress as `0x${string}`);
 
 	return (
 		<Tabs
