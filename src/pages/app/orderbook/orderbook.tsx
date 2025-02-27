@@ -109,13 +109,13 @@ const Pool = () => {
 
 		const adjustedSupply = remainingSupplyItems
 			.slice(0, supplyCount)
-			.sort((a, b) => b.apy - a.apy);
+			.sort((a, b) => a.apy - b.apy);
 
 		// Combine and set the filled pool
 		setFilledPool([
 			...createEmptyItems(maxItems - (supplyCount + (settled ? 1 : 0))),
-			...removedSupplyItems,
 			...adjustedSupply,
+			...removedSupplyItems,
 		]);
 	};
 
@@ -164,21 +164,21 @@ const Pool = () => {
 		// Adjusted borrow and supply lists after slicing and sorting
 		const adjustedBorrow = remainingBorrowItems
 			.slice(0, borrowCount)
-			.sort((a, b) => a.apy - b.apy);
+			.sort((a, b) => b.apy - a.apy);
 
 		const adjustedSupply = remainingSupplyItems
 			.slice(0, supplyCount)
-			.sort((a, b) => b.apy - a.apy);
+			.sort((a, b) => a.apy - b.apy);
 
 		// Combine and set the filled pool
 		setFilledPool([
 			...createEmptyItems(
 				maxItems - (borrowCount + supplyCount + (settled ? 1 : 0)),
 			),
-			...adjustedBorrow,
-			...removedBorrowItems,
-			...removedSupplyItems,
 			...adjustedSupply,
+			...removedSupplyItems,
+			...removedBorrowItems,
+			...adjustedBorrow,
 		]);
 	};
 
@@ -226,12 +226,14 @@ const Pool = () => {
 										});
 										dispatch({ type: "SET_FIXED_RATE", payload: +item.apy });
 										dispatch({ type: "SET_MAX_AMOUNT", payload: +item.amount });
+										dispatch({
+											type: "SET_IS_MARKET",
+											payload: false,
+										});
 									}}
 								>
 									<span className="flex-1 text-left">{item.apy}%</span>
-									<span className="flex-1 text-right">
-										{item.apy === settled ? "-" : item.amount}
-									</span>
+									<span className="flex-1 text-right">{item.amount}</span>
 								</button>
 							) : (
 								<div className="w-full h-full" />

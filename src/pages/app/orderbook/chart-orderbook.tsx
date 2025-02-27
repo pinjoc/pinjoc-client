@@ -31,7 +31,11 @@ const OrderBookChart = () => {
 	const { state, dispatch } = useCLOBState();
 
 	const { data: dataChart } = useQuery({
-		queryKey: ["clobData"],
+		queryKey: [
+			"clobData",
+			state.token.collateralAddress,
+			state.token.debtAddress,
+		],
 		queryFn: () =>
 			fetchCLOBMaturityBestRateData(
 				state.token.collateralAddress!,

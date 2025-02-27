@@ -111,15 +111,24 @@ export function SupplyAction() {
 	return (
 		<Tabs
 			onValueChange={(value) => {
-				if (value === "market")
+				if (value === "market") {
 					dispatch({ type: "SET_FIXED_RATE", payload: state.bestRate });
-				else
+					dispatch({
+						type: "SET_IS_MARKET",
+						payload: true,
+					});
+				} else {
 					dispatch({
 						type: "SET_FIXED_RATE",
 						payload: state.orderbookFixedRate,
 					});
+					dispatch({
+						type: "SET_IS_MARKET",
+						payload: false,
+					});
+				}
 			}}
-			defaultValue="limit"
+			value={state.isMarket ? "market" : "limit"}
 			className="w-full"
 		>
 			<TabsList className="grid w-full grid-cols-2 bg-transparent">
@@ -187,7 +196,7 @@ export function SupplyAction() {
 							</div>
 							<Slider
 								value={[amount]}
-								max={state.maxAmount}
+								max={Number(amountBalance)}
 								step={1}
 								onValueChange={(value) => setAmount(value[0])}
 							/>
@@ -282,7 +291,7 @@ export function SupplyAction() {
 							</div>
 							<Slider
 								value={[amountMarket]}
-								max={state.maxAmount}
+								max={Number(amountBalance)}
 								step={1}
 								onValueChange={(value) => setAmountMarket(value[0])}
 							/>

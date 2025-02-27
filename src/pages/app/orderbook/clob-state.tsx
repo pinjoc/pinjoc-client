@@ -13,6 +13,9 @@ import { useParams } from "react-router-dom";
 import { PoolProps } from "./type";
 
 interface State {
+	isMarket: boolean;
+	bestRateAmount: number;
+	orderbookBestRateAmount: number;
 	fixedRate: number;
 	orderbookFixedRate: number;
 	maxAmount: number;
@@ -33,6 +36,9 @@ interface State {
 }
 
 type Action =
+	| { type: "SET_BEST_RATE_AMOUNT"; payload: number }
+	| { type: "SET_IS_MARKET"; payload: boolean }
+	| { type: "SET_BEST_RATE_AMOUNT_ORDERBOOK"; payload: number }
 	| { type: "SET_FIXED_RATE"; payload: number }
 	| { type: "SET_CLOB_FIXED_RATE"; payload: number }
 	| { type: "SET_MAX_AMOUNT"; payload: number }
@@ -53,6 +59,9 @@ interface CLOBStateContextType {
 }
 
 const initialState: State = {
+	isMarket: false,
+	bestRateAmount: 0,
+	orderbookBestRateAmount: 0,
 	fixedRate: 0,
 	orderbookFixedRate: 0,
 	maxAmount: 0,
@@ -74,6 +83,8 @@ const reducer = (state: State, action: Action): State => {
 			return { ...state, fixedRate: action.payload };
 		case "SET_CLOB_FIXED_RATE":
 			return { ...state, orderbookFixedRate: action.payload };
+		case "SET_IS_MARKET":
+			return { ...state, isMarket: action.payload };
 		case "SET_MAX_AMOUNT":
 			return { ...state, maxAmount: action.payload };
 		case "SET_DEBT_TOKEN":
@@ -111,6 +122,10 @@ const reducer = (state: State, action: Action): State => {
 			return { ...state, borrow: action.payload };
 		case "SET_SETTLED":
 			return { ...state, settled: action.payload };
+		case "SET_BEST_RATE_AMOUNT":
+			return { ...state, bestRateAmount: action.payload };
+		case "SET_BEST_RATE_AMOUNT_ORDERBOOK":
+			return { ...state, orderbookBestRateAmount: action.payload };
 		default:
 			return state;
 	}
@@ -198,6 +213,15 @@ export const CLOBStateProvider: React.FC<{ children: React.ReactNode }> = ({
 			dispatch({
 				type: "SET_SETTLED",
 				payload: +(dataBestRate.best_rate || "0"),
+			});
+		}
+
+		if (dataBestRate && data) {
+			dispatch({
+				type: "SET_BEST_RATE_AMOUNT",
+				payload:
+					(data || []).find((d) => +d.Rate === +dataBestRate.best_rate)
+						?.AvailableToken || 0,
 			});
 		}
 	}, [data, dataBestRate]);

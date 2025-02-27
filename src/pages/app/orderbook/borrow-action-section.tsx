@@ -47,11 +47,11 @@ export function BorrowAction() {
 		}
 	};
 
-	const {
-		balance: debtBalance,
-		// error: debtError,
-		// loading: debtLoading,
-	} = useBalance(address!, state.token.debtAddress as `0x${string}`);
+	// const {
+	// 	balance: debtBalance,
+	// 	// error: debtError,
+	// 	// loading: debtLoading,
+	// } = useBalance(address!, state.token.debtAddress as `0x${string}`);
 
 	const {
 		balance: collateralBalance,
@@ -61,15 +61,35 @@ export function BorrowAction() {
 
 	return (
 		<Tabs
-			defaultValue="limit"
+			value={state.isMarket ? "market" : "limit"}
 			onValueChange={(value) => {
-				if (value === "market")
-					dispatch({ type: "SET_FIXED_RATE", payload: state.bestRate });
-				else
+				if (value === "market") {
+					dispatch({
+						type: "SET_FIXED_RATE",
+						payload: state.bestRate,
+					});
+					dispatch({
+						type: "SET_MAX_AMOUNT",
+						payload: state.bestRateAmount,
+					});
+					dispatch({
+						type: "SET_IS_MARKET",
+						payload: true,
+					});
+				} else {
 					dispatch({
 						type: "SET_FIXED_RATE",
 						payload: state.orderbookFixedRate,
 					});
+					dispatch({
+						type: "SET_MAX_AMOUNT",
+						payload: state.maxAmount,
+					});
+					dispatch({
+						type: "SET_IS_MARKET",
+						payload: false,
+					});
+				}
 			}}
 			className="w-full"
 		>
@@ -108,7 +128,7 @@ export function BorrowAction() {
 											id="collateral-limit"
 											value={collateralLimit}
 											onChange={(e) => {
-												const max = state.maxAmount;
+												const max = state.bestRateAmount;
 												const value = Number(e.target.value) || 0;
 												setCollateralLimit(value > max ? max : value);
 											}}
@@ -125,7 +145,7 @@ export function BorrowAction() {
 								</div>
 								<Slider
 									value={[collateralLimit]}
-									max={state.maxAmount}
+									max={Number(collateralBalance)}
 									step={1}
 									onValueChange={(value) => setCollateralLimit(value[0])}
 								/>
@@ -173,7 +193,7 @@ export function BorrowAction() {
 										type="button"
 										onClick={() => setDebtLimit(state.maxAmount)}
 									>
-										Max {debtBalance?.toString()}
+										Max {state.maxAmount}
 									</button>
 								</div>
 							</div>
@@ -225,7 +245,7 @@ export function BorrowAction() {
 											id="collateral-market"
 											value={collateralMarket}
 											onChange={(e) => {
-												const max = state.maxAmount;
+												const max = state.bestRateAmount;
 												const value = Number(e.target.value) || 0;
 												setCollacteralMarket(value > max ? max : value);
 											}}
@@ -242,7 +262,7 @@ export function BorrowAction() {
 								</div>
 								<Slider
 									value={[collateralMarket]}
-									max={state.maxAmount}
+									max={Number(collateralBalance)}
 									step={1}
 									onValueChange={(value) => setCollacteralMarket(value[0])}
 								/>
@@ -290,7 +310,7 @@ export function BorrowAction() {
 										type="button"
 										onClick={() => setCollateralLimit(state.maxAmount)}
 									>
-										Max {debtBalance?.toString()}
+										Max {state.maxAmount}
 									</button>
 								</div>
 							</div>
