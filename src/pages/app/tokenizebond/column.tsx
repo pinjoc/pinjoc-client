@@ -3,6 +3,7 @@ import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { TokenizedBonds } from "@/types";
 import { Link } from "react-router-dom";
+import { AvatarCollapse } from "@/components/ui/avatar-collapse";
 
 // export type Collection = {
 //   id: number;
@@ -38,13 +39,19 @@ export const columns: ColumnDef<TokenizedBonds>[] = [
 		cell: ({ row }) => (
 			<div className="flex items-center gap-2">
 				<div className="text-white font-extralight">
-					{row.getValue("QuoteTokenSymbol")}
+					<AvatarCollapse
+						avatarUrls={[
+							row.original.BaseTokenIcon,
+							row.original.QuoteTokenIcon,
+						]}
+					/>
 				</div>
+				{row.original.BaseTokenSymbol}/{row.getValue("QuoteTokenSymbol")}
 			</div>
 		),
 	},
 	{
-		accessorKey: "QuoteTokenName",
+		accessorKey: "RateRange",
 		header: ({ column }) => {
 			return (
 				<Button
@@ -52,14 +59,32 @@ export const columns: ColumnDef<TokenizedBonds>[] = [
 					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
 					className="hover:bg-transparent hover:text-white font-extralight"
 				>
-					Name
+					APY
+					<ArrowUpDown className="ml-2 h-4 w-4" />
+				</Button>
+			);
+		},
+		cell: ({ row }) => {
+			return <div className="font-extralight">{row.getValue("RateRange")}</div>;
+		},
+	},
+	{
+		accessorKey: "MaturityRange",
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					className="hover:bg-transparent hover:text-white font-extralight"
+				>
+					Maturity
 					<ArrowUpDown className="ml-2 h-4 w-4" />
 				</Button>
 			);
 		},
 		cell: ({ row }) => {
 			return (
-				<div className="font-extralight">{row.getValue("QuoteTokenName")}</div>
+				<div className="font-extralight">{row.getValue("MaturityRange")}</div>
 			);
 		},
 	},
@@ -81,18 +106,55 @@ export const columns: ColumnDef<TokenizedBonds>[] = [
 			function formatRange(value: string) {
 				const [start, end] = value
 					.split("~")
-					.map((value: string) => Number.parseInt(value.trim()));
+					.map((value: string) => Number.parseFloat(value.trim()));
 				const formatter = new Intl.NumberFormat("en-US", {
 					currency: "USD",
 					style: "currency",
-					maximumFractionDigits: 0,
-					minimumFractionDigits: 0,
+					maximumFractionDigits: 2,
+					minimumFractionDigits: 2,
 				});
 				return `${formatter.format(start)} ~ ${formatter.format(end)}`;
 			}
 			return (
 				<div className="font-extralight">
 					{formatRange(row.getValue("PriceRange"))}
+				</div>
+			);
+		},
+	},
+	{
+		accessorKey: "Volume24h",
+		header: ({ column }) => {
+			return (
+				<Button
+					variant="ghost"
+					onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+					className="hover:bg-transparent font-extralight hover:text-white"
+				>
+					Volume
+					<ArrowUpDown className="ml-2 h-4 w-4" />
+				</Button>
+			);
+		},
+		cell: ({ row }) => {
+			function formatVolume24h(value: number): string {
+				let formattedValue: string;
+
+				if (value >= 1_000_000_000) {
+					formattedValue = (value / 1_000_000_000).toFixed(2) + "B";
+				} else if (value >= 1_000_000) {
+					formattedValue = (value / 1_000_000).toFixed(2) + "M";
+				} else if (value >= 1_000) {
+					formattedValue = (value / 1_000).toFixed(0) + "K";
+				} else {
+					formattedValue = value.toString();
+				}
+
+				return `${formattedValue} USDC`;
+			}
+			return (
+				<div className="font-extralight">
+					{formatVolume24h(row.getValue("Volume24h"))}
 				</div>
 			);
 		},

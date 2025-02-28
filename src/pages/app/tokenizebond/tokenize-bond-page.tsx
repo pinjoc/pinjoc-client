@@ -50,8 +50,6 @@ const TokenizebondPage = () => {
 
 	const { isTokenizedbondLoading, tokenizedbonds } = useTokenizedbond();
 
-	console.log("tokenizebond", tokenizedbonds);
-
 	return (
 		<AppLayout>
 			{!isConnected && (
