@@ -18,9 +18,10 @@ interface PlaceOrderParams {
 }
 
 export interface PlaceOrderResult {
-	orderIndex: bigint;
-	executedTick: bigint;
-	remainingVolume: bigint;
+	// orderIndex: bigint;
+	// executedTick: bigint;
+	// remainingVolume: bigint;
+	event: PlaceOrderEvent;
 	receipt: TransactionReceipt;
 }
 
@@ -68,7 +69,6 @@ export const usePlaceOrder = (
 			setIsPlacing(true);
 			setError(null);
 			toast.loading("Processing transaction...");
-			console.log({ maturityMonth });
 
 			try {
 				// Kirim transaksi ke smart contract
@@ -93,18 +93,10 @@ export const usePlaceOrder = (
 				const receipt = await waitForTransaction(config, { hash });
 
 				// Cari dan decode event `PlaceOrder`
-				const placeOrderLog = receipt.logs.find((log: Log) => {
-					try {
-						const event = decodeEventLog({
-							abi: placeOrderAbi,
-							data: log.data,
-							topics: log.topics,
-						});
-						return event.eventName === "PlaceOrder";
-					} catch {
-						return false;
-					}
-				});
+				const placeOrderLog = receipt.logs.find(
+					(log: Log) =>
+						log.address.toLowerCase() === contractAddr.toLowerCase(),
+				);
 
 				if (!placeOrderLog) {
 					throw new Error("PlaceOrder event not found in transaction logs");
@@ -119,9 +111,10 @@ export const usePlaceOrder = (
 
 				// Buat objek hasil transaksi
 				const orderResult: PlaceOrderResult = {
-					orderIndex: event.orderIndex,
-					executedTick: event.tick,
-					remainingVolume: event.remainingVolume,
+					// orderIndex: event.orderIndex,
+					// executedTick: event.tick,
+					// remainingVolume: event.remainingVolume,
+					event,
 					receipt,
 				};
 

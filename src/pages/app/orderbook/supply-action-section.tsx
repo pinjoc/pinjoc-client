@@ -1,4 +1,3 @@
-import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { Button } from "@/components/ui/button";
 import { ButtonWallet } from "@/components/ui/button-wallet";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -6,15 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useAccount } from "wagmi";
 import { useCLOBState } from "./clob-state";
 import { cn } from "@/lib/utils";
 import { AutoRollSupply } from "./autoroll";
 import { usePlaceOrder } from "@/hooks/use-place-order";
-// import { placeOrderAbi } from "@/abis/pinjoc/place-order-abi";
-import { toast } from "sonner";
 import { useBalance } from "@/hooks/use-balance";
+import { useApprove } from "@/hooks/use-approve";
 
 export function SupplyAction() {
 	const { state, dispatch } = useCLOBState();
@@ -24,10 +22,10 @@ export function SupplyAction() {
 
 	// TODO: Berikut adalah cara integerasi smart contract yang masih (mungkin) salah
 	// const contractAddr = "0x6f79Ec0beD0b721750477778B25f02Ac104b8F77" as const;
-	const { data: hash } = useWriteContract();
-	const { isLoading, isSuccess, isError } = useWaitForTransactionReceipt({
-		hash,
-	});
+	//   const { data: hash } = useWriteContract();
+	//   const { isLoading, isSuccess, isError } = useWaitForTransactionReceipt({
+	//     hash,
+	//   });
 
 	const _debtToken = "0x0F848482cC12EA259DA229e7c5C4949EdA7E6475";
 	const _collateralToken = "0xa8014bB3A0020C0FF326Ef3AF3E1c55F6e5B25c7"; //WETH
@@ -64,16 +62,16 @@ export function SupplyAction() {
 	// 	}
 	// };
 
-	useEffect(() => {
-		if (isLoading) {
-			toast.loading("Transaction is being processed...");
-		}
+	// useEffect(() => {
+	// 	if (isLoading) {
+	// 		toast.loading("Transaction is being processed...");
+	// 	}
 
-		if (isError || isSuccess) {
-			toast.dismiss();
-			toast.success("Order placed successfully!");
-		}
-	}, [isLoading, isSuccess, isError]);
+	// 	if (isError || isSuccess) {
+	// 		toast.dismiss();
+	// 		toast.success("Order placed successfully!");
+	// 	}
+	// }, [isLoading, isSuccess, isError]);
 
 	const { placeOrder, isPlacing } = usePlaceOrder({
 		onSuccess: (result) => {
@@ -84,22 +82,40 @@ export function SupplyAction() {
 		},
 	});
 
-	const handleClick = async () => {
-		try {
-			await placeOrder({
-				debtToken: _debtToken,
-				collateralToken: _collateralToken,
-				amount: _amount,
-				collateralAmount: _collateralAmount,
-				rate: _rate,
-				maturity: _maturity,
-				maturityMonth: _maturityMonth,
-				maturityYear: _maturityYear,
-				lendingOrderType: _lendingOrderType,
-			});
-		} catch (error) {
-			console.error("Failed to place order:", error);
-		}
+	const { isApproving, approve } = useApprove({
+		onSuccess: (result: any) => {
+			console.log("Order placed successfully:", result);
+		},
+		onError: (error: any) => {
+			console.error("Error placing order:", error);
+		},
+	});
+
+	const handlePlaceOrder = async () => {
+		// const hashApprove = await writeContract(config, {
+		//   abi: placeOrderAbi,
+		//   address: state.token.debtAddress as `0x${string}`,
+		//   functionName: "approve",
+		//   args: ["0x6f79Ec0beD0b721750477778B25f02Ac104b8F77", _amount],
+		// });
+
+		await approve({
+			amount: _amount,
+			spender: "0x6f79Ec0beD0b721750477778B25f02Ac104b8F77",
+			address: state.token.debtAddress as `0x${string}`,
+		});
+		// await waitForTransaction(config, { hash: hashApprove });
+		await placeOrder({
+			debtToken: _debtToken,
+			collateralToken: _collateralToken,
+			amount: _amount,
+			collateralAmount: _collateralAmount,
+			rate: _rate,
+			maturity: _maturity,
+			maturityMonth: _maturityMonth,
+			maturityYear: _maturityYear,
+			lendingOrderType: _lendingOrderType,
+		});
 	};
 
 	const {
@@ -221,9 +237,9 @@ export function SupplyAction() {
 							<Button
 								type="button"
 								className="w-full text-black"
-								onClick={handleClick}
+								onClick={handlePlaceOrder}
 							>
-								{isPlacing ? "Loading" : "Place Order"}
+								{isPlacing || isApproving ? "Loading" : "Place Order"}
 							</Button>
 						) : (
 							<div className="w-full">
@@ -313,8 +329,12 @@ export function SupplyAction() {
 					</CardContent>
 					<CardFooter className="p-0 pr-3">
 						{isConnected ? (
-							<Button type="button" className="w-full text-black">
-								Place Order
+							<Button
+								type="button"
+								className="w-full text-black"
+								onClick={handlePlaceOrder}
+							>
+								{isPlacing || isApproving ? "Loading" : "Place Order"}
 							</Button>
 						) : (
 							<div className="w-full">

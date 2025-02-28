@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 export type Collection = {
 	id: number;
 	asset: string;
-	apy: number;
+	apy: string;
 	borrowed: string;
 	maturity: string;
 	liquidationRisk: string;
@@ -81,8 +81,7 @@ export const columnBorrow: ColumnDef<Collection>[] = [
 			);
 		},
 		cell: ({ row }) => {
-			const amount = Number.parseFloat(row.getValue("apy"));
-			return <div className="font-extralight">{amount.toFixed(2)} %</div>;
+			return <div className="font-extralight">{row.getValue("apy")}</div>;
 		},
 	},
 	{
