@@ -18,7 +18,6 @@ export function SupplyAction() {
 	const { state, dispatch } = useCLOBState();
 	const { isConnected, address } = useAccount();
 	const [amount, setAmount] = useState(0);
-	const [amountMarket, setAmountMarket] = useState(0);
 
 	// TODO: Berikut adalah cara integerasi smart contract yang masih (mungkin) salah
 	// const contractAddr = "0x6f79Ec0beD0b721750477778B25f02Ac104b8F77" as const;
@@ -26,16 +25,6 @@ export function SupplyAction() {
 	//   const { isLoading, isSuccess, isError } = useWaitForTransactionReceipt({
 	//     hash,
 	//   });
-
-	const _debtToken = "0x0F848482cC12EA259DA229e7c5C4949EdA7E6475";
-	const _collateralToken = "0xa8014bB3A0020C0FF326Ef3AF3E1c55F6e5B25c7"; //WETH
-	const _amount = BigInt(100) * BigInt(10 ** 6);
-	const _rate = BigInt(500000000000); // 6% dalam wei (0.06 ETH);
-	const _maturity = BigInt(1748449527);
-	const _maturityMonth = "MAY";
-	const _maturityYear = BigInt(2025);
-	const _lendingOrderType = 0;
-	const _collateralAmount = BigInt(1000000000);
 
 	// const handlePlaceOrder = async () => {
 	// 	try {
@@ -100,21 +89,21 @@ export function SupplyAction() {
 		// });
 
 		await approve({
-			amount: _amount,
+			amount: BigInt(amount) * BigInt(10 ** 6),
 			spender: "0x6f79Ec0beD0b721750477778B25f02Ac104b8F77",
 			address: state.token.debtAddress as `0x${string}`,
 		});
 		// await waitForTransaction(config, { hash: hashApprove });
 		await placeOrder({
-			debtToken: _debtToken,
-			collateralToken: _collateralToken,
-			amount: _amount,
-			collateralAmount: _collateralAmount,
-			rate: _rate,
-			maturity: _maturity,
-			maturityMonth: _maturityMonth,
-			maturityYear: _maturityYear,
-			lendingOrderType: _lendingOrderType,
+			debtToken: state.token.debtAddress as `0x${string}`,
+			collateralToken: state.token.collateralAddress as `0x${string}`,
+			amount: BigInt(amount) * BigInt(10 ** 6),
+			collateralAmount: BigInt(0),
+			rate: BigInt(Math.floor(state.fixedRate * 100000000000)),
+			maturity: BigInt(1748449527),
+			maturityMonth: state.maturity.month,
+			maturityYear: BigInt(state.maturity.year),
+			lendingOrderType: 0,
 		});
 	};
 
@@ -194,7 +183,7 @@ export function SupplyAction() {
 								<div className="relative flex items-center">
 									<Input
 										id="amount-limit"
-										value={amount}
+										value={amount.toLocaleString("id-ID")}
 										onChange={(e) => {
 											const max = state.maxAmount;
 											const value = Number(e.target.value) || 0;
@@ -238,6 +227,7 @@ export function SupplyAction() {
 								type="button"
 								className="w-full text-black"
 								onClick={handlePlaceOrder}
+								disabled={amount === 0}
 							>
 								{isPlacing || isApproving ? "Loading" : "Place Order"}
 							</Button>
@@ -289,15 +279,15 @@ export function SupplyAction() {
 								<div className="relative flex items-center">
 									<Input
 										id="amount-market"
-										value={amountMarket}
+										value={amount.toLocaleString("id-ID")}
 										onChange={(e) => {
 											const max = state.maxAmount;
 											const value = Number(e.target.value) || 0;
-											setAmountMarket(value > max ? max : value);
+											setAmount(value > max ? max : value);
 										}}
 										className={cn(
 											"w-48 text-right border-0 bg-transparent text-white pr-14",
-											amountMarket > state.maxAmount && "border",
+											amount > state.maxAmount && "border",
 										)}
 									/>
 									<span className="absolute right-3 text-gray-500 text-sm">
@@ -306,10 +296,10 @@ export function SupplyAction() {
 								</div>
 							</div>
 							<Slider
-								value={[amountMarket]}
+								value={[amount]}
 								max={Number(amountBalance)}
 								step={1}
-								onValueChange={(value) => setAmountMarket(value[0])}
+								onValueChange={(value) => setAmount(value[0])}
 							/>
 							<div className="flex justify-end w-full">
 								<button
@@ -332,6 +322,7 @@ export function SupplyAction() {
 							<Button
 								type="button"
 								className="w-full text-black"
+								disabled={amount === 0}
 								onClick={handlePlaceOrder}
 							>
 								{isPlacing || isApproving ? "Loading" : "Place Order"}

@@ -233,7 +233,9 @@ const Pool = () => {
 									}}
 								>
 									<span className="flex-1 text-left">{item.apy}%</span>
-									<span className="flex-1 text-right">{item.amount}</span>
+									<span className="flex-1 text-right">
+										{(item.amount / 1000).toLocaleString()} USDC
+									</span>
 								</button>
 							) : (
 								<div className="w-full h-full" />

@@ -16,8 +16,6 @@ import { useApprove } from "@/hooks/use-approve";
 export function BorrowAction() {
 	const { state, dispatch } = useCLOBState();
 	const { isConnected, address } = useAccount();
-	const [collateralMarket, setCollacteralMarket] = useState(0);
-	const [debtMarket, setDebtMarket] = useState(0);
 	const [debtLimit, setDebtLimit] = useState(0);
 	const [collateralLimit, setCollateralLimit] = useState(0);
 
@@ -78,7 +76,7 @@ export function BorrowAction() {
 		// });
 
 		await approve({
-			amount: BigInt(10000000000000000000),
+			amount: BigInt(collateralLimit) * BigInt(10 ** 8),
 			spender: "0x6f79Ec0beD0b721750477778B25f02Ac104b8F77",
 			address: state.token.collateralAddress as `0x${string}`,
 		});
@@ -86,12 +84,12 @@ export function BorrowAction() {
 		await placeOrder({
 			debtToken: state.token.debtAddress as `0x${string}`,
 			collateralToken: state.token.collateralAddress as `0x${string}`,
-			amount: BigInt(1000000000),
-			collateralAmount: BigInt(10000000000000000000),
-			rate: BigInt(50000000000000000),
-			maturity: BigInt(9999999999999999999999999999999),
-			maturityMonth: "MAY",
-			maturityYear: BigInt(2025),
+			amount: BigInt(debtLimit) * BigInt(10 ** 6),
+			collateralAmount: BigInt(collateralLimit) * BigInt(10 ** 18), //decimal
+			rate: BigInt(500000000000),
+			maturity: BigInt(1748449527),
+			maturityMonth: state.maturity.month,
+			maturityYear: BigInt(state.maturity.year),
 			lendingOrderType: 1,
 		});
 	};
@@ -163,7 +161,7 @@ export function BorrowAction() {
 									<div className="relative flex items-center">
 										<Input
 											id="collateral-limit"
-											value={collateralLimit}
+											value={collateralLimit.toLocaleString("id-ID")}
 											onChange={(e) => {
 												const max = state.bestRateAmount;
 												const value = Number(e.target.value) || 0;
@@ -202,7 +200,7 @@ export function BorrowAction() {
 									<div className="relative flex items-center">
 										<Input
 											id="debt-limit"
-											value={debtLimit}
+											value={debtLimit.toLocaleString("id-ID")}
 											onChange={(e) => {
 												const max = state.maxAmount;
 												const value = Number(e.target.value) || 0;
@@ -242,7 +240,7 @@ export function BorrowAction() {
 								type="button"
 								className="w-full text-black"
 								onClick={handlePlaceOrder}
-								disabled={isPlacing}
+								disabled={isPlacing || collateralLimit === 0 || debtLimit === 0}
 							>
 								{isPlacing || isApproving ? "Loading" : "Place Order"}
 							</Button>
@@ -280,15 +278,15 @@ export function BorrowAction() {
 									<div className="relative flex items-center">
 										<Input
 											id="collateral-market"
-											value={collateralMarket}
+											value={collateralLimit.toLocaleString("id-ID")}
 											onChange={(e) => {
 												const max = state.bestRateAmount;
 												const value = Number(e.target.value) || 0;
-												setCollacteralMarket(value > max ? max : value);
+												setCollateralLimit(value > max ? max : value);
 											}}
 											className={cn(
 												"w-48 text-right border-0 text-white bg-transparent pr-14",
-												collateralMarket > state.maxAmount &&
+												collateralLimit > state.maxAmount &&
 													"border border-red-500",
 											)}
 										/>
@@ -298,10 +296,10 @@ export function BorrowAction() {
 									</div>
 								</div>
 								<Slider
-									value={[collateralMarket]}
+									value={[collateralLimit]}
 									max={Number(collateralBalance)}
 									step={1}
-									onValueChange={(value) => setCollacteralMarket(value[0])}
+									onValueChange={(value) => setCollateralLimit(value[0])}
 								/>
 								<div className="flex justify-end w-full">
 									<button
@@ -319,15 +317,15 @@ export function BorrowAction() {
 									<div className="relative flex items-center">
 										<Input
 											id="debt-market"
-											value={debtMarket}
+											value={debtLimit.toLocaleString("id-ID")}
 											onChange={(e) => {
 												const max = state.maxAmount;
 												const value = Number(e.target.value) || 0;
-												setDebtMarket(value > max ? max : value);
+												setDebtLimit(value > max ? max : value);
 											}}
 											className={cn(
 												"w-48 text-right border-0 text-white bg-transparent pr-14",
-												debtMarket > state.maxAmount && "border border-red-500",
+												debtLimit > state.maxAmount && "border border-red-500",
 											)}
 										/>
 										<span className="absolute right-3 text-gray-500 text-sm">
@@ -336,10 +334,10 @@ export function BorrowAction() {
 									</div>
 								</div>
 								<Slider
-									value={[debtMarket]}
+									value={[debtLimit]}
 									max={state.maxAmount}
 									step={1}
-									onValueChange={(value) => setDebtMarket(value[0])}
+									onValueChange={(value) => setDebtLimit(value[0])}
 								/>
 								<div className="flex justify-end w-full">
 									<button
