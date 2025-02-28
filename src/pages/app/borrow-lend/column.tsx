@@ -34,11 +34,11 @@ export const columns: ColumnDef<AvailableTokens>[] = [
 				<div className="text-white font-extralight flex items-center gap-8">
 					<AvatarCollapse
 						avatarUrls={[
-							row.original.DebtTokenIcon,
 							row.original.CollateralTokenIcon,
+							row.original.DebtTokenIcon,
 						]}
 					/>
-					{row.original.DebtTokenSymbol}/{row.original.CollateralTokenSymbol}
+					{row.original.CollateralTokenSymbol}/{row.original.DebtTokenSymbol}
 				</div>
 			</div>
 		),

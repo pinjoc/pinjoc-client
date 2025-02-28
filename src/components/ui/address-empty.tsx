@@ -1,5 +1,6 @@
 import { Card, CardContent, CardFooter, CardHeader } from "./card";
 import { ButtonWallet } from "./button-wallet";
+import Logo from "./logo";
 
 const AddressEmpty = () => {
 	return (
@@ -7,7 +8,8 @@ const AddressEmpty = () => {
 			<Card className="bg-[#22232E] border-none w-96 p-0 py-4 px-3 rounded-md">
 				<CardHeader>
 					<h1 className="text-2xl font-semibold text-center text-white">
-						PINJ 🪙 C
+						PINJ
+						<Logo />C
 					</h1>
 				</CardHeader>
 				<CardContent className="text-white space-y-3 text-center font-light mt-8">

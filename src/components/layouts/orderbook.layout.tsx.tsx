@@ -5,8 +5,10 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useScroll } from "motion/react";
 import { CLOBStateProvider } from "@/pages/app/orderbook/clob-state";
+import Logo from "../ui/logo";
+import { Footer } from "../ui/footer";
 
-const V2_AppLayout = ({ children }: PropsWithChildren) => {
+const OrderbookLayout = ({ children }: PropsWithChildren) => {
 	const isScrolled = useScroll();
 	const location = useLocation();
 	const { pathname } = location;
@@ -32,7 +34,10 @@ const V2_AppLayout = ({ children }: PropsWithChildren) => {
 										aria-label="logo"
 										className="flex items-center"
 									>
-										<h1 className="text-3xl font-bold text-white">PINJ 🪙 C</h1>
+										<h1 className="text-3xl font-bold text-white">
+											PINJ
+											<Logo />C
+										</h1>
 									</Link>
 									<div className="relative flex max-h-10 items-center lg:hidden">
 										<label
@@ -125,12 +130,14 @@ const V2_AppLayout = ({ children }: PropsWithChildren) => {
 				</main>
 
 				{/* Footer */}
-				<footer className="w-full p-6 bg-[#121323] border-t border-gray-300 text-sm shadow-md text-center text-gray-400 rounded-b-lg">
-					&copy; {new Date().getFullYear()} PINJ🪙C
-				</footer>
+				{/* <footer className="w-full p-6 bg-[#121323] border-t border-gray-300 text-sm shadow-md text-center text-gray-400 rounded-b-lg">
+          &copy; {new Date().getFullYear()} PINJ
+          <Logo width={15} height={15} className="mb-1" />C
+        </footer> */}
 			</div>
+			<Footer />
 		</CLOBStateProvider>
 	);
 };
 
-export default V2_AppLayout;
+export default OrderbookLayout;

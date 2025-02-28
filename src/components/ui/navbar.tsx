@@ -3,6 +3,7 @@ import { ButtonWallet } from "./button-wallet";
 import { Button } from "./button";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import Logo from "./logo";
 
 const Navbar = () => {
 	const isScrolled = useScroll();
@@ -24,7 +25,10 @@ const Navbar = () => {
 						/>
 						<div className="relative z-20 flex w-full items-center justify-between md:px-0 lg:w-max">
 							<Link to={"/"} aria-label="logo" className="flex items-center">
-								<h1 className="text-3xl font-bold text-white">PINJ 🪙 C</h1>
+								<h1 className="text-3xl font-bold text-white">
+									PINJ
+									<Logo />C
+								</h1>
 							</Link>
 							<div className="relative flex max-h-10 items-center lg:hidden">
 								<label
