@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import { useScroll } from "motion/react";
 import { CLOBStateProvider } from "@/pages/app/orderbook/clob-state";
 
-const V2_AppLayout = ({ children }: PropsWithChildren) => {
+const OrderbookLayout = ({ children }: PropsWithChildren) => {
 	const isScrolled = useScroll();
 	const location = useLocation();
 	const { pathname } = location;
@@ -133,4 +133,4 @@ const V2_AppLayout = ({ children }: PropsWithChildren) => {
 	);
 };
 
-export default V2_AppLayout;
+export default OrderbookLayout;
