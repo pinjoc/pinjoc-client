@@ -5,6 +5,8 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useScroll } from "motion/react";
 import { CLOBStateProvider } from "@/pages/app/tokenizedbond-market/clob-state";
+import Logo from "../ui/logo";
+import { Footer } from "../ui/footer";
 
 const TokenizedBondMarketLayout = ({ children }: PropsWithChildren) => {
 	const isScrolled = useScroll();
@@ -32,7 +34,10 @@ const TokenizedBondMarketLayout = ({ children }: PropsWithChildren) => {
 										aria-label="logo"
 										className="flex items-center"
 									>
-										<h1 className="text-3xl font-bold text-white">PINJ 🪙 C</h1>
+										<h1 className="text-3xl font-bold text-white">
+											PINJ
+											<Logo />C
+										</h1>
 									</Link>
 									<div className="relative flex max-h-10 items-center lg:hidden">
 										<label
@@ -125,10 +130,11 @@ const TokenizedBondMarketLayout = ({ children }: PropsWithChildren) => {
 				</main>
 
 				{/* Footer */}
-				<footer className="w-full p-6 bg-[#121323] border-t border-gray-300 text-sm shadow-md text-center text-gray-400 rounded-b-lg">
-					&copy; {new Date().getFullYear()} PINJ🪙C
-				</footer>
+				{/* <footer className="w-full p-6 bg-[#121323] border-t border-gray-300 text-sm shadow-md text-center text-gray-400 rounded-b-lg">
+          &copy; {new Date().getFullYear()} PINJ🪙C
+        </footer> */}
 			</div>
+			<Footer />
 		</CLOBStateProvider>
 	);
 };
