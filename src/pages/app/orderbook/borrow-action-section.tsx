@@ -87,7 +87,7 @@ export function BorrowAction() {
 			collateralToken: state.token.collateralAddress as `0x${string}`,
 			amount: BigInt(debtLimit) * BigInt(10 ** 6),
 			collateralAmount: BigInt(collateralLimit) * BigInt(10 ** 18), //decimal
-			rate: BigInt(50000000000000000),
+			rate: BigInt(70000000000000000),
 			maturity: BigInt(1748449527),
 			maturityMonth: state.maturity.month,
 			maturityYear: BigInt(state.maturity.year),
