@@ -1,4 +1,5 @@
 import { placeOrderAbi } from "@/abis/pinjoc/place-order-abi";
+import { pinjocRouterAddress } from "@/abis/pinjoc/token-abi";
 import { config } from "@/lib/wallet";
 import { writeContract, waitForTransaction } from "@wagmi/core";
 import { useCallback, useState } from "react";
@@ -52,7 +53,6 @@ export const usePlaceOrder = (
 	const { onSuccess, onError } = options;
 	const [isPlacing, setIsPlacing] = useState(false);
 	const [error, setError] = useState<Error | null>(null);
-	const contractAddr = "0x6f79Ec0beD0b721750477778B25f02Ac104b8F77" as const;
 
 	const placeOrder = useCallback(
 		async ({
@@ -73,7 +73,7 @@ export const usePlaceOrder = (
 			try {
 				// Kirim transaksi ke smart contract
 				const hash = await writeContract(config, {
-					address: contractAddr,
+					address: pinjocRouterAddress,
 					abi: placeOrderAbi,
 					functionName: "placeOrder",
 					args: [
@@ -95,7 +95,7 @@ export const usePlaceOrder = (
 				// Cari dan decode event `PlaceOrder`
 				const placeOrderLog = receipt.logs.find(
 					(log: Log) =>
-						log.address.toLowerCase() === contractAddr.toLowerCase(),
+						log.address.toLowerCase() === pinjocRouterAddress.toLowerCase(),
 				);
 
 				if (!placeOrderLog) {

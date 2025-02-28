@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { usePlaceOrder } from "@/hooks/use-place-order";
 import { useBalance } from "@/hooks/use-balance";
 import { useApprove } from "@/hooks/use-approve";
+import { pinjocRouterAddress } from "@/abis/pinjoc/token-abi";
 
 export function BorrowAction() {
 	const { state, dispatch } = useCLOBState();
@@ -30,10 +31,10 @@ export function BorrowAction() {
 
 	const { approve, isApproving } = useApprove({
 		onSuccess: (result) => {
-			console.log("Order placed successfully:", result);
+			console.log("Approve successfully:", result);
 		},
 		onError: (error) => {
-			console.error("Error placing order:", error);
+			console.error("Error approve:", error);
 		},
 	});
 
@@ -76,23 +77,43 @@ export function BorrowAction() {
 		// });
 
 		await approve({
-			amount: BigInt(collateralLimit) * BigInt(10 ** 8),
-			spender: "0x6f79Ec0beD0b721750477778B25f02Ac104b8F77",
+			amount: BigInt(collateralLimit) * BigInt(10 ** 18),
+			spender: pinjocRouterAddress,
 			address: state.token.collateralAddress as `0x${string}`,
 		});
-		// await waitForTransaction(config, { hash: hashApprove });
+
 		await placeOrder({
 			debtToken: state.token.debtAddress as `0x${string}`,
 			collateralToken: state.token.collateralAddress as `0x${string}`,
 			amount: BigInt(debtLimit) * BigInt(10 ** 6),
 			collateralAmount: BigInt(collateralLimit) * BigInt(10 ** 18), //decimal
-			rate: BigInt(500000000000),
+			rate: BigInt(50000000000000000),
 			maturity: BigInt(1748449527),
 			maturityMonth: state.maturity.month,
 			maturityYear: BigInt(state.maturity.year),
 			lendingOrderType: 1,
 		});
 	};
+	//   await approve({
+	//     amount: BigInt(10000000000000000000),
+	//     spender: "0x6f79Ec0beD0b721750477778B25f02Ac104b8F77",
+	//     address: state.token.collateralAddress as `0x${string}`,
+	//   });
+	//   // await waitForTransaction(config, { hash: hashApprove });
+	//   await placeOrder({
+	//     debtToken: state.token.debtAddress as `0x${string}`,
+	//     collateralToken: state.token.collateralAddress as `0x${string}`,
+	//     amount: BigInt(1000000000),
+	//     collateralAmount: BigInt(10000000000000000000),
+	//     rate: BigInt(50000000000000000),
+	//     maturity: BigInt(9999999999999999999999999999999),
+	//     maturityMonth: "MAY",
+	//     maturityYear: BigInt(2025),
+	//     lendingOrderType: 1,
+	//   });
+	// };
+
+	console.log("collateralLimit", collateralLimit);
 
 	return (
 		<Tabs

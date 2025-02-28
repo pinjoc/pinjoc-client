@@ -13,6 +13,7 @@ import { AutoRollSupply } from "./autoroll";
 import { usePlaceOrder } from "@/hooks/use-place-order";
 import { useBalance } from "@/hooks/use-balance";
 import { useApprove } from "@/hooks/use-approve";
+import { pinjocRouterAddress } from "@/abis/pinjoc/token-abi";
 
 export function SupplyAction() {
 	const { state, dispatch } = useCLOBState();
@@ -81,25 +82,17 @@ export function SupplyAction() {
 	});
 
 	const handlePlaceOrder = async () => {
-		// const hashApprove = await writeContract(config, {
-		//   abi: placeOrderAbi,
-		//   address: state.token.debtAddress as `0x${string}`,
-		//   functionName: "approve",
-		//   args: ["0x6f79Ec0beD0b721750477778B25f02Ac104b8F77", _amount],
-		// });
-
 		await approve({
 			amount: BigInt(amount) * BigInt(10 ** 6),
-			spender: "0x6f79Ec0beD0b721750477778B25f02Ac104b8F77",
+			spender: pinjocRouterAddress,
 			address: state.token.debtAddress as `0x${string}`,
 		});
-		// await waitForTransaction(config, { hash: hashApprove });
 		await placeOrder({
 			debtToken: state.token.debtAddress as `0x${string}`,
 			collateralToken: state.token.collateralAddress as `0x${string}`,
 			amount: BigInt(amount) * BigInt(10 ** 6),
 			collateralAmount: BigInt(0),
-			rate: BigInt(Math.floor(state.fixedRate * 100000000000)),
+			rate: BigInt(Math.floor(state.fixedRate * 10 ** 16)),
 			maturity: BigInt(1748449527),
 			maturityMonth: state.maturity.month,
 			maturityYear: BigInt(state.maturity.year),
