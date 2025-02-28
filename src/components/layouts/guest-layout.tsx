@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import { Footer } from "../ui/footer";
 import { Link } from "react-router-dom";
 import { useScroll } from "@/hooks/use-scroll";
+import Logo from "../ui/logo";
 
 function GuestLayout({ children }: { children: React.ReactNode }) {
 	return (
@@ -33,7 +34,10 @@ function Navbar() {
 						/>
 						<div className="relative z-20 flex w-full justify-between md:px-0 lg:w-max">
 							<a href="/" aria-label="logo" className="flex items-center">
-								<h1 className="text-3xl font-bold text-white">PINJ 🪙 C</h1>
+								<h1 className="text-3xl font-bold text-white">
+									PINJ
+									<Logo />C
+								</h1>
 							</a>
 							<div className="relative flex max-h-10 items-center lg:hidden">
 								<label

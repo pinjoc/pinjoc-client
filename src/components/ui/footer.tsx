@@ -1,6 +1,8 @@
+import Logo from "./logo";
+
 export function Footer() {
 	return (
-		<footer className="bg-[#121421] border-t border-gray-800 mt-20 py-20 relative overflow-hidden">
+		<footer className="bg-[#121421] border-t border-gray-800 py-20 relative overflow-hidden">
 			<div className="absolute -bottom-24 left-0 flex items-center justify-center right-0 overflow-hidden pointer-events-none select-none">
 				<div className="text-[400px] font-bold text-white/1 leading-none whitespace-nowrap">
 					PINJOC
@@ -9,7 +11,10 @@ export function Footer() {
 			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-50 relative">
 				<div className="grid grid-cols-1 md:grid-cols-4 gap-12">
 					<div>
-						<h2 className="text-2xl font-bold text-white mb-4">Pinj 🪙 c</h2>
+						<h2 className="text-2xl font-bold text-white mb-4">
+							PINJ
+							<Logo />C
+						</h2>
 					</div>
 
 					<div>

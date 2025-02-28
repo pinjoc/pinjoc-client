@@ -93,7 +93,7 @@ const LandingPage = () => {
 						<h1 className="text-white mt-5 inline-block font-thin text-5xl leading-tight">
 							We are a team of developers and designers who are passionate about
 							building the future of{" "}
-							<span className="bg-primary text-black font-normal">
+							<span className="bg-primary font-normal">
 								decentralized finance
 							</span>
 							.
