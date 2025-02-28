@@ -53,6 +53,73 @@ export const placeOrderAbi = [
 		stateMutability: "nonpayable",
 	},
 	{
+		anonymous: false,
+		inputs: [
+			{
+				indexed: false,
+				internalType: "uint256",
+				name: "orderId",
+				type: "uint256",
+			},
+			{
+				indexed: false,
+				internalType: "address",
+				name: "debtToken",
+				type: "address",
+			},
+			{
+				indexed: false,
+				internalType: "address",
+				name: "collateralToken",
+				type: "address",
+			},
+			{
+				indexed: false,
+				internalType: "uint256",
+				name: "amount",
+				type: "uint256",
+			},
+			{
+				indexed: false,
+				internalType: "uint256",
+				name: "rate",
+				type: "uint256",
+			},
+			{
+				indexed: false,
+				internalType: "uint256",
+				name: "maturity",
+				type: "uint256",
+			},
+			{
+				indexed: false,
+				internalType: "string",
+				name: "maturityMonth",
+				type: "string",
+			},
+			{
+				indexed: false,
+				internalType: "uint256",
+				name: "maturityYear",
+				type: "uint256",
+			},
+			{
+				indexed: false,
+				internalType: "enum LendingOrderType",
+				name: "lendingOrderType",
+				type: "uint8",
+			},
+			{
+				indexed: false,
+				internalType: "enum Status",
+				name: "status",
+				type: "uint8",
+			},
+		],
+		name: "OrderPlaced",
+		type: "event",
+	},
+	{
 		inputs: [
 			{
 				internalType: "address",
