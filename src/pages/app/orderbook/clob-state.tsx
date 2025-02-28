@@ -64,7 +64,7 @@ const initialState: State = {
 	orderbookBestRateAmount: 0,
 	fixedRate: 0,
 	orderbookFixedRate: 0,
-	maxAmount: 0,
+	maxAmount: 5000,
 	bestRate: 0,
 	supply: [],
 	borrow: [],
